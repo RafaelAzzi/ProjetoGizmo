@@ -5,67 +5,121 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed = 10f; 
-    public Transform holdPoint; // Onde o obejto vai ficar
-    public float pickupRange = 2f; // Dist‚ncia para pegar o objeto
+    public Transform holdPoint; // Onde o obejto vai ficar quando estiver sendo segurado
+    public float pickupRange = 2f; // Distancia para pegar o objeto
     public KeyCode pickupKey = KeyCode.E; 
-    private GameObject heldObject; // Guardar qual obejto est· sendo segurado no momento 
+    private Item heldItem; // guardamos o script Item ao inv√©s de GameObject
 
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal"); // Pega os Input padr„o da Unity, que vai de -1 a 1
+        // ===== MOVIMENTO ===== 
+        float horizontal = Input.GetAxis("Horizontal"); // Pega os Input padrao da Unity, que vai de -1 a 1
         float vertical = Input.GetAxis("Vertical");
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical); // Cria vetor de movimento, neste caso X e Z
 
-        direction = Quaternion.Euler(0, 45, 0) * direction; // Faz o personagem andar de acordo com o ‚ngulo da c‚mera
+        direction = Quaternion.Euler(0, 45, 0) * direction; // Faz o personagem andar de acordo com o ÔøΩngulo da cÔøΩmera
         direction = direction.normalized;
 
         transform.Translate(direction * speed * Time.deltaTime, Space.World); 
-        // Movimento do personagem: DireÁ„o calculada, velocidade, movimento independente do frame e o Space World que move no eixo global do mundo
+        // Movimento do personagem: Direcao calculada, velocidade, movimento independente do frame
 
+
+        // ===== SISTEMA DE INTERACAO =====
         if (Input.GetKeyDown(pickupKey)) // Sistema de pegar obejto
         {
-            if (heldObject == null)
-            {
+            // Se n√£o estiver segurando nada, tenta pegar
+            if (heldItem == null)
+             {
                 TryPickup();
-            }
+             }
             else
-            {
-                DropObject();
-            }
+             {
+               // Se estiver segurando algo, tenta interagir com bancada
+               TryInteractWithStation();
+             }
         }
         
     }
+
+
+    // ===== TENTAR PEGAR UM ITEM =====
     void TryPickup()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, pickupRange); 
-        // Criar uma esfera em volta do jogador. Todos os colliders dentro dessa esfera s„o detectados
+        // Detecta todos os colliders pr√≥ximos dentro do raio
 
         foreach (Collider hit in hits)
         {
-            if (hit.CompareTag("Pickable")) // SÛ pega objetos com a Tag Pickable
+            if (hit.CompareTag("Pickable")) // So pega objetos com a Tag Pickable
             {
-                heldObject = hit.gameObject; // Ao pegar, guarda o objeto
-                Rigidbody rb = heldObject.GetComponent<Rigidbody>();
-                rb.useGravity = false; // Desliga a gravidade e impede o objeto de cair
-                rb.isKinematic = true;
+                // Tenta pegar o script Item do objeto
+                Item item = hit.GetComponent<Item>();
 
-                heldObject.transform.position = holdPoint.position; // Move o obejto para o HoldPoint e faz ele acompanhar o jogador
-                heldObject.transform.parent = holdPoint; 
-                
-                break;
+                if (item != null)
+                {
+                    heldItem = item; // Guarda o item
+
+                    Rigidbody rb = item.GetComponent<Rigidbody>();
+
+                    // Desativa f√≠sica enquanto estiver segurando
+                    rb.useGravity = false;
+                    rb.isKinematic = true;
+
+                    // Move para o ponto da m√£o
+                    item.transform.position = holdPoint.position;
+
+                    // Faz virar filho do holdPoint para acompanhar o player
+                    item.transform.parent = holdPoint;
+
+                    break;
+                }
             }
         }
     }
-    void DropObject() // Remove o objeto do jogador 
-    {
-        Rigidbody rb = heldObject.GetComponent<Rigidbody>();
-        heldObject.transform.parent = null; 
 
-        rb.useGravity = true; // Reativa a fÌsica 
+
+    // ===== TENTAR INTERAGIR COM A BANCADA =====
+    void TryInteractWithStation()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, pickupRange);
+
+        foreach (Collider hit in hits)
+        {
+            // Verifica se o objeto tem o script WorkBench
+            WorkBench station = hit.GetComponent<WorkBench>();
+
+            if (station != null)
+            {
+                // Entrega o item para a bancada
+                station.Interact(heldItem);
+
+                // Player n√£o est√° mais segurando nada
+                heldItem = null;
+
+                return;
+            }
+        }
+
+        // Se n√£o encontrou bancada, solta no ch√£o
+        DropObject();
+    }
+
+
+    // ===== SOLTA O ITEM NO CH√ÉO =====
+    void DropObject()
+    {
+        if (heldItem == null) return;
+
+        Rigidbody rb = heldItem.GetComponent<Rigidbody>();
+
+        // Remove o item do jogador
+        heldItem.transform.parent = null;
+
+        // Reativa f√≠sica
+        rb.useGravity = true;
         rb.isKinematic = false;
 
-        heldObject = null; // N„o est· segurando mais nada 
-
+        heldItem = null;
     }
 }
