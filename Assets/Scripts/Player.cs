@@ -4,122 +4,143 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 10f; 
-    public Transform holdPoint; // Onde o obejto vai ficar quando estiver sendo segurado
-    public float pickupRange = 2f; // Distancia para pegar o objeto
-    public KeyCode pickupKey = KeyCode.E; 
-    private Item heldItem; // guardamos o script Item ao invés de GameObject
+    // ===== CONFIGURAÇÕES DO JOGADOR =====
+    public float speed = 10f;
+    public Transform holdPoint; // ponto onde o item ficará quando o jogador estiver segurando
+    public float interactRange = 2f; // distância máxima para interagir com objetos
+    public KeyCode interactKey = KeyCode.E;
+
+    // Guarda o item que o jogador está segurando no momento
+    private Item heldItem;
 
     void Update()
     {
-        // ===== MOVIMENTO ===== 
-        float horizontal = Input.GetAxis("Horizontal"); // Pega os Input padrao da Unity, que vai de -1 a 1
+        // Movimento do jogador
+        Move();
+
+        // Se apertar tecla de interação
+        if (Input.GetKeyDown(interactKey))
+        {
+            TryInteract();
+        }
+    }
+
+    // ===== MOVIMENTO DO JOGADOR =====
+    void Move()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(horizontal, 0f, vertical); // Cria vetor de movimento, neste caso X e Z
+        // Cria vetor de direção
+        Vector3 direction = new Vector3(horizontal, 0f, vertical);
 
-        direction = Quaternion.Euler(0, 45, 0) * direction; // Faz o personagem andar de acordo com o �ngulo da c�mera
+        // Ajusta direção para câmera isométrica
+        direction = Quaternion.Euler(0, 45, 0) * direction;
+
+        // Normaliza para evitar velocidade maior na diagonal
         direction = direction.normalized;
 
-        transform.Translate(direction * speed * Time.deltaTime, Space.World); 
-        // Movimento do personagem: Direcao calculada, velocidade, movimento independente do frame
-
-
-        // ===== SISTEMA DE INTERACAO =====
-        if (Input.GetKeyDown(pickupKey)) // Sistema de pegar obejto
-        {
-            // Se não estiver segurando nada, tenta pegar
-            if (heldItem == null)
-             {
-                TryPickup();
-             }
-            else
-             {
-               // Se estiver segurando algo, tenta interagir com bancada
-               TryInteractWithStation();
-             }
-        }
-        
+        // Move o player
+        transform.Translate(direction * speed * Time.deltaTime, Space.World);
     }
 
-
-    // ===== TENTAR PEGAR UM ITEM =====
-    void TryPickup()
+    // ===== SISTEMA DE INTERAÇÃO =====
+    void TryInteract()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, pickupRange); 
-        // Detecta todos os colliders próximos dentro do raio
+        // Detecta objetos próximos
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
 
-        foreach (Collider hit in hits)
+        // ===============================
+        // SE O PLAYER ESTÁ SEGURANDO ITEM
+        // ===============================
+        if (heldItem != null)
         {
-            if (hit.CompareTag("Pickable")) // So pega objetos com a Tag Pickable
+            foreach (Collider hit in hits)
             {
-                // Tenta pegar o script Item do objeto
-                Item item = hit.GetComponent<Item>();
+                // Ignora o próprio player
+                if (hit.gameObject == gameObject) continue;
 
-                if (item != null)
+                IInteractable interactable = hit.GetComponent<IInteractable>();
+
+                // Se encontrou algo interagível
+                if (interactable != null)
                 {
-                    heldItem = item; // Guarda o item
-
-                    Rigidbody rb = item.GetComponent<Rigidbody>();
-
-                    // Desativa física enquanto estiver segurando
-                    rb.useGravity = false;
-                    rb.isKinematic = true;
-
-                    // Move para o ponto da mão
-                    item.transform.position = holdPoint.position;
-
-                    // Faz virar filho do holdPoint para acompanhar o player
-                    item.transform.parent = holdPoint;
-
-                    break;
+                    interactable.Interact(this);
+                    return;
                 }
             }
+
+            // Se não encontrou nada para interagir
+            // solta o item no chão
+            DropItem();
+            return;
         }
-    }
 
-
-    // ===== TENTAR INTERAGIR COM A BANCADA =====
-    void TryInteractWithStation()
-    {
-        Collider[] hits = Physics.OverlapSphere(transform.position, pickupRange);
-
+        // ==================================
+        // SE O PLAYER NÃO ESTÁ SEGURANDO ITEM
+        // ==================================
         foreach (Collider hit in hits)
         {
-            // Verifica se o objeto tem o script WorkBench
-            WorkBench station = hit.GetComponent<WorkBench>();
+            // Ignora o próprio player
+            if (hit.gameObject == gameObject) continue;
 
-            if (station != null)
+            ItemPickup pickup = hit.GetComponent<ItemPickup>();
+
+            if (pickup != null)
             {
-                // Entrega o item para a bancada
-                station.Interact(heldItem);
-
-                // Player não está mais segurando nada
-                heldItem = null;
-
+                pickup.Interact(this);
                 return;
             }
         }
-
-        // Se não encontrou bancada, solta no chão
-        DropObject();
     }
 
+    // ===== PEGAR ITEM =====
+    public void PickupItem(Item item)
+    {
+        heldItem = item;
 
-    // ===== SOLTA O ITEM NO CHÃO =====
-    void DropObject()
+        Rigidbody rb = item.GetComponent<Rigidbody>();
+
+        rb.useGravity = false;
+        rb.isKinematic = true;
+
+        item.transform.position = holdPoint.position;
+        item.transform.parent = holdPoint;
+    }
+
+    // ===== SOLTAR ITEM NO CHÃO =====
+    public void DropItem()
     {
         if (heldItem == null) return;
 
         Rigidbody rb = heldItem.GetComponent<Rigidbody>();
 
-        // Remove o item do jogador
         heldItem.transform.parent = null;
 
-        // Reativa física
+        // Solta o item um pouco à frente do jogador
+        heldItem.transform.position = transform.position + transform.forward * 1f;
+
         rb.useGravity = true;
         rb.isKinematic = false;
 
+        heldItem = null;
+    }
+
+    // ===== RETORNA ITEM NA MÃO =====
+    public Item GetHeldItem()
+    {
+        return heldItem;
+    }
+
+    // ===== DEFINE ITEM NA MÃO =====
+    public void SetHeldItem(Item item)
+    {
+        heldItem = item;
+    }
+
+    // ===== LIMPA ITEM DA MÃO =====
+    public void ClearHeldItem()
+    {
         heldItem = null;
     }
 }

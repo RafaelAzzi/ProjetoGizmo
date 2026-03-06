@@ -580,6 +580,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sucata (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7857328096324582588, guid: ca88b6f00aa3229488b7c85c7840fd73, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 7903122039290608617, guid: ca88b6f00aa3229488b7c85c7840fd73, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.4463739
@@ -776,8 +780,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   holdPoint: {fileID: 195602643}
-  pickupRange: 2
-  pickupKey: 101
+  interactRange: 2
+  interactKey: 101
 --- !u!1 &2067646849
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,6 +963,10 @@ PrefabInstance:
     - target: {fileID: 7857328096324582588, guid: ca88b6f00aa3229488b7c85c7840fd73, type: 3}
       propertyPath: m_Name
       value: Sucata
+      objectReference: {fileID: 0}
+    - target: {fileID: 7857328096324582588, guid: ca88b6f00aa3229488b7c85c7840fd73, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 7903122039290608617, guid: ca88b6f00aa3229488b7c85c7840fd73, type: 3}
       propertyPath: m_LocalPosition.x

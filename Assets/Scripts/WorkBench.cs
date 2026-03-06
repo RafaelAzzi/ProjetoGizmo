@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkBench : MonoBehaviour
+public class WorkBench : MonoBehaviour, IInteractable
 {
-    // Ponto onde os itens vão aparecer na bancada
     public Transform itemPoint; // posição onde itens ficam 
 
     // Guarda o primeiro item colocado
@@ -29,22 +28,30 @@ public class WorkBench : MonoBehaviour
 
 
     // ===== INTERAÇÃO COM PLAYER =====
-    public void Interact(Item item)
+    public void Interact(Player player)
     {
+        // Pega o item que o jogador está segurando
+        Item item = player.GetHeldItem();
+
+        // Se o jogador não estiver segurando nada, não faz nada
+        if (item == null) return;
+
         // Se ainda não tem primeiro item
         if (firstItem == null)
         {
             firstItem = item; // guarda o item
             PlaceItem(item); // posiciona na bancada
+            player.ClearHeldItem(); // remove da mão do jogador
         }
 
-        // Se já tem primeiro mas não tem segundo
+        // Se já tem primeiro item mas não tem o segundo
         else if (secondItem == null)
         {
-            secondItem = item; // guarda o segundo
+            secondItem = item; // guarda segundo item
             PlaceItem(item); // posiciona na bancada
+            player.ClearHeldItem(); // remove da mão do jogador
 
-            CombineItems(); // tenta combinar
+            CombineItems(); // tenta combinar os itens
         }
     }
 
