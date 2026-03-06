@@ -2,41 +2,43 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
-    public GameObject itemPrefab; // Prefab do item que esse spawner vai criar
-    public float spawnDelay = 3f;
-    private GameObject currentItem; // Guarda referência do item que está spawnado 
-    private float timer;
+    public GameObject itemPrefab; // Prefab do item que serÃ¡ criado
+    public float spawnDelay = 2f; 
+
+    private GameObject currentItem; // Item atual
+    private float timer = 0f;
 
     void Start()
     {
-        SpawnItem();
+        SpawnItem(); 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(currentItem == null && currentItem.transform.parent != transform) 
+        // Se existe item mas ele nÃ£o Ã© mais filho do spawner (foi pego)
+        if (currentItem != null && currentItem.transform.parent != transform)
         {
-            currentItem = null; // Limpa referência
+            currentItem = null; // Limpa referÃªncia
         }
 
-        // Se não existir item, começa a contagem
-        if(currentItem == null)
+        // Se nÃ£o existe item, comeÃ§a contagem
+        if (currentItem == null)
         {
-            timer += Time.deltaTime; // Faz o tempo contar corretamente
+            timer += Time.deltaTime;
 
-            if(timer >= spawnDelay)
+            if (timer >= spawnDelay)
             {
                 SpawnItem();
                 timer = 0f;
             }
         }
     }
+
     void SpawnItem()
     {
-        // Crie o item na posição do spawner
-        currentItem = Instantiate(itemPrefab,transform.position,Quaternion.identity); 
+        currentItem = Instantiate(itemPrefab, transform.position, Quaternion.identity);
 
+        // Faz o item nascer como filho do spawner
         currentItem.transform.parent = transform;
     }
 }

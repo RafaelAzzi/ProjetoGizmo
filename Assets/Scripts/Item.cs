@@ -22,6 +22,8 @@ public enum ItemType
     Sucata,
     Fiacao,
     Bateria,
+    OleoComum,
+    OleoAntiferrugem,
 
     // --- FASE 2 (RAROS) ---
     ChipComum,
