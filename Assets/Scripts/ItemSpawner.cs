@@ -21,7 +21,7 @@ public class ItemSpawner : MonoBehaviour
         }
 
         // Se não existir item, começa a contagem
-        if(currentItem = null)
+        if(currentItem == null)
         {
             timer += Time.deltaTime; // Faz o tempo contar corretamente
 

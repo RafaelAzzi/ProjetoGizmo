@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 9073568088658111475, guid: 626f951e3097c284e8d863ae0b2d677e, type: 3}
-  currentItem: {fileID: 0}
+  spawnDelay: 2
 --- !u!4 &921492831
 Transform:
   m_ObjectHideFlags: 0
@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 7857328096324582588, guid: ca88b6f00aa3229488b7c85c7840fd73, type: 3}
-  currentItem: {fileID: 0}
+  spawnDelay: 2
 --- !u!4 &1442179838
 Transform:
   m_ObjectHideFlags: 0
@@ -932,7 +932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 3352736235010023919, guid: 9b14dfffb5843a243aa3d4303c5d638b, type: 3}
-  currentItem: {fileID: 0}
+  spawnDelay: 2
 --- !u!4 &2133330131
 Transform:
   m_ObjectHideFlags: 0
