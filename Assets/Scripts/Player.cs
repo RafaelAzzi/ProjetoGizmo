@@ -49,49 +49,38 @@ public class Player : MonoBehaviour
     {
         // Detecta objetos próximos
         Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
+        
 
-        // ===============================
-        // SE O PLAYER ESTÁ SEGURANDO ITEM
-        // ===============================
-        if (heldItem != null)
-        {
+            if (heldItem == null)
+            {
+                foreach (Collider hit in hits)
+                {
+                    // Ignora o próprio player
+                    if (hit.gameObject == gameObject) continue;
+
+                    ItemPickup pickup = hit.GetComponent<ItemPickup>();
+                
+                    if (pickup != null)
+                    {
+                        pickup.Interact(this);
+                        return;
+                    }
+                }
+            }
+
             foreach (Collider hit in hits)
             {
-                // Ignora o próprio player
                 if (hit.gameObject == gameObject) continue;
 
                 IInteractable interactable = hit.GetComponent<IInteractable>();
 
-                // Se encontrou algo interagível
                 if (interactable != null)
                 {
                     interactable.Interact(this);
                     return;
+                   
                 }
             }
-
-            // Se não encontrou nada para interagir
-            // solta o item no chão
-            DropItem();
-            return;
-        }
-
-        // ==================================
-        // SE O PLAYER NÃO ESTÁ SEGURANDO ITEM
-        // ==================================
-        foreach (Collider hit in hits)
-        {
-            // Ignora o próprio player
-            if (hit.gameObject == gameObject) continue;
-
-            ItemPickup pickup = hit.GetComponent<ItemPickup>();
-
-            if (pickup != null)
-            {
-                pickup.Interact(this);
-                return;
-            }
-        }
     }
 
     // ===== PEGAR ITEM =====
@@ -106,24 +95,6 @@ public class Player : MonoBehaviour
 
         item.transform.position = holdPoint.position;
         item.transform.parent = holdPoint;
-    }
-
-    // ===== SOLTAR ITEM NO CHÃO =====
-    public void DropItem()
-    {
-        if (heldItem == null) return;
-
-        Rigidbody rb = heldItem.GetComponent<Rigidbody>();
-
-        heldItem.transform.parent = null;
-
-        // Solta o item um pouco à frente do jogador
-        heldItem.transform.position = transform.position + transform.forward * 1f;
-
-        rb.useGravity = true;
-        rb.isKinematic = false;
-
-        heldItem = null;
     }
 
     // ===== RETORNA ITEM NA MÃO =====
