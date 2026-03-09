@@ -10,9 +10,11 @@ public class SupportBench : MonoBehaviour, IInteractable
 
     public void Interact(Player player)
     {
+        Debug.Log("Bench Interact");
+
         Item heldItem = player.GetHeldItem();
 
-        // Jogador está segurando item
+        // Jogador segurando item
         if (heldItem != null)
         {
             if (TryPlaceItem(heldItem))
@@ -20,7 +22,7 @@ public class SupportBench : MonoBehaviour, IInteractable
                 player.ClearHeldItem();
             }
         }
-        // Jogador não está segurando item
+        // Jogador sem item
         else
         {
             Item item = TakeItem();
@@ -37,16 +39,22 @@ public class SupportBench : MonoBehaviour, IInteractable
         if (itemSlot1 == null)
         {
             itemSlot1 = item;
+
             item.transform.SetParent(slot1);
             item.transform.localPosition = Vector3.zero;
+            item.transform.rotation = Quaternion.identity;
+
             return true;
         }
 
         if (itemSlot2 == null)
         {
             itemSlot2 = item;
+
             item.transform.SetParent(slot2);
             item.transform.localPosition = Vector3.zero;
+            item.transform.rotation = Quaternion.identity;
+
             return true;
         }
 
@@ -59,6 +67,7 @@ public class SupportBench : MonoBehaviour, IInteractable
         {
             Item item = itemSlot1;
             itemSlot1 = null;
+
             item.transform.SetParent(null);
             return item;
         }
@@ -67,6 +76,7 @@ public class SupportBench : MonoBehaviour, IInteractable
         {
             Item item = itemSlot2;
             itemSlot2 = null;
+
             item.transform.SetParent(null);
             return item;
         }

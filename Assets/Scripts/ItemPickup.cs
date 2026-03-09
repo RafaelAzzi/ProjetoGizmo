@@ -22,13 +22,7 @@ public class ItemPickup : MonoBehaviour, IInteractable
         rb.useGravity = false;
         rb.isKinematic = true;
 
-        // Move o item para a mão do player
-        item.transform.position = player.holdPoint.position;
-
-        // Faz o item virar filho da mão
-        item.transform.parent = player.holdPoint;
-
         // Player passa a segurar esse item
-        player.SetHeldItem(item);
+        player.PickupItem(item);
     }
 }

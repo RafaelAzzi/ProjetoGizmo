@@ -5,82 +5,69 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     // ===== CONFIGURAÇÕES DO JOGADOR =====
-    public float speed = 10f;
-    public Transform holdPoint; // ponto onde o item ficará quando o jogador estiver segurando
-    public float interactRange = 2f; // distância máxima para interagir com objetos
+    public float speed = 6f;
+    public Transform holdPoint;
+    public float interactRange = 2f;
     public KeyCode interactKey = KeyCode.E;
 
-    // Guarda o item que o jogador está segurando no momento
+    // Item que o jogador está segurando
     private Item heldItem;
 
     void Update()
     {
-        // Movimento do jogador
         Move();
 
-        // Se apertar tecla de interação
         if (Input.GetKeyDown(interactKey))
         {
             TryInteract();
         }
     }
 
-    // ===== MOVIMENTO DO JOGADOR =====
+    // ===== MOVIMENTO =====
     void Move()
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        // Cria vetor de direção
         Vector3 direction = new Vector3(horizontal, 0f, vertical);
 
-        // Ajusta direção para câmera isométrica
         direction = Quaternion.Euler(0, 45, 0) * direction;
 
-        // Normaliza para evitar velocidade maior na diagonal
         direction = direction.normalized;
 
-        // Move o player
         transform.Translate(direction * speed * Time.deltaTime, Space.World);
     }
 
     // ===== SISTEMA DE INTERAÇÃO =====
     void TryInteract()
     {
-        // Detecta objetos próximos
         Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
-        
 
-            if (heldItem == null)
+        IInteractable closestInteractable = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject == gameObject) continue;
+
+            IInteractable interactable = hit.GetComponent<IInteractable>();
+
+            if (interactable != null)
             {
-                foreach (Collider hit in hits)
+                float distance = Vector3.Distance(transform.position, hit.transform.position);
+
+                if (distance < closestDistance)
                 {
-                    // Ignora o próprio player
-                    if (hit.gameObject == gameObject) continue;
-
-                    ItemPickup pickup = hit.GetComponent<ItemPickup>();
-                
-                    if (pickup != null)
-                    {
-                        pickup.Interact(this);
-                        return;
-                    }
-                }
+                    closestDistance = distance;
+                    closestInteractable = interactable;
+                }   
             }
+        }
 
-            foreach (Collider hit in hits)
-            {
-                if (hit.gameObject == gameObject) continue;
-
-                IInteractable interactable = hit.GetComponent<IInteractable>();
-
-                if (interactable != null)
-                {
-                    interactable.Interact(this);
-                    return;
-                   
-                }
-            }
+        if (closestInteractable != null)
+        {
+            closestInteractable.Interact(this);
+        }
     }
 
     // ===== PEGAR ITEM =====
@@ -94,22 +81,22 @@ public class Player : MonoBehaviour
         rb.isKinematic = true;
 
         item.transform.position = holdPoint.position;
-        item.transform.parent = holdPoint;
+        item.transform.SetParent(holdPoint);
     }
 
-    // ===== RETORNA ITEM NA MÃO =====
+    // ===== RETORNAR ITEM NA MÃO =====
     public Item GetHeldItem()
     {
         return heldItem;
     }
 
-    // ===== DEFINE ITEM NA MÃO =====
+    // ===== DEFINIR ITEM NA MÃO =====
     public void SetHeldItem(Item item)
     {
         heldItem = item;
     }
 
-    // ===== LIMPA ITEM DA MÃO =====
+    // ===== LIMPAR ITEM DA MÃO =====
     public void ClearHeldItem()
     {
         heldItem = null;
