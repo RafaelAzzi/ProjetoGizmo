@@ -50,24 +50,28 @@ public class Player : MonoBehaviour
         {
             if (hit.gameObject == gameObject) continue;
 
+            // IGNORA ITEM QUE O PLAYER ESTÁ SEGURANDO
+            if (heldItem != null && hit.transform == heldItem.transform)
+                continue;
+
             IInteractable interactable = hit.GetComponent<IInteractable>();
 
             if (interactable != null)
             {
                 float distance = Vector3.Distance(transform.position, hit.transform.position);
 
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestInteractable = interactable;
-                }   
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestInteractable = interactable;
             }
         }
+    }
 
-        if (closestInteractable != null)
-        {
-            closestInteractable.Interact(this);
-        }
+    if (closestInteractable != null)
+    {
+        closestInteractable.Interact(this);
+    }
     }
 
     // ===== PEGAR ITEM =====
