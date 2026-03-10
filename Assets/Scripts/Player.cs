@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IItemHolder
 {
     // ===== CONFIGURAÇÕES DO JOGADOR =====
     public float speed = 6f;
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
     {
         closestInteractable.Interact(this);
     }
-    }
+}
 
     // ===== PEGAR ITEM =====
     public void PickupItem(Item item)
@@ -84,25 +84,56 @@ public class Player : MonoBehaviour
         rb.useGravity = false;
         rb.isKinematic = true;
 
+        // move para a mão do player
         item.transform.position = holdPoint.position;
+
+        // vira filho do holdPoint
         item.transform.SetParent(holdPoint);
+
+        // define que o player é o holder
+        item.SetHolder(this);
     }
 
-    // ===== RETORNAR ITEM NA MÃO =====
+    // ===== IMPLEMENTAÇÃO DO IItemHolder =====
+
+    // retorna o ponto onde o item ficará
+    public Transform GetHoldPoint()
+    {
+        return holdPoint;
+    }
+
+    // define item na mão
+    public void SetItem(Item item)
+    {
+        heldItem = item;
+    }
+
+    // retorna item atual
+    public Item GetItem()
+    {
+        return heldItem;
+    }
+
+    // verifica se possui item
+    public bool HasItem()
+    {
+        return heldItem != null;
+    }
+
+    // limpa item da mão
+    public void ClearItem()
+    {
+        heldItem = null;
+    }
+
+    // compatibilidade código antigo
     public Item GetHeldItem()
     {
         return heldItem;
     }
 
-    // ===== DEFINIR ITEM NA MÃO =====
     public void SetHeldItem(Item item)
     {
         heldItem = item;
-    }
-
-    // ===== LIMPAR ITEM DA MÃO =====
-    public void ClearHeldItem()
-    {
-        heldItem = null;
     }
 }

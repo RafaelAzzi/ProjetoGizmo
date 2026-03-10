@@ -60,4 +60,40 @@ public class Item : MonoBehaviour
     [Header("Classificação")]
     public ItemPhase phase;
     public Rarity rarity;
+
+
+
+    // ===== SISTEMA DE HOLDER =====
+
+    private IItemHolder currentHolder;
+
+    public void SetHolder(IItemHolder newHolder)
+    {
+      // remove do holder anterior
+        if (currentHolder != null)
+        {
+            currentHolder.ClearItem();
+        }
+
+        // define novo holder
+        currentHolder = newHolder;
+
+        // registra item no novo holder
+        newHolder.SetItem(this);
+
+        // move visualmente para o ponto correto
+        Transform holdPoint = newHolder.GetHoldPoint();
+
+        transform.SetParent(holdPoint, true);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+
+        // desativa física
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+    }
 }

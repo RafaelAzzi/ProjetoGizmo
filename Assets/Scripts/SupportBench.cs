@@ -2,85 +2,65 @@ using UnityEngine;
 
 public class SupportBench : MonoBehaviour, IInteractable
 {
-    public Transform slot1;
-    public Transform slot2;
+    // ===== SLOTS DA BANCADA =====
+    public ItemHolder slot1; 
+    public ItemHolder slot2; 
 
-    private Item itemSlot1;
-    private Item itemSlot2;
-
+    // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
-        Debug.Log("Bench Interact");
+        Debug.Log("SupportBench Interact");
 
-        Item heldItem = player.GetHeldItem();
-
-        // Jogador segurando item
-        if (heldItem != null)
+        // Se o jogador está segurando item
+        if (player.HasItem())
         {
-            if (TryPlaceItem(heldItem))
-            {
-                player.ClearHeldItem();
-            }
+            TryPlaceItem(player);
         }
-        // Jogador sem item
         else
         {
-            Item item = TakeItem();
-
-            if (item != null)
-            {
-                player.PickupItem(item);
-            }
+            TryTakeItem(player);
         }
     }
 
-    bool TryPlaceItem(Item item)
+    // ===== TENTAR COLOCAR ITEM =====
+    void TryPlaceItem(Player player)
     {
-        if (itemSlot1 == null)
+        Item playerItem = player.GetItem();
+
+        // tenta colocar no slot1
+        if (!slot1.HasItem())
         {
-            itemSlot1 = item;
-
-            item.transform.SetParent(slot1);
-            item.transform.localPosition = Vector3.zero;
-            item.transform.rotation = Quaternion.identity;
-
-            return true;
+            playerItem.SetHolder(slot1);
+            return;
         }
 
-        if (itemSlot2 == null)
+        // tenta colocar no slot2
+        if (!slot2.HasItem())
         {
-            itemSlot2 = item;
-
-            item.transform.SetParent(slot2);
-            item.transform.localPosition = Vector3.zero;
-            item.transform.rotation = Quaternion.identity;
-
-            return true;
+            playerItem.SetHolder(slot2);
+            return;
         }
 
-        return false;
+        Debug.Log("SupportBench cheia!");
     }
 
-    Item TakeItem()
+    // ===== TENTAR PEGAR ITEM =====
+    void TryTakeItem(Player player)
     {
-        if (itemSlot1 != null)
+        // pega primeiro do slot1
+        if (slot1.HasItem())
         {
-            Item item = itemSlot1;
-            itemSlot1 = null;
-
-            item.transform.SetParent(null);
-            return item;
+            slot1.GetItem().SetHolder(player);
+            return;
         }
 
-        if (itemSlot2 != null)
+        // depois slot2
+        if (slot2.HasItem())
         {
-            Item item = itemSlot2;
-            itemSlot2 = null;
-
-            item.transform.SetParent(null);
-            return item;
+            slot2.GetItem().SetHolder(player);
+            return;
         }
 
-        return null;
+        Debug.Log("SupportBench vazia!");
     }
 }
