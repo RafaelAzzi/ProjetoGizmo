@@ -78,6 +78,9 @@ public class Item : MonoBehaviour
         // define novo holder
         currentHolder = newHolder;
 
+        // se não tiver novo holder, para aqui
+        if (newHolder == null) return;
+
         // registra item no novo holder
         newHolder.SetItem(this);
 
