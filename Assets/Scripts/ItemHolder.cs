@@ -1,7 +1,7 @@
 using UnityEngine;
 
-// Este script IMPLEMENTA a interface IItemHolder
-// Ele é o componente real que pode segurar itens
+// IMPLEMENTA a interface IItemHolder
+// Ele é o componente que pode segurar itens
 public class ItemHolder : MonoBehaviour, IItemHolder
 {
     // Ponto onde o item ficará visualmente
