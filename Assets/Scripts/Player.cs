@@ -126,7 +126,7 @@ public class Player : MonoBehaviour, IItemHolder
         heldItem = null;
     }
 
-    // compatibilidade código antigo
+    // compatibilidade com código antigo
     public Item GetHeldItem()
     {
         return heldItem;
