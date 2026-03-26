@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Classe base de todas as bancadas
-// Agora também pode segurar itens (IItemHolder)
+// Segurar itens (IItemHolder)
 public class Station : MonoBehaviour, IInteractable, IItemHolder
 {
     // Ponto onde o item ficará em cima da bancada

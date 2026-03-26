@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4d989b0bd7578a40b150a12c92504a1, type: 3}
+  m_Name: Recipe5_RR
+  m_EditorClassIdentifier: 
+  itemA: 5
+  itemB: 10
+  resultPrefab: {fileID: 5947657967145451194, guid: 65739e7f0672d464096a0cb6b90b11c0, type: 3}
+  craftTime: 3

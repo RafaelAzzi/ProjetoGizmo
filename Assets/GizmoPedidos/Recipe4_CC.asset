@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4d989b0bd7578a40b150a12c92504a1, type: 3}
-  m_Name: Recipe2
+  m_Name: Recipe4_CC
   m_EditorClassIdentifier: 
-  itemA: 0
-  itemB: 1
-  resultPrefab: {fileID: 4849826366079586654, guid: dca66d6274962b64580acc76337dc57f, type: 3}
-  craftTime: 2
+  itemA: 2
+  itemB: 2
+  resultPrefab: {fileID: 7117777531041341454, guid: fb1193ff14767234bac80dce4048accd, type: 3}
+  craftTime: 3

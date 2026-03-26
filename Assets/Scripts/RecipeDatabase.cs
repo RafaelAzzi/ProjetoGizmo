@@ -11,10 +11,7 @@ public class RecipeDatabase : ScriptableObject
         foreach (Recipe recipe in recipes)
         {
             // aceita ordem invertida
-            if (
-                (recipe.itemA == a && recipe.itemB == b) ||
-                (recipe.itemA == b && recipe.itemB == a)
-            )
+            if ((recipe.itemA == a && recipe.itemB == b) || (recipe.itemA == b && recipe.itemB == a))
             {
                 return recipe; // encontrou
             }

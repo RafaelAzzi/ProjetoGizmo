@@ -8,6 +8,6 @@ public class Recipe : ScriptableObject
 
     public GameObject resultPrefab; // resultado
 
-    public float craftTime; // tempo futuro (ainda não vamos usar)
+    public float craftTime; // tempo preparo (pra depois)
     // teste
 }
