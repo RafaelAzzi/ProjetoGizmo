@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // Necessário para Slider
+using UnityEngine.UI; //  Para Slider
 
 public class MainMenu : MonoBehaviour
 {

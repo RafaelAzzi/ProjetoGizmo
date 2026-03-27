@@ -5,6 +5,7 @@ public class SupportBench : MonoBehaviour, IInteractable
     // ===== SLOTS DA BANCADA =====
     public ItemHolder slot1; 
     public ItemHolder slot2; 
+    public ItemHolder slot3;
 
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
@@ -38,6 +39,13 @@ public class SupportBench : MonoBehaviour, IInteractable
         if (!slot2.HasItem())
         {
             playerItem.SetHolder(slot2);
+            return;
+        }
+
+        // tenta colocar no slot3
+        if (!slot3.HasItem())
+        {
+            playerItem.SetHolder(slot3);
             return;
         }
 

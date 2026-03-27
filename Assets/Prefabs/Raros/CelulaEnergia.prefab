@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451e8c5ca4616114381a2ffa1e9ed557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 5
+  itemType: 7
   phase: 1
   rarity: 1
 --- !u!33 &5759917601331991085
