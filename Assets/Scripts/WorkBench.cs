@@ -1,24 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WorkBench : MonoBehaviour, IInteractable
 {
-    // ponto onde o item aparece
+    //  onde os itens ficam na bancada
     public Transform holdPoint;
+
+    // referência ao banco de receitas
+    public RecipeDatabase recipeDatabase;
 
     // primeiro item colocado
     private Item firstItem;
-
-    // ===== SISTEMA DE RECEITAS =====
-    [System.Serializable]
-    public class Recipe
-    {
-        public ItemType itemA;
-        public ItemType itemB;
-        public GameObject resultPrefab;
-    }
-
-    public List<Recipe> recipes = new List<Recipe>();
 
 
     // ===== INTERAÇÃO =====
@@ -26,21 +17,21 @@ public class WorkBench : MonoBehaviour, IInteractable
     {
         Item heldItem = player.GetHeldItem();
 
-        // jogador não tem item
+        // ===== PLAYER SEM ITEM → tenta pegar resultado =====
         if (heldItem == null)
         {
             TakeResult(player);
             return;
         }
 
-        // jogador colocou primeiro item
+        // ===== PRIMEIRO ITEM =====
         if (firstItem == null)
         {
             PlaceFirstItem(player, heldItem);
             return;
         }
 
-        // jogador colocou segundo item
+        // ===== SEGUNDO ITEM =====
         TryCombine(player, heldItem);
     }
 
@@ -50,12 +41,15 @@ public class WorkBench : MonoBehaviour, IInteractable
     {
         firstItem = item;
 
+        // remove item da mão do player
         player.SetItem(null);
 
+        // desativa física
         Rigidbody rb = item.GetComponent<Rigidbody>();
         rb.isKinematic = true;
         rb.useGravity = false;
 
+        // posiciona na bancada
         item.transform.SetParent(holdPoint);
         item.transform.localPosition = Vector3.zero;
     }
@@ -64,35 +58,36 @@ public class WorkBench : MonoBehaviour, IInteractable
     // ===== TENTA COMBINAR =====
     void TryCombine(Player player, Item secondItem)
     {
-        foreach (Recipe recipe in recipes)
+        // busca receita no database
+        Recipe recipe = recipeDatabase.GetRecipe(firstItem.itemType, secondItem.itemType);
+
+        // ===== SE EXISTE RECEITA =====
+        if (recipe != null)
         {
-            if (
-                (recipe.itemA == firstItem.itemType && recipe.itemB == secondItem.itemType) ||
-                (recipe.itemA == secondItem.itemType && recipe.itemB == firstItem.itemType)
-            )
-            {
-                // remove itens antigos
-                Destroy(firstItem.gameObject);
-                Destroy(secondItem.gameObject);
+            // destrói os dois itens usados
+            Destroy(firstItem.gameObject);
+            Destroy(secondItem.gameObject);
 
-                player.SetItem(null);
+            // remove item da mão do player
+            player.SetItem(null);
 
-                // cria resultado
-                GameObject result = Instantiate(
-                    recipe.resultPrefab,
-                    holdPoint.position,
-                    Quaternion.identity
-                );
+            // cria o resultado
+            GameObject result = Instantiate(
+                recipe.resultPrefab,
+                holdPoint.position,
+                Quaternion.identity
+            );
 
-                result.transform.SetParent(holdPoint);
+            // coloca na bancada
+            result.transform.SetParent(holdPoint);
 
-                // limpa primeiro item
-                firstItem = null;
+            // limpa o primeiro item
+            firstItem = null;
 
-                return;
-            }
+            return;
         }
 
+        // ===== SE NÃO EXISTE RECEITA =====
         Debug.Log("Receita não encontrada!");
     }
 
@@ -100,14 +95,17 @@ public class WorkBench : MonoBehaviour, IInteractable
     // ===== PEGAR RESULTADO =====
     void TakeResult(Player player)
     {
+        // verifica se tem algo na bancada
         if (holdPoint.childCount == 0) return;
 
         Item item = holdPoint.GetChild(0).GetComponent<Item>();
 
         if (item == null) return;
 
+        // remove da bancada
         item.transform.SetParent(null);
 
+        // entrega pro player
         player.PickupItem(item);
     }
 }
