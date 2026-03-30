@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour, IItemHolder
 {
     // ===== CONFIGURAÇÕES DO JOGADOR =====
-    public float speed = 7f;
+    public float speed = 9f;
     public Transform holdPoint;
     public float interactRange = 2f;
     public KeyCode interactKey = KeyCode.E;
