@@ -2,87 +2,91 @@ using UnityEngine;
 
 public class WorkBench : MonoBehaviour, IInteractable
 {
-    //  onde os itens ficam na bancada
+    // onde os itens ficam na bancada
     public Transform holdPoint;
 
     // referência ao banco de receitas
     public RecipeDatabase recipeDatabase;
-
-    // primeiro item colocado
-    private Item firstItem;
 
 
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
         Item heldItem = player.GetHeldItem();
+        Item benchItem = GetItemOnBench();
 
-        // ===== PLAYER SEM ITEM → tenta pegar resultado =====
+        // ===== PLAYER SEM ITEM → pega da bancada =====
         if (heldItem == null)
         {
-            TakeResult(player);
+            if (benchItem != null)
+            {
+                TakeResult(player);
+            }
             return;
         }
 
-        // ===== PRIMEIRO ITEM =====
-        if (firstItem == null)
+        // ===== NÃO TEM ITEM NA BANCADA → coloca =====
+        if (benchItem == null)
         {
-            PlaceFirstItem(player, heldItem);
+            PlaceItem(player, heldItem);
             return;
         }
 
-        // ===== SEGUNDO ITEM =====
-        TryCombine(player, heldItem);
+        // ===== TEM ITEM NA BANCADA → tenta combinar =====
+        TryCombine(player, heldItem, benchItem);
     }
 
 
-    // ===== COLOCA PRIMEIRO ITEM =====
-    void PlaceFirstItem(Player player, Item item)
+    // ===== PEGA ITEM REAL DA BANCADA =====
+    Item GetItemOnBench()
     {
-        firstItem = item;
+        if (holdPoint.childCount == 0) return null;
 
-        // remove item da mão do player
+        return holdPoint.GetChild(0).GetComponent<Item>();
+    }
+
+
+    // ===== COLOCA ITEM NA BANCADA =====
+    void PlaceItem(Player player, Item item)
+    {
+        // remove da mão do player
         player.SetItem(null);
 
         // desativa física
         Rigidbody rb = item.GetComponent<Rigidbody>();
-        rb.isKinematic = true;
-        rb.useGravity = false;
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
 
-        // posiciona na bancada
+        // coloca na bancada
         item.transform.SetParent(holdPoint);
         item.transform.localPosition = Vector3.zero;
     }
 
 
     // ===== TENTA COMBINAR =====
-    void TryCombine(Player player, Item secondItem)
+    void TryCombine(Player player, Item heldItem, Item benchItem)
     {
-        // busca receita no database
-        Recipe recipe = recipeDatabase.GetRecipe(firstItem.itemType, secondItem.itemType);
+        // busca receita
+        Recipe recipe = recipeDatabase.GetRecipe(benchItem.itemType, heldItem.itemType);
 
         // ===== SE EXISTE RECEITA =====
         if (recipe != null)
         {
-            // destrói os dois itens usados
-            Destroy(firstItem.gameObject);
-            Destroy(secondItem.gameObject);
+            Destroy(benchItem.gameObject);
+            Destroy(heldItem.gameObject);
 
-            // remove item da mão do player
             player.SetItem(null);
 
-            // cria o resultado
             GameObject result = Instantiate(
                 recipe.resultPrefab,
                 holdPoint.position,
                 Quaternion.identity
             );
 
-            // coloca na bancada
             result.transform.SetParent(holdPoint);
-
-            // limpa o primeiro item
-            firstItem = null;
 
             return;
         }
@@ -92,20 +96,14 @@ public class WorkBench : MonoBehaviour, IInteractable
     }
 
 
-    // ===== PEGAR RESULTADO =====
+    // ===== PEGAR ITEM DA BANCADA =====
     void TakeResult(Player player)
     {
-        // verifica se tem algo na bancada
-        if (holdPoint.childCount == 0) return;
-
-        Item item = holdPoint.GetChild(0).GetComponent<Item>();
-
+        Item item = GetItemOnBench();
         if (item == null) return;
 
-        // remove da bancada
         item.transform.SetParent(null);
 
-        // entrega pro player
         player.PickupItem(item);
     }
 }
