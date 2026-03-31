@@ -138,7 +138,7 @@ public class OrderManager : MonoBehaviour
             text += order.requestedItem.ToString();
             text += " -> ";
             text += Mathf.Ceil(order.timeRemaining) + "s";
-            text += "</color>\n"; // fechar corretamente
+            text += "</color>\n"; // fechar 
         }
 
         ordersText.text = text;
