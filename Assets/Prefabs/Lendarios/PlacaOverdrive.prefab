@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1907096340589090882}
   - component: {fileID: 3333704111466825353}
   - component: {fileID: 2745717156383793981}
-  - component: {fileID: 4248580248427201291}
   m_Layer: 0
   m_Name: PlacaOverdrive
   m_TagString: Pickable
@@ -150,15 +149,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4248580248427201291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3124834775328438519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25157645abb788c4b9001a1b50224827, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

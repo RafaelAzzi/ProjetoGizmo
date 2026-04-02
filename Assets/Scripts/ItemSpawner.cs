@@ -1,27 +1,22 @@
 using UnityEngine;
 
-public class ItemSpawner : MonoBehaviour
+// spawner pode ser interagido
+public class ItemSpawner : MonoBehaviour, IInteractable
 {
-    public GameObject itemPrefab; // Prefab do item que será criado
-    public float spawnDelay = 2f; 
+    public GameObject itemPrefab; // Prefab do item
+    public float spawnDelay = 2f;
 
     private GameObject currentItem; // Item atual
     private float timer = 0f;
 
     void Start()
     {
-        SpawnItem(); 
+        SpawnItem();
     }
 
     void Update()
     {
-        // Se existe item mas ele não é mais filho do spawner (foi pego)
-        if (currentItem != null && currentItem.transform.parent != transform)
-        {
-            currentItem = null; // Limpa referência
-        }
-
-        // Se não existe item, começa contagem
+        // Se não existe item, começa contagem para respawn
         if (currentItem == null)
         {
             timer += Time.deltaTime;
@@ -38,7 +33,34 @@ public class ItemSpawner : MonoBehaviour
     {
         currentItem = Instantiate(itemPrefab, transform.position, Quaternion.identity);
 
-        // Faz o item nascer como filho do spawner
+        // item nasce como filho do spawner
         currentItem.transform.parent = transform;
+
+        // desativa física (igual você já fazia no pickup)
+        Rigidbody rb = currentItem.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+    }
+
+    // ===== INTERAÇÃO DO PLAYER =====
+    public void Interact(Player player)
+    {
+        // se não tem item, não faz nada
+        if (currentItem == null) return;
+
+        // se player já tem item, não pega
+        if (player.HasItem()) return;
+
+        // pega o script Item
+        Item item = currentItem.GetComponent<Item>();
+
+        // player pega o item
+        player.PickupItem(item);
+
+        // remove referência (para permitir respawn)
+        currentItem = null;
     }
 }

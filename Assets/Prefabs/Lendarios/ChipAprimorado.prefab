@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7962107290358803597}
   - component: {fileID: 813273881875052873}
   - component: {fileID: 8365725868735929168}
-  - component: {fileID: -6655982313971594869}
   m_Layer: 0
   m_Name: ChipAprimorado
   m_TagString: Pickable
@@ -150,15 +149,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-6655982313971594869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6302452255393757364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25157645abb788c4b9001a1b50224827, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

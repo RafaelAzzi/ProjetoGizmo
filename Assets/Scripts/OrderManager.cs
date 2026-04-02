@@ -92,13 +92,6 @@ public class OrderManager : MonoBehaviour
 
             order.timeRemaining -= Time.deltaTime;
 
-            //  DEBUG VISUAL COM URGÊNCIA
-            //Debug.Log(
-               // GetOrderUrgency(order) +
-               // " Pedido: " + order.requestedItem +
-               // " | Tempo: " + Mathf.Ceil(order.timeRemaining)
-            
-
             if (order.timeRemaining <= 0)
             {
                 Debug.Log("Pedido EXPIRADO: " + order.requestedItem);
