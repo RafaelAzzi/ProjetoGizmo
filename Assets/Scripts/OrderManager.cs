@@ -8,6 +8,8 @@ public class OrderManager : MonoBehaviour
 {
     public TextMeshProUGUI ordersText;
 
+    float blinkTimer = 0f;
+
     public float orderTime = 20f; // tempo padrão por pedido
 
     // lista de pedidos ativos
@@ -77,6 +79,8 @@ public class OrderManager : MonoBehaviour
     {
         UpdateOrders();
         UpdateUI();
+
+        blinkTimer += Time.deltaTime;
     }
 
     // ===== SISTEMA DE TEMPO =====
@@ -89,11 +93,11 @@ public class OrderManager : MonoBehaviour
             order.timeRemaining -= Time.deltaTime;
 
             //  DEBUG VISUAL COM URGÊNCIA
-            Debug.Log(
-                GetOrderUrgency(order) +
-                " Pedido: " + order.requestedItem +
-                " | Tempo: " + Mathf.Ceil(order.timeRemaining)
-            );
+            //Debug.Log(
+               // GetOrderUrgency(order) +
+               // " Pedido: " + order.requestedItem +
+               // " | Tempo: " + Mathf.Ceil(order.timeRemaining)
+            
 
             if (order.timeRemaining <= 0)
             {
@@ -124,7 +128,7 @@ public class OrderManager : MonoBehaviour
         return "red";
     }
 
-    void UpdateUI()
+   void UpdateUI()
     {
         if (ordersText == null) return;
 
@@ -132,13 +136,20 @@ public class OrderManager : MonoBehaviour
 
         foreach (Order order in activeOrders)
         {
-            string color = GetOrderUrgency(order); // A COR
+            string color = GetOrderUrgency(order);
+
+            //  PISCAR SE ESTIVER NO VERMELHO
+            if (color == "red")
+            {
+                bool blink = Mathf.FloorToInt(blinkTimer * 30) % 2 == 0;
+                color = blink ? "red" : "yellow";
+            }
 
             text += "<color=" + color + ">";
             text += order.requestedItem.ToString();
             text += " -> ";
             text += Mathf.Ceil(order.timeRemaining) + "s";
-            text += "</color>\n"; // fechar 
+            text += "</color>\n";
         }
 
         ordersText.text = text;

@@ -29,7 +29,7 @@ public class Player : MonoBehaviour, IItemHolder
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(horizontal, 0f, vertical);
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
         direction = Quaternion.Euler(0, 45, 0) * direction;
 
