@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 58018442}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HoldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 116737712}
   - component: {fileID: 116737713}
   - component: {fileID: 116737714}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SpawnAntiFerrugem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 318747590}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HoldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 513938595}
   - component: {fileID: 513938597}
   - component: {fileID: 513938596}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BenchMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +777,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 914850809}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HoldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -810,7 +810,7 @@ GameObject:
   - component: {fileID: 921492831}
   - component: {fileID: 921492830}
   - component: {fileID: 921492832}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SpawnBateria
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -877,7 +877,7 @@ GameObject:
   m_Component:
   - component: {fileID: 925552006}
   - component: {fileID: 925552007}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Slot1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1015,7 +1015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 997582131}
   - component: {fileID: 997582132}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Slot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1062,7 +1062,7 @@ GameObject:
   - component: {fileID: 1010920729}
   - component: {fileID: 1010920730}
   - component: {fileID: 1010920731}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SpawnOleoComum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1128,7 +1128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1033635287}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HoldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1159,7 +1159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1108472355}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HoldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1294,7 +1294,7 @@ GameObject:
   - component: {fileID: 1442179838}
   - component: {fileID: 1442179837}
   - component: {fileID: 1442179839}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SpawnSucata
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1362,7 +1362,7 @@ GameObject:
   - component: {fileID: 1505759480}
   - component: {fileID: 1505759482}
   - component: {fileID: 1505759481}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DeliveryMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1446,7 +1446,7 @@ GameObject:
   - component: {fileID: 1717984924}
   - component: {fileID: 1717984923}
   - component: {fileID: 1717984922}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DeliveryBench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1605,7 +1605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1770693835}
   - component: {fileID: 1770693836}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Slot3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1652,7 +1652,7 @@ GameObject:
   - component: {fileID: 1778539898}
   - component: {fileID: 1778539900}
   - component: {fileID: 1778539899}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: WorkMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1873,9 +1873,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca71aac2cf77a9146ab1449119ea3d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 8
   speed: 9
   holdPoint: {fileID: 195602643}
-  interactRange: 2
+  interactRange: 1
   interactKey: 101
 --- !u!1 &2067646849
 GameObject:
@@ -1889,7 +1892,7 @@ GameObject:
   - component: {fileID: 2067646851}
   - component: {fileID: 2067646850}
   - component: {fileID: 2067646854}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: WorkBench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2002,7 +2005,7 @@ GameObject:
   - component: {fileID: 2091491571}
   - component: {fileID: 2091491575}
   - component: {fileID: 2091491576}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SupportBench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2117,7 +2120,7 @@ GameObject:
   - component: {fileID: 2133330131}
   - component: {fileID: 2133330130}
   - component: {fileID: 2133330132}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SpawnFiacao
   m_TagString: Untagged
   m_Icon: {fileID: 0}

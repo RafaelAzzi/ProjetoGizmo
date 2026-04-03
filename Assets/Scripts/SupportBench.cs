@@ -10,8 +10,6 @@ public class SupportBench : MonoBehaviour, IInteractable
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
-        Debug.Log("SupportBench Interact");
-
         // Se o jogador está segurando item
         if (player.HasItem())
         {
@@ -66,6 +64,13 @@ public class SupportBench : MonoBehaviour, IInteractable
         if (slot2.HasItem())
         {
             slot2.GetItem().SetHolder(player);
+            return;
+        }
+
+        // depois slot3
+        if (slot3.HasItem())
+        {
+            slot3.GetItem().SetHolder(player);
             return;
         }
 

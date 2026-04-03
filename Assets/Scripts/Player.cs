@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IItemHolder
 {
+    // Layer dos objetos interagíveis 
+    public LayerMask interactLayer;
+
     // ===== CONFIGURAÇÕES DO JOGADOR =====
     public float speed = 9f;
     public Transform holdPoint;
-    public float interactRange = 2f;
+    public float interactRange = 1f;
     public KeyCode interactKey = KeyCode.E;
 
     // Item que o jogador está segurando
@@ -41,7 +44,7 @@ public class Player : MonoBehaviour, IItemHolder
     // ===== SISTEMA DE INTERAÇÃO =====
     void TryInteract()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
 
         IInteractable closestInteractable = null;
         float closestDistance = Mathf.Infinity;
@@ -126,7 +129,6 @@ public class Player : MonoBehaviour, IItemHolder
         heldItem = null;
     }
 
-    // compatibilidade com código antigo
     public Item GetHeldItem()
     {
         return heldItem;

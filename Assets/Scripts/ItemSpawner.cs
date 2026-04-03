@@ -36,7 +36,7 @@ public class ItemSpawner : MonoBehaviour, IInteractable
         // item nasce como filho do spawner
         currentItem.transform.parent = transform;
 
-        // desativa física (igual você já fazia no pickup)
+        // desativa física
         Rigidbody rb = currentItem.GetComponent<Rigidbody>();
         if (rb != null)
         {

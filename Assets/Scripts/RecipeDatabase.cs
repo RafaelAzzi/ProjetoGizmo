@@ -13,13 +13,6 @@ public class RecipeDatabase : ScriptableObject
 
         foreach (Recipe recipe in recipes)
         {
-            // proteção: evita erro se alguma receita estiver mal configurada
-            if (recipe == null)
-            {
-                Debug.LogWarning("Existe uma receita NULL no RecipeDatabase!");
-                continue;
-            }
-
             // verifica combinação (ordem não importa)
             if ((recipe.itemA == a && recipe.itemB == b) ||
                 (recipe.itemA == b && recipe.itemB == a))
