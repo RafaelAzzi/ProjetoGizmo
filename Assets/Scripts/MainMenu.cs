@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
     public GameObject optionsPanel; // Painel de opções
     public Slider musicSlider; // Slider da música
     public Slider sfxSlider; // Slider dos efeitos sonoros
+    public GameObject comoJogarPanel;
 
     void Start()
     {
@@ -51,5 +52,17 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Volume SFX: " + volume);
         // Depois conectar a um AudioManager
+    }
+
+    // ===== NOVO: abrir "Como Jogar" =====
+    public void OpenComoJogar()
+    {
+        comoJogarPanel.SetActive(true); // Mostra painel
+    }
+
+    // ===== NOVO: fechar "Como Jogar" =====
+    public void CloseComoJogar()
+    {
+        comoJogarPanel.SetActive(false); // Esconde painel
     }
 }
