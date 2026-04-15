@@ -12,7 +12,6 @@ public class Player : MonoBehaviour, IItemHolder
     public Transform holdPoint;
     public float interactRange = 1f;
     public KeyCode interactKey = KeyCode.E;
-    
 
     // Item que o jogador está segurando
     private Item heldItem;
@@ -35,11 +34,16 @@ public class Player : MonoBehaviour, IItemHolder
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
-        direction = Quaternion.Euler(0, 45, 0) * direction;
-
         direction = direction.normalized;
 
+        // move o personagem
         transform.Translate(direction * speed * Time.deltaTime, Space.World);
+
+        //  ROTACIONA NA DIREÇÃO DO MOVIMENTO =====
+        if (direction != Vector3.zero)
+        {
+            transform.forward = direction;
+        }
     }
 
     // ===== SISTEMA DE INTERAÇÃO =====
@@ -52,42 +56,46 @@ public class Player : MonoBehaviour, IItemHolder
 
         foreach (Collider hit in hits)
         {
-        if (hit.gameObject == gameObject) continue;
+            if (hit.gameObject == gameObject) continue;
 
-        // IGNORA ITEM QUE O PLAYER ESTÁ SEGURANDO
-        if (heldItem != null && hit.transform == heldItem.transform)
-            continue;
+            // IGNORA ITEM QUE O PLAYER ESTÁ SEGURANDO
+            if (heldItem != null && hit.transform == heldItem.transform)
+                continue;
 
-        IInteractable interactable = hit.GetComponent<IInteractable>();
+            //  Interface → usar GetComponent 
+            IInteractable interactable = hit.GetComponent<IInteractable>();
 
-        if (interactable != null)
-        {
-            // posição padrão
-            Vector3 targetPosition = hit.transform.position;
-
-            // usa holdPoint se existir
-            IItemHolder holder = hit.GetComponent<IItemHolder>();
-            if (holder != null && holder.GetHoldPoint() != null)
+            if (interactable != null)
             {
-                targetPosition = holder.GetHoldPoint().position;
-            }
+                // posição padrão
+                Vector3 targetPosition = hit.transform.position;
 
-            float distance = Vector3.Distance(transform.position, targetPosition);
+                //  aqui usar TryGetComponent  (seguro)
+                if (hit.TryGetComponent(out IItemHolder holder))
+                {
+                    Transform hold = holder.GetHoldPoint();
 
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestInteractable = interactable;
+                    if (hold != null)
+                    {
+                        targetPosition = hold.position;
+                    }
+                }
+
+                float distance = Vector3.Distance(transform.position, targetPosition);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestInteractable = interactable;
+                }
             }
         }
-    }
-    
 
-    if (closestInteractable != null)
-    {
-        closestInteractable.Interact(this);
+        if (closestInteractable != null)
+        {
+            closestInteractable.Interact(this);
+        }
     }
-}
 
     // ===== PEGAR ITEM =====
     public void PickupItem(Item item)
@@ -96,8 +104,11 @@ public class Player : MonoBehaviour, IItemHolder
 
         Rigidbody rb = item.GetComponent<Rigidbody>();
 
-        rb.useGravity = false;
-        rb.isKinematic = true;
+        if (rb != null)
+        {
+            rb.useGravity = false;
+            rb.isKinematic = true;
+        }
 
         // move para a mão do player
         item.transform.position = holdPoint.position;
@@ -111,31 +122,26 @@ public class Player : MonoBehaviour, IItemHolder
 
     // ===== IMPLEMENTAÇÃO DO IItemHolder =====
 
-    // retorna o ponto onde o item ficará
     public Transform GetHoldPoint()
     {
         return holdPoint;
     }
 
-    // define item na mão
     public void SetItem(Item item)
     {
         heldItem = item;
     }
 
-    // retorna item atual
     public Item GetItem()
     {
         return heldItem;
     }
 
-    // verifica se possui item
     public bool HasItem()
     {
         return heldItem != null;
     }
 
-    // limpa item da mão
     public void ClearItem()
     {
         heldItem = null;

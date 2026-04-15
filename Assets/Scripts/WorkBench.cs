@@ -6,7 +6,7 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     public RecipeDatabase recipeDatabase;
 
     // distância máxima para interagir com o ponto de crafting
-    public float interactDistance = 1.8f;
+    public float interactDistance = 2.5f;
 
     private Item currentItem;
 
