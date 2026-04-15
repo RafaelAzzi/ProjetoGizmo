@@ -105,7 +105,7 @@ public class Item : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
 
-        // desativa física para não cair ou colidir
+        // desativa física 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {

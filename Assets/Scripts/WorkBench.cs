@@ -14,7 +14,7 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     public void Interact(Player player)
     {
 
-        // ===== NOVO: VERIFICA DISTÂNCIA ATÉ O HOLDPOINT =====
+        //  VERIFICA DISTÂNCIA ATÉ O HOLDPOINT =====
         float distance = Vector3.Distance(player.transform.position, holdPoint.position);
 
         if (distance > interactDistance)
@@ -72,8 +72,6 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
 
             return;
         }
-
-        Debug.Log("Receita não encontrada!");
     }
 
     // ===== IItemHolder =====
