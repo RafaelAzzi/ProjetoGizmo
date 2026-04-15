@@ -63,13 +63,19 @@ public class Item : MonoBehaviour
 
 
 
-    // ===== SISTEMA DE HOLDER =====
+// ===== SISTEMA DE HOLDER =====
 
     private IItemHolder currentHolder;
 
     public void SetHolder(IItemHolder newHolder)
     {
-      // remove do holder anterior
+        // evita refazer tudo se já estiver no mesmo holder
+        if (currentHolder == newHolder)
+        {
+            return;
+        }
+
+        // remove do holder anterior
         if (currentHolder != null)
         {
             currentHolder.ClearItem();
@@ -84,14 +90,22 @@ public class Item : MonoBehaviour
         // registra item no novo holder
         newHolder.SetItem(this);
 
-        // move visualmente para o ponto correto
+        // pega o ponto onde o item deve ficar
         Transform holdPoint = newHolder.GetHoldPoint();
 
-        transform.SetParent(holdPoint, true);
+        // segurança: evita erro se não tiver holdPoint
+        if (holdPoint == null)
+        {
+            Debug.LogError("HoldPoint está NULL no holder: " + newHolder);
+            return;
+        }
+
+        // move o item para o holder
+        transform.SetParent(holdPoint);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
 
-        // desativa física
+        // desativa física para não cair ou colidir
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {

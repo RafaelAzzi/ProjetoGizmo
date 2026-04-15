@@ -12,6 +12,7 @@ public class Player : MonoBehaviour, IItemHolder
     public Transform holdPoint;
     public float interactRange = 1f;
     public KeyCode interactKey = KeyCode.E;
+    
 
     // Item que o jogador está segurando
     private Item heldItem;
@@ -51,17 +52,27 @@ public class Player : MonoBehaviour, IItemHolder
 
         foreach (Collider hit in hits)
         {
-            if (hit.gameObject == gameObject) continue;
+        if (hit.gameObject == gameObject) continue;
 
-            // IGNORA ITEM QUE O PLAYER ESTÁ SEGURANDO
-            if (heldItem != null && hit.transform == heldItem.transform)
-                continue;
+        // IGNORA ITEM QUE O PLAYER ESTÁ SEGURANDO
+        if (heldItem != null && hit.transform == heldItem.transform)
+            continue;
 
-            IInteractable interactable = hit.GetComponent<IInteractable>();
+        IInteractable interactable = hit.GetComponent<IInteractable>();
 
-            if (interactable != null)
+        if (interactable != null)
+        {
+            // posição padrão
+            Vector3 targetPosition = hit.transform.position;
+
+            // usa holdPoint se existir
+            IItemHolder holder = hit.GetComponent<IItemHolder>();
+            if (holder != null && holder.GetHoldPoint() != null)
             {
-                float distance = Vector3.Distance(transform.position, hit.transform.position);
+                targetPosition = holder.GetHoldPoint().position;
+            }
+
+            float distance = Vector3.Distance(transform.position, targetPosition);
 
             if (distance < closestDistance)
             {
@@ -70,6 +81,7 @@ public class Player : MonoBehaviour, IItemHolder
             }
         }
     }
+    
 
     if (closestInteractable != null)
     {

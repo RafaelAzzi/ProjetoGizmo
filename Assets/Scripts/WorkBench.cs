@@ -1,109 +1,105 @@
 using UnityEngine;
 
-public class WorkBench : MonoBehaviour, IInteractable
+public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
 {
-    // onde os itens ficam na bancada
     public Transform holdPoint;
-
-    // referência ao banco de receitas
     public RecipeDatabase recipeDatabase;
 
+    // distância máxima para interagir com o ponto de crafting
+    public float interactDistance = 1.8f;
+
+    private Item currentItem;
 
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
-        Item heldItem = player.GetHeldItem();
-        Item benchItem = GetItemOnBench();
 
-        // ===== PLAYER SEM ITEM → pega da bancada =====
+        // ===== NOVO: VERIFICA DISTÂNCIA ATÉ O HOLDPOINT =====
+        float distance = Vector3.Distance(player.transform.position, holdPoint.position);
+
+        if (distance > interactDistance)
+        {
+            return; // player está longe do ponto de crafting
+        }
+
+        Item heldItem = player.GetHeldItem();
+
+        // PLAYER SEM ITEM → pega resultado
         if (heldItem == null)
         {
-            if (benchItem != null)
+            if (HasItem())
             {
-                TakeResult(player);
+                GetItem().SetHolder(player);
             }
             return;
         }
 
-        // ===== NÃO TEM ITEM NA BANCADA → coloca =====
-        if (benchItem == null)
+        // BANCADA VAZIA → coloca item
+        if (!HasItem())
         {
-            PlaceItem(player, heldItem);
+            heldItem.SetHolder(this);
             return;
         }
 
-        // ===== TEM ITEM NA BANCADA → tenta combinar =====
-        TryCombine(player, heldItem, benchItem);
+        // TENTA COMBINAR
+        TryCombine(player, heldItem, currentItem);
     }
 
-
-    // ===== PEGA ITEM REAL DA BANCADA =====
-    Item GetItemOnBench()
-    {
-        if (holdPoint.childCount == 0) return null;
-
-        return holdPoint.GetChild(0).GetComponent<Item>();
-    }
-
-
-    // ===== COLOCA ITEM NA BANCADA =====
-    void PlaceItem(Player player, Item item)
-    {
-        // remove da mão do player
-        player.SetItem(null);
-
-        // desativa física
-        Rigidbody rb = item.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-            rb.useGravity = false;
-        }
-
-        // coloca na bancada
-        item.transform.SetParent(holdPoint);
-        item.transform.localPosition = Vector3.zero;
-    }
-
-
-    // ===== TENTA COMBINAR =====
+    // ===== COMBINAÇÃO =====
     void TryCombine(Player player, Item heldItem, Item benchItem)
     {
-        // busca receita
         Recipe recipe = recipeDatabase.GetRecipe(benchItem.itemType, heldItem.itemType);
 
-        // ===== SE EXISTE RECEITA =====
         if (recipe != null)
         {
+            // limpa referência antes de destruir
+            ClearItem();
+
             Destroy(benchItem.gameObject);
             Destroy(heldItem.gameObject);
 
-            player.SetItem(null);
-
-            GameObject result = Instantiate(
+            // cria resultado
+            GameObject resultGO = Instantiate(
                 recipe.resultPrefab,
                 holdPoint.position,
                 Quaternion.identity
             );
 
-            result.transform.SetParent(holdPoint);
+            Item resultItem = resultGO.GetComponent<Item>();
+
+            // coloca resultado na bancada usando o sistema correto
+            resultItem.SetHolder(this);
 
             return;
         }
 
-        // ===== SE NÃO EXISTE RECEITA =====
         Debug.Log("Receita não encontrada!");
     }
 
+    // ===== IItemHolder =====
 
-    // ===== PEGAR ITEM DA BANCADA =====
-    void TakeResult(Player player)
+    public Transform GetHoldPoint()
     {
-        Item item = GetItemOnBench();
-        if (item == null) return;
+        return holdPoint;
+    }
 
-        item.transform.SetParent(null);
+    public void SetItem(Item item)
+    {
+        currentItem = item;
+    }
 
-        player.PickupItem(item);
+    public Item GetItem()
+    {
+        return currentItem;
+    }
+
+    public void ClearItem()
+    {
+        currentItem = null;
+    }
+
+    public bool HasItem()
+    {
+        return currentItem != null;
     }
 }

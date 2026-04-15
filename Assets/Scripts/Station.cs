@@ -11,29 +11,21 @@ public class Station : MonoBehaviour, IInteractable, IItemHolder
     private Item currentItem;
 
     // ===== INTERAÇÃO COM O PLAYER =====
-    public virtual void Interact(Player player)
-    {
-        // Se a estação não tem item e o player tem → colocar item
+    public void Interact(Player player) 
+       {
+        // PLAYER TEM ITEM → coloca na bancada
         if (!HasItem() && player.HasItem())
         {
             Item item = player.GetItem();
 
-            player.ClearItem();
-
-            SetItem(item);
-
-            item.transform.SetParent(itemPoint);
-            item.transform.position = itemPoint.position;
+            // apenas muda o holder (o item cuida do resto)
+            item.SetHolder(this);
         }
 
-        // Se estação tem item e player não tem → pegar item
+        // PLAYER NÃO TEM ITEM → pega da bancada
         else if (HasItem() && !player.HasItem())
         {
-            Item item = GetItem();
-
-            ClearItem();
-
-            player.PickupItem(item);
+            GetItem().SetHolder(player);
         }
     }
 

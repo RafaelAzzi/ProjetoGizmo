@@ -1,16 +1,16 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SupportBench : MonoBehaviour, IInteractable
 {
-    // ===== SLOTS DA BANCADA =====
-    public ItemHolder slot1; 
-    public ItemHolder slot2; 
+    // ===== SLOTS =====
+    public ItemHolder slot1;
+    public ItemHolder slot2;
     public ItemHolder slot3;
 
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
-        // Se o jogador está segurando item
         if (player.HasItem())
         {
             TryPlaceItem(player);
@@ -21,59 +21,86 @@ public class SupportBench : MonoBehaviour, IInteractable
         }
     }
 
-    // ===== TENTAR COLOCAR ITEM =====
+    // ===== COLOCAR ITEM (slot mais próximo vazio) =====
     void TryPlaceItem(Player player)
     {
-        Item playerItem = player.GetItem();
+        Item playerItem = player.GetHeldItem();
+        if (playerItem == null) return;
 
-        // tenta colocar no slot1
-        if (!slot1.HasItem())
+        ItemHolder closestSlot = GetClosestAvailableSlot(player.transform.position);
+
+        if (closestSlot != null)
         {
-            playerItem.SetHolder(slot1);
-            return;
+            playerItem.SetHolder(closestSlot);
         }
-
-        // tenta colocar no slot2
-        if (!slot2.HasItem())
+        else
         {
-            playerItem.SetHolder(slot2);
-            return;
+            Debug.Log("SupportBench cheia!");
         }
-
-        // tenta colocar no slot3
-        if (!slot3.HasItem())
-        {
-            playerItem.SetHolder(slot3);
-            return;
-        }
-
-        Debug.Log("SupportBench cheia!");
     }
 
-    // ===== TENTAR PEGAR ITEM =====
+    // ===== PEGAR ITEM (slot mais próximo com item) =====
     void TryTakeItem(Player player)
     {
-        // pega primeiro do slot1
-        if (slot1.HasItem())
+        ItemHolder closestSlot = GetClosestOccupiedSlot(player.transform.position);
+
+        if (closestSlot != null)
         {
-            slot1.GetItem().SetHolder(player);
-            return;
+            closestSlot.GetItem().SetHolder(player);
+        }
+        else
+        {
+            Debug.Log("SupportBench vazia!");
+        }
+    }
+
+    // ===== SLOT VAZIO MAIS PRÓXIMO =====
+    ItemHolder GetClosestAvailableSlot(Vector3 playerPos)
+    {
+        List<ItemHolder> slots = new List<ItemHolder> { slot1, slot2, slot3 };
+
+        ItemHolder closest = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (ItemHolder slot in slots)
+        {
+            if (!slot.HasItem())
+            {
+                float distance = Vector3.Distance(playerPos, slot.transform.position);
+
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closest = slot;
+                }
+            }
         }
 
-        // depois slot2
-        if (slot2.HasItem())
+        return closest;
+    }
+
+    // ===== SLOT COM ITEM MAIS PRÓXIMO =====
+    ItemHolder GetClosestOccupiedSlot(Vector3 playerPos)
+    {
+        List<ItemHolder> slots = new List<ItemHolder> { slot1, slot2, slot3 };
+
+        ItemHolder closest = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (ItemHolder slot in slots)
         {
-            slot2.GetItem().SetHolder(player);
-            return;
+            if (slot.HasItem())
+            {
+                float distance = Vector3.Distance(playerPos, slot.transform.position);
+
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closest = slot;
+                }
+            }
         }
 
-        // depois slot3
-        if (slot3.HasItem())
-        {
-            slot3.GetItem().SetHolder(player);
-            return;
-        }
-
-        Debug.Log("SupportBench vazia!");
+        return closest;
     }
 }
