@@ -8,7 +8,7 @@ public class RecipeDatabase : ScriptableObject
 
     public Recipe GetRecipe(ItemType a, ItemType b)
     {
-        // debug opcional (ajuda MUITO quando tiver muitas receitas)
+       //debug para muitas receitas
         Debug.Log($"Tentando combinar: {a} + {b}");
 
         foreach (Recipe recipe in recipes)
