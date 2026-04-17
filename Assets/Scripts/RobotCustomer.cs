@@ -46,10 +46,21 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         {
             MoveToTarget(targetPoint.position);
 
-            // chegou no ponto
             if (Vector3.Distance(transform.position, targetPoint.position) < stopDistance)
             {
                 isWaiting = true;
+            }
+        }
+
+        // ===== NOVO: VERIFICA SE O PEDIDO EXPIRou =====
+        if (isWaiting && hasOrder && !isLeaving)
+        {
+            if (!orderManager.activeOrders.Contains(myOrder))
+            {
+                Debug.Log("Pedido do robô expirou, indo embora...");
+
+                isWaiting = false;
+                isLeaving = true;
             }
         }
 
@@ -58,7 +69,6 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         {
             MoveToTarget(exitPoint.position);
 
-            // destrói quando chega na saída
             if (Vector3.Distance(transform.position, exitPoint.position) < stopDistance)
             {
                 Destroy(gameObject);

@@ -8,6 +8,9 @@ public class SupportBench : MonoBehaviour, IInteractable
     public ItemHolder slot2;
     public ItemHolder slot3;
 
+    // ===== NOVO: DISTÂNCIA DE INTERAÇÃO =====
+    public float interactDistance = 2.5f;
+
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
@@ -21,7 +24,7 @@ public class SupportBench : MonoBehaviour, IInteractable
         }
     }
 
-    // ===== COLOCAR ITEM (slot mais próximo vazio) =====
+    // ===== COLOCAR ITEM =====
     void TryPlaceItem(Player player)
     {
         Item playerItem = player.GetHeldItem();
@@ -29,29 +32,29 @@ public class SupportBench : MonoBehaviour, IInteractable
 
         ItemHolder closestSlot = GetClosestAvailableSlot(player.transform.position);
 
-        if (closestSlot != null)
-        {
-            playerItem.SetHolder(closestSlot);
-        }
-        else
-        {
-            Debug.Log("SupportBench cheia!");
-        }
+        // ===== VALIDA DISTÂNCIA =====
+        if (closestSlot == null) return;
+
+        float distance = Vector3.Distance(player.transform.position, closestSlot.GetHoldPoint().position);
+
+        if (distance > interactDistance) return;
+
+        playerItem.SetHolder(closestSlot);
     }
 
-    // ===== PEGAR ITEM (slot mais próximo com item) =====
+    // ===== PEGAR ITEM =====
     void TryTakeItem(Player player)
     {
         ItemHolder closestSlot = GetClosestOccupiedSlot(player.transform.position);
 
-        if (closestSlot != null)
-        {
-            closestSlot.GetItem().SetHolder(player);
-        }
-        else
-        {
-            Debug.Log("SupportBench vazia!");
-        }
+        // ===== VALIDA DISTÂNCIA =====
+        if (closestSlot == null) return;
+
+        float distance = Vector3.Distance(player.transform.position, closestSlot.GetHoldPoint().position);
+
+        if (distance > interactDistance) return;
+
+        closestSlot.GetItem().SetHolder(player);
     }
 
     // ===== SLOT VAZIO MAIS PRÓXIMO =====
