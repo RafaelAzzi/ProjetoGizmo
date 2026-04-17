@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
-
 public class OrderManager : MonoBehaviour
 {
     public TextMeshProUGUI ordersText;
@@ -23,33 +21,35 @@ public class OrderManager : MonoBehaviour
 
     void Start()
     {
-        // gera pedidos iniciais
-        for (int i = 0; i < maxOrders; i++)
-        {
-            GenerateNewOrder();
-        }
+        //  NÃO GERAr MAIS PEDIDOS AUTOMATICAMENTE
+        // agora os robôs controlam isso
     }
 
-    // cria um novo pedido
-    void GenerateNewOrder()
+    // ===== NOVO: AGORA É PUBLIC E RETORNA O PEDIDO =====
+    public Order GenerateNewOrder()
     {
-        if (activeOrders.Count >= maxOrders) return;
+        // se já atingiu limite, não cria
+        if (activeOrders.Count >= maxOrders) return null;
 
         int index = Random.Range(0, possibleItems.Length);
 
         Order newOrder = new Order();
         newOrder.requestedItem = possibleItems[index];
 
-        // tempo
+        // define tempo
         newOrder.maxTime = orderTime;
         newOrder.timeRemaining = orderTime;
 
+        // adiciona na lista
         activeOrders.Add(newOrder);
 
         Debug.Log("Novo pedido: " + newOrder.requestedItem);
+
+        //  retorna o pedido criado
+        return newOrder;
     }
 
-    // tenta completar um pedido com o item entregue
+    // ===== COMPLETAR PEDIDO =====
     public bool TryCompleteOrder(Item item)
     {
         for (int i = 0; i < activeOrders.Count; i++)
@@ -64,8 +64,8 @@ public class OrderManager : MonoBehaviour
                 // destrói item entregue
                 Destroy(item.gameObject);
 
-                // gera novo pedido
-                GenerateNewOrder();
+                //  NÃO gera novo pedido automaticamente
+                // agora quem controla isso são os robôs
 
                 return true;
             }
@@ -99,10 +99,10 @@ public class OrderManager : MonoBehaviour
                 // remove pedido
                 activeOrders.RemoveAt(i);
 
-                // futura penalidade aqui
+                //  NÃO gera novo automaticamente
+                // robôs vão gerar novos pedidos depois
 
-                // gera novo pedido
-                GenerateNewOrder();
+                // futura penalidade aqui
             }
         }
     }
@@ -121,7 +121,7 @@ public class OrderManager : MonoBehaviour
         return "red";
     }
 
-   void UpdateUI()
+    void UpdateUI()
     {
         if (ordersText == null) return;
 
@@ -131,7 +131,7 @@ public class OrderManager : MonoBehaviour
         {
             string color = GetOrderUrgency(order);
 
-            //  PISCAR SE ESTIVER NO VERMELHO
+            // piscar se estiver crítico
             if (color == "red")
             {
                 bool blink = Mathf.FloorToInt(blinkTimer * 30) % 2 == 0;

@@ -10,7 +10,7 @@ public class Player : MonoBehaviour, IItemHolder
     // ===== CONFIGURAÇÕES DO JOGADOR =====
     public float speed = 9f;
     public Transform holdPoint;
-    public float interactRange = 1f;
+    public float interactRange = 2f;
     public KeyCode interactKey = KeyCode.E;
 
     // Item que o jogador está segurando
