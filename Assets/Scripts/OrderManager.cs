@@ -21,7 +21,7 @@ public class OrderManager : MonoBehaviour
 
     void Start()
     {
-        //  NÃO GERAr MAIS PEDIDOS AUTOMATICAMENTE
+        //  NÃO GERAR MAIS PEDIDOS AUTOMATICAMENTE
         // agora os robôs controlam isso
     }
 
@@ -49,8 +49,6 @@ public class OrderManager : MonoBehaviour
 
         // adiciona na lista
         activeOrders.Add(newOrder);
-
-        Debug.Log("Novo pedido: " + newOrder.requestedItem);
 
         //  retorna o pedido criado
         return newOrder;
