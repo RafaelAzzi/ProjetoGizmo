@@ -119,7 +119,14 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             if (myOrder != null)
             {
                 hasOrder = true;
-                Debug.Log("Robô fez pedido: " + myOrder.requestedItem);
+                string items = "";
+
+                foreach (var item in myOrder.requestedItems)
+                {
+                    items += item.ToString() + " ";
+                }
+
+                Debug.Log("Robô fez pedido: " + items);
             }
 
             return; // importante: não continua para entrega

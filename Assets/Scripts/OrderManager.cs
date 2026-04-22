@@ -34,6 +34,13 @@ public class OrderManager : MonoBehaviour
         int index = Random.Range(0, possibleItems.Length);
 
         Order newOrder = new Order();
+        // limpa lista
+        newOrder.requestedItems.Clear();
+
+        // adiciona item na lista (novo sistema)
+        newOrder.requestedItems.Add(possibleItems[index]);
+
+        // mantém compatibilidade
         newOrder.requestedItem = possibleItems[index];
 
         // define tempo
@@ -54,18 +61,26 @@ public class OrderManager : MonoBehaviour
     {
         for (int i = 0; i < activeOrders.Count; i++)
         {
-            if (item.itemType == activeOrders[i].requestedItem)
-            {
-                Debug.Log("Pedido COMPLETO: " + item.itemType);
+            Order order = activeOrders[i];
 
-                // remove pedido
-                activeOrders.RemoveAt(i);
+            // ===== NOVO SISTEMA (lista) =====
+            if (order.requestedItems.Contains(item.itemType))
+            {
+                Debug.Log("Item entregue: " + item.itemType);
+
+                // remove item da lista
+                order.requestedItems.Remove(item.itemType);
 
                 // destrói item entregue
                 Destroy(item.gameObject);
 
-                //  NÃO gera novo pedido automaticamente
-                // agora quem controla isso são os robôs
+                // se acabou a lista → pedido completo
+                if (order.requestedItems.Count == 0)
+                {
+                    Debug.Log("Pedido COMPLETO!");
+
+                    activeOrders.RemoveAt(i);
+                }
 
                 return true;
             }
@@ -139,7 +154,14 @@ public class OrderManager : MonoBehaviour
             }
 
             text += "<color=" + color + ">";
-            text += order.requestedItem.ToString();
+            // mostra todos os itens do pedido
+            for (int j = 0; j < order.requestedItems.Count; j++)
+            {
+                text += order.requestedItems[j].ToString();
+
+                if (j < order.requestedItems.Count - 1)
+                text += ", ";
+            }
             text += " -> ";
             text += Mathf.Ceil(order.timeRemaining) + "s";
             text += "</color>\n";

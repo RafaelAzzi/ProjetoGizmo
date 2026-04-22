@@ -61,6 +61,9 @@ public class Item : MonoBehaviour
     public ItemPhase phase;
     public Rarity rarity;
 
+    // Diz se o item já foi preparado na DrinkBench
+    public bool isProcessed = false;
+
 
 
 // ===== SISTEMA DE HOLDER =====
