@@ -4,6 +4,10 @@ using TMPro;
 
 public class OrderManager : MonoBehaviour
 {
+    [Header("Quantidade de itens por pedido")]
+    public int minItemsPerOrder = 1;
+    public int maxItemsPerOrder = 1;
+
     public TextMeshProUGUI ordersText;
 
     float blinkTimer = 0f;
@@ -31,17 +35,28 @@ public class OrderManager : MonoBehaviour
         // se já atingiu limite, não cria
         if (activeOrders.Count >= maxOrders) return null;
 
-        int index = Random.Range(0, possibleItems.Length);
-
         Order newOrder = new Order();
+
+        // define quantos itens o pedido terá
+        int itemCount = Random.Range(minItemsPerOrder, maxItemsPerOrder + 1);
+
         // limpa lista
         newOrder.requestedItems.Clear();
 
-        // adiciona item na lista (novo sistema)
-        newOrder.requestedItems.Add(possibleItems[index]);
+        // gera os itens
+        for (int i = 0; i < itemCount; i++)
+        {
+            int randomIndex = Random.Range(0, possibleItems.Length);
+            ItemType randomItem = possibleItems[randomIndex];
 
-        // mantém compatibilidade
-        newOrder.requestedItem = possibleItems[index];
+            newOrder.requestedItems.Add(randomItem);
+        }
+
+        // compatibilidade
+        if (newOrder.requestedItems.Count > 0)
+        {
+            newOrder.requestedItem = newOrder.requestedItems[0];
+        }
 
         // define tempo
         newOrder.maxTime = orderTime;
@@ -50,7 +65,16 @@ public class OrderManager : MonoBehaviour
         // adiciona na lista
         activeOrders.Add(newOrder);
 
-        //  retorna o pedido criado
+        // DEBUG
+        string items = "";
+
+        foreach (var item in newOrder.requestedItems)
+        {
+            items += item.ToString() + " ";
+        }
+
+        Debug.Log("Novo pedido: " + items);
+
         return newOrder;
     }
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // representa o robô cliente
@@ -133,21 +134,71 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         }
 
         // ===== PASSO 2: ENTREGAR ITEM =====
+        // ===== ENTREGA =====
         Item heldItem = player.GetHeldItem();
-
-        // player não tem item
         if (heldItem == null) return;
 
-        bool success = orderManager.TryCompleteOrder(heldItem);
+        // verifica se é prato
+        PlateItem plate = heldItem as PlateItem;
 
-        if (success)
+        if (plate != null)
         {
-            // remove item corretamente do sistema
+            bool success = TryDeliverPlate(plate);
+
+            if (success)
+            {
+                Destroy(plate.gameObject);
+
+                isWaiting = false;
+                isLeaving = true;
+            }
+
+            return;
+        }
+
+        // fallback (item único)
+        bool singleSuccess = orderManager.TryCompleteOrder(heldItem);
+
+        if (singleSuccess)
+        {
             heldItem.SetHolder(null);
 
-            // robô começa a sair
             isWaiting = false;
             isLeaving = true;
         }
+    }
+
+    bool TryDeliverPlate(PlateItem plate)
+    {
+        if (myOrder == null) return false;
+
+        List<ItemType> orderItems = new List<ItemType>(myOrder.requestedItems);
+        List<ItemType> plateItems = new List<ItemType>(plate.GetItems());
+
+        // compara listas (ignorando ordem)
+        foreach (var item in plateItems)
+        {
+            if (orderItems.Contains(item))
+            {
+                orderItems.Remove(item);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // se ainda sobrou item no pedido → incompleto
+        if (orderItems.Count > 0)
+        {
+            Debug.Log("Prato incompleto!");
+            return false;
+        }
+
+        Debug.Log("Pedido COMPLETO com prato!");
+
+        orderManager.activeOrders.Remove(myOrder);
+
+        return true;
     }
 }
