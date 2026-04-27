@@ -21,7 +21,7 @@ public class OrderManager : MonoBehaviour
     public ItemType[] possibleItems;
 
     // quantidade máxima de pedidos simultâneos
-    public int maxOrders = 2;
+    public int maxOrders = 3;
 
     void Start()
     {

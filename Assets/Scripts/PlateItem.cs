@@ -7,6 +7,9 @@ public class PlateItem : Item
     // Lista de itens dentro do prato
     public List<ItemType> itemsInside = new List<ItemType>();
 
+    [Header("Pontos onde os itens ficam no prato")]
+    public List<Transform> slotPoints = new List<Transform>();
+
     // Escala original dos itens
     private Dictionary<Item, Vector3> originalScales = new Dictionary<Item, Vector3>();
 
@@ -43,5 +46,11 @@ public class PlateItem : Item
     public List<ItemType> GetItems()
     {
         return itemsInside;
+    }
+
+    // verifica se ainda cabe item no prato
+    public bool CanAddItem()
+    {
+        return itemsInside.Count < slotPoints.Count;
     }
 }

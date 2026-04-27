@@ -50,6 +50,18 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             if (Vector3.Distance(transform.position, targetPoint.position) < stopDistance)
             {
                 isWaiting = true;
+
+                // ===== NOVO: GERA PEDIDO AUTOMATICAMENTE =====
+                if (!hasOrder)
+                {
+                    myOrder = orderManager.GenerateNewOrder();
+
+                    if (myOrder != null)
+                    {
+                        hasOrder = true;
+                        Debug.Log("Robô gerou pedido automático: " + myOrder.requestedItems.Count + " itens");
+                    }
+                }
             }
         }
 
@@ -112,26 +124,6 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         // só permite interação quando estiver parado esperando
         if (!isWaiting) return;
 
-        // ===== PASSO 1: PEGAR PEDIDO =====
-        if (!hasOrder)
-        {
-            myOrder = orderManager.GenerateNewOrder();
-
-            if (myOrder != null)
-            {
-                hasOrder = true;
-                string items = "";
-
-                foreach (var item in myOrder.requestedItems)
-                {
-                    items += item.ToString() + " ";
-                }
-
-                Debug.Log("Robô fez pedido: " + items);
-            }
-
-            return; // importante: não continua para entrega
-        }
 
         // ===== PASSO 2: ENTREGAR ITEM =====
         // ===== ENTREGA =====

@@ -1,18 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlateStation : MonoBehaviour, IInteractable
+public class PlateBench : MonoBehaviour, IInteractable
 {
     [Header("Prefab do prato")]
     public GameObject platePrefab;
 
-    [Header("Slots do prato")]
+    // guarda os pratos de cada slot
+    private Dictionary<Transform, PlateItem> plates = new Dictionary<Transform, PlateItem>();
+
+    [Header("Slots (cada um com seu prato)")]
     public List<Transform> slotPoints;
 
     [Header("Distância de interação")]
     public float interactDistance = 2.5f;
 
-    private PlateItem currentPlate;
+    void Start()
+    {
+        // cria um prato em cada slot ao iniciar
+        foreach (Transform slot in slotPoints)
+        {
+            CreatePlateInSlot(slot);
+        }
+    }
 
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
@@ -27,7 +37,23 @@ public class PlateStation : MonoBehaviour, IInteractable
         }
     }
 
-    // ===== COLOCAR ITEM OU PRATO =====
+    // ===== CRIA PRATO NO SLOT =====
+    void CreatePlateInSlot(Transform slot)
+    {
+        GameObject plateGO = Instantiate(platePrefab, slot.position, Quaternion.identity);
+
+        PlateItem plate = plateGO.GetComponent<PlateItem>();
+
+        // define o slot como pai
+        plate.transform.SetParent(slot);
+        plate.transform.localPosition = Vector3.zero;
+        plate.transform.localRotation = Quaternion.identity;
+
+        // salva referência
+        plates[slot] = plate;
+    }
+
+    // ===== COLOCAR ITEM OU DEVOLVER PRATO =====
     void TryPlace(Player player)
     {
         Item heldItem = player.GetHeldItem();
@@ -38,66 +64,120 @@ public class PlateStation : MonoBehaviour, IInteractable
 
         if (plate != null)
         {
-            float distance = Vector3.Distance(player.transform.position, transform.position);
+            Transform closestSlot = GetClosestSlot(player.transform.position);
+            if (closestSlot == null) return;
+
+            float distance = Vector3.Distance(player.transform.position, closestSlot.position);
             if (distance > interactDistance) return;
 
-            // coloca prato na bancada
+            // devolve prato ao slot
             plate.SetHolder(null);
-            plate.transform.position = transform.position;
 
-            currentPlate = plate;
+            plate.transform.SetParent(closestSlot);
+            plate.transform.localPosition = Vector3.zero;
+            plate.transform.localRotation = Quaternion.identity;
+
+            // atualiza referência
+            plates[closestSlot] = plate;
+
             return;
         }
 
-        // ===== BLOQUEIA COLOCAR PRATO EM OUTRAS BANCADAS =====
-        if (heldItem is PlateItem) return;
-
         // ===== ITEM NORMAL =====
 
-        // cria prato se não existir
-        if (currentPlate == null)
-        {
-            GameObject plateGO = Instantiate(platePrefab, transform.position, Quaternion.identity);
-            currentPlate = plateGO.GetComponent<PlateItem>();
-        }
+        Transform closestSlotWithSpace = GetClosestSlotWithSpace(player.transform.position);
+        if (closestSlotWithSpace == null) return;
 
-        // encontra slot disponível
-        Transform slot = GetAvailableSlot();
-
-        if (slot == null) return;
-
-        float dist = Vector3.Distance(player.transform.position, slot.position);
+        float dist = Vector3.Distance(player.transform.position, closestSlotWithSpace.position);
         if (dist > interactDistance) return;
 
-        // adiciona item ao prato
-        currentPlate.AddItem(heldItem, slot);
+        PlateItem plateInSlot = plates[closestSlotWithSpace];
+        if (plateInSlot == null) return;
+
+        Transform freePoint = GetFreePointOnPlate(plateInSlot);
+        if (freePoint == null) return;
+
+        // remove item do player corretamente
+        heldItem.SetHolder(null);
+
+        // adiciona no prato
+        plateInSlot.AddItem(heldItem, freePoint);
     }
 
     // ===== PEGAR PRATO =====
     void TryTake(Player player)
     {
-        if (currentPlate == null) return;
+        Transform closestSlot = GetClosestSlot(player.transform.position);
+        if (closestSlot == null) return;
 
-        // só pega se tiver pelo menos 1 item
-        if (currentPlate.itemsInside.Count == 0) return;
-
-        float distance = Vector3.Distance(player.transform.position, transform.position);
+        float distance = Vector3.Distance(player.transform.position, closestSlot.position);
         if (distance > interactDistance) return;
 
-        currentPlate.SetHolder(player);
+        PlateItem plate = plates[closestSlot];
+        if (plate == null) return;
 
-        currentPlate = null;
+        if (plate.itemsInside.Count == 0) return;
+
+        plate.SetHolder(player);
+
+        // limpa o slot (fica sem prato até devolver)
+        plates[closestSlot] = null;
     }
 
-    // ===== SLOT DISPONÍVEL =====
-    Transform GetAvailableSlot()
+    // ===== SLOT MAIS PRÓXIMO =====
+    Transform GetClosestSlot(Vector3 playerPos)
     {
-        foreach (var slot in slotPoints)
+        Transform closest = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (Transform slot in slotPoints)
         {
-            if (slot.childCount == 0)
+            float distance = Vector3.Distance(playerPos, slot.position);
+
+            if (distance < minDistance)
             {
-                return slot;
+                minDistance = distance;
+                closest = slot;
             }
+        }
+
+        return closest;
+    }
+
+    // ===== SLOT MAIS PRÓXIMO COM ESPAÇO =====
+    Transform GetClosestSlotWithSpace(Vector3 playerPos)
+    {
+        Transform closest = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (Transform slot in slotPoints)
+        {
+            PlateItem plate = plates[slot];
+
+            if (plate == null) continue;
+
+            // verifica se ainda cabe item
+            if (!plate.CanAddItem()) continue;
+
+            float distance = Vector3.Distance(playerPos, slot.position);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closest = slot;
+            }
+        }
+
+        return closest;
+    }
+
+    // ===== PEGA UM PONTO LIVRE NO PRATO =====
+    Transform GetFreePointOnPlate(PlateItem plate)
+    {
+        foreach (Transform point in plate.slotPoints)
+        {
+            if (point.childCount == 0)
+                return point;
         }
 
         return null;
