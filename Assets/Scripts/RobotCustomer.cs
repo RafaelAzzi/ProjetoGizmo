@@ -59,13 +59,12 @@ public class RobotCustomer : MonoBehaviour, IInteractable
                     if (myOrder != null)
                     {
                         hasOrder = true;
-                        Debug.Log("Robô gerou pedido automático: " + myOrder.requestedItems.Count + " itens");
                     }
                 }
             }
         }
 
-        // ===== NOVO: VERIFICA SE O PEDIDO EXPIROU =====
+        // ==== VERIFICA SE O PEDIDO EXPIROU =====
         if (isWaiting && hasOrder && !isLeaving)
         {
             if (!orderManager.activeOrders.Contains(myOrder))
@@ -106,11 +105,6 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     // ===== INTERAÇÃO COM PLAYER =====
     public void Interact(Player player)
     {
-        Debug.Log("Interagiu com robô");
-        Debug.Log("isWaiting: " + isWaiting);
-        Debug.Log("hasOrder: " + hasOrder);
-        Debug.Log("isLeaving: " + isLeaving);
-        
         // ===== VALIDA DISTÂNCIA REAL =====
         if (interactPoint == null)
         {
@@ -120,7 +114,6 @@ public class RobotCustomer : MonoBehaviour, IInteractable
 
         float distance = Vector3.Distance(player.transform.position, interactPoint.position);
 
-        // se estiver longe, não interage
         if (distance > interactDistance)
         {
             return;
@@ -129,55 +122,47 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         // só permite interação quando estiver parado esperando
         if (!isWaiting) return;
 
-
-        // ===== PASSO 2: ENTREGAR ITEM =====
         // ===== ENTREGA =====
         Item heldItem = player.GetHeldItem();
         if (heldItem == null) return;
 
-        // DEBUG
-        Debug.Log("Item na mão: " + heldItem.name);
-        Debug.Log("Tipo do item: " + heldItem.GetType());
-
         // verifica se é prato
         PlateItem plate = heldItem as PlateItem;
 
-        if (plate != null)
+        // se NÃO for prato, não entrega
+        if (plate == null)
         {
-            return; // não é prato → não entrega
+            return;
         }
 
         bool success = TryDeliverPlate(plate);
 
         if (success)
         {
+            if (plate.originalSlot != null)
+            {
+                PlateBench bench = plate.originalSlot.GetComponentInParent<PlateBench>();
+
+                if (bench != null)
+                {
+                    bench.RespawnPlate(plate.originalSlot);
+                }
+            }
+            
             Destroy(plate.gameObject);
 
             isWaiting = false;
             isLeaving = true;
         }
-
-        
     }
 
     bool TryDeliverPlate(PlateItem plate)
     {
         // ===== VALIDAÇÕES =====
-        if (plate == null)
-        {
-            Debug.LogError("Plate está NULL!");
-            return false;
-        }
-
+        
         if (myOrder == null || myOrder.requestedItems == null)
         {
             Debug.LogError("Pedido inválido!");
-            return false;
-        }
-
-        if (plate.GetItems() == null)
-        {
-            Debug.LogError("Plate não tem itens!");
             return false;
         }
 
@@ -185,21 +170,7 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         List<ItemType> orderItems = new List<ItemType>(myOrder.requestedItems);
         List<ItemType> plateItems = new List<ItemType>(plate.GetItems());
 
-        // ===== DEBUG (UMA VEZ SÓ) =====
-        Debug.Log("----- VALIDANDO PRATO -----");
-
-        Debug.Log("Pedido:");
-        foreach (var orderItem in orderItems)
-        {
-            Debug.Log(orderItem);
-        }
-
-        Debug.Log("Prato:");
-        foreach (var plateItem in plateItems)
-        {
-            Debug.Log(plateItem);
-        }
-
+    
         // ===== COMPARAÇÃO =====
         foreach (var plateItem in plateItems)
         {
@@ -209,7 +180,6 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             }
             else
             {
-                Debug.Log("Item do prato NÃO corresponde ao pedido: " + plateItem);
                 return false;
             }
         }
@@ -217,11 +187,6 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         // ===== VERIFICA SE FALTOU ITEM =====
         if (orderItems.Count > 0)
         {
-            Debug.Log("Prato incompleto! Faltando itens:");
-            foreach (var remainingItem in orderItems)
-            {
-                Debug.Log(remainingItem);
-            }
             return false;
         }
 

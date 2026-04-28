@@ -51,6 +51,8 @@ public class PlateBench : MonoBehaviour, IInteractable
 
         // salva referência
         plates[slot] = plate;
+
+        plate.originalSlot = slot;
     }
 
     // ===== COLOCAR ITEM OU DEVOLVER PRATO =====
@@ -179,5 +181,19 @@ public class PlateBench : MonoBehaviour, IInteractable
         }
 
         return null;
+    }
+
+    // ===== RESPAWN DO PRATO =====
+    public void RespawnPlate(Transform slot)
+    {
+        if (slot == null) return;
+
+        // evita duplicar prato
+        if (plates.ContainsKey(slot))
+        {
+            plates[slot] = null;
+        }
+
+        CreatePlateInSlot(slot);
     }
 }

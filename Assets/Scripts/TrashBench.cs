@@ -36,6 +36,19 @@ public class TrashStation : MonoBehaviour, IInteractable
             return;
         }
 
+        //  verifica se é um prato =====
+        PlateItem plate = item as PlateItem;
+
+        if (plate != null && plate.originalSlot != null)
+        {
+            PlateBench bench = plate.originalSlot.GetComponentInParent<PlateBench>();
+
+            if (bench != null)
+            {
+                bench.RespawnPlate(plate.originalSlot);
+            }
+        }
+
         // remove corretamente do sistema de holder
         item.SetHolder(null);
 

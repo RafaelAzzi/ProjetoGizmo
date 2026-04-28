@@ -4,6 +4,8 @@ using UnityEngine;
 // Representa o prato como ITEM carregável
 public class PlateItem : Item
 {
+    public Transform originalSlot;
+    
     // Lista de itens dentro do prato
     public List<ItemType> itemsInside = new List<ItemType>();
 
