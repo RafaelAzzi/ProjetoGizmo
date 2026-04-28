@@ -87,6 +87,13 @@ public class Item : MonoBehaviour
         // define novo holder
         currentHolder = newHolder;
 
+        // reativa colisão quando não tem holder
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = true;
+        }
+
         // se não tiver novo holder, para aqui
         if (newHolder == null) return;
 
@@ -114,6 +121,13 @@ public class Item : MonoBehaviour
         {
             rb.isKinematic = true;
             rb.useGravity = false;
+        }
+
+        // desativa colisão quando está sendo segurado
+        col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = false;
         }
     }
 }

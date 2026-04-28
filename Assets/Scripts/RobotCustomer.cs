@@ -106,6 +106,11 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     // ===== INTERAÇÃO COM PLAYER =====
     public void Interact(Player player)
     {
+        Debug.Log("Interagiu com robô");
+        Debug.Log("isWaiting: " + isWaiting);
+        Debug.Log("hasOrder: " + hasOrder);
+        Debug.Log("isLeaving: " + isLeaving);
+        
         // ===== VALIDA DISTÂNCIA REAL =====
         if (interactPoint == null)
         {
@@ -130,63 +135,97 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         Item heldItem = player.GetHeldItem();
         if (heldItem == null) return;
 
+        // DEBUG
+        Debug.Log("Item na mão: " + heldItem.name);
+        Debug.Log("Tipo do item: " + heldItem.GetType());
+
         // verifica se é prato
         PlateItem plate = heldItem as PlateItem;
 
         if (plate != null)
         {
-            bool success = TryDeliverPlate(plate);
-
-            if (success)
-            {
-                Destroy(plate.gameObject);
-
-                isWaiting = false;
-                isLeaving = true;
-            }
-
-            return;
+            return; // não é prato → não entrega
         }
 
-        // fallback (item único)
-        bool singleSuccess = orderManager.TryCompleteOrder(heldItem);
+        bool success = TryDeliverPlate(plate);
 
-        if (singleSuccess)
+        if (success)
         {
-            heldItem.SetHolder(null);
+            Destroy(plate.gameObject);
 
             isWaiting = false;
             isLeaving = true;
         }
+
+        
     }
 
     bool TryDeliverPlate(PlateItem plate)
     {
-        if (myOrder == null) return false;
+        // ===== VALIDAÇÕES =====
+        if (plate == null)
+        {
+            Debug.LogError("Plate está NULL!");
+            return false;
+        }
 
+        if (myOrder == null || myOrder.requestedItems == null)
+        {
+            Debug.LogError("Pedido inválido!");
+            return false;
+        }
+
+        if (plate.GetItems() == null)
+        {
+            Debug.LogError("Plate não tem itens!");
+            return false;
+        }
+
+        // ===== COPIA LISTAS =====
         List<ItemType> orderItems = new List<ItemType>(myOrder.requestedItems);
         List<ItemType> plateItems = new List<ItemType>(plate.GetItems());
 
-        // compara listas (ignorando ordem)
-        foreach (var item in plateItems)
+        // ===== DEBUG (UMA VEZ SÓ) =====
+        Debug.Log("----- VALIDANDO PRATO -----");
+
+        Debug.Log("Pedido:");
+        foreach (var orderItem in orderItems)
         {
-            if (orderItems.Contains(item))
+            Debug.Log(orderItem);
+        }
+
+        Debug.Log("Prato:");
+        foreach (var plateItem in plateItems)
+        {
+            Debug.Log(plateItem);
+        }
+
+        // ===== COMPARAÇÃO =====
+        foreach (var plateItem in plateItems)
+        {
+            if (orderItems.Contains(plateItem))
             {
-                orderItems.Remove(item);
+                orderItems.Remove(plateItem);
             }
             else
             {
+                Debug.Log("Item do prato NÃO corresponde ao pedido: " + plateItem);
                 return false;
             }
         }
 
-        // se ainda sobrou item no pedido → incompleto
+        // ===== VERIFICA SE FALTOU ITEM =====
         if (orderItems.Count > 0)
         {
-            Debug.Log("Prato incompleto!");
+            Debug.Log("Prato incompleto! Faltando itens:");
+            foreach (var remainingItem in orderItems)
+            {
+                Debug.Log(remainingItem);
+            }
             return false;
         }
 
+        // ===== SUCESSO =====
         Debug.Log("Pedido COMPLETO com prato!");
 
         orderManager.activeOrders.Remove(myOrder);

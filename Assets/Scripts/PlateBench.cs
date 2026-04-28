@@ -116,8 +116,6 @@ public class PlateBench : MonoBehaviour, IInteractable
         PlateItem plate = plates[closestSlot];
         if (plate == null) return;
 
-        if (plate.itemsInside.Count == 0) return;
-
         plate.SetHolder(player);
 
         // limpa o slot (fica sem prato até devolver)

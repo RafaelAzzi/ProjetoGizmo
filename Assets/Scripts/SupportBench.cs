@@ -30,6 +30,12 @@ public class SupportBench : MonoBehaviour, IInteractable
         Item playerItem = player.GetHeldItem();
         if (playerItem == null) return;
 
+        // bloqueia prato
+        if (playerItem is PlateItem)
+        {
+            return;
+        }
+
         ItemHolder closestSlot = GetClosestAvailableSlot(player.transform.position);
 
         // ===== VALIDA DISTÂNCIA =====

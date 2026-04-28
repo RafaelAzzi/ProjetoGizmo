@@ -34,6 +34,19 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
             return;
         }
 
+        // bloqueia prato
+        if (heldItem is PlateItem)
+        {
+            return;
+        }
+
+        // bloqueia bebidas
+        if (heldItem.itemType == ItemType.OleoComum || 
+            heldItem.itemType == ItemType.OleoAntiferrugem)
+        {
+            return;
+        }
+
         // BANCADA VAZIA → coloca item
         if (!HasItem())
         {

@@ -40,6 +40,13 @@ public class PlateItem : Item
             rb.isKinematic = true;
             rb.useGravity = false;
         }
+
+        // desativa collider do item dentro do prato
+        Collider col = item.GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
     }
 
     // ===== PEGAR ITENS (para validação) =====
