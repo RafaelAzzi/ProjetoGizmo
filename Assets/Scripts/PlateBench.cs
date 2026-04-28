@@ -13,7 +13,7 @@ public class PlateBench : MonoBehaviour, IInteractable
     public List<Transform> slotPoints;
 
     [Header("Distância de interação")]
-    public float interactDistance = 2.5f;
+    public float interactDistance = 3f;
 
     void Start()
     {

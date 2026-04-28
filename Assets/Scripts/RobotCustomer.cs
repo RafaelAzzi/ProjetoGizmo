@@ -65,7 +65,7 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             }
         }
 
-        // ===== NOVO: VERIFICA SE O PEDIDO EXPIRou =====
+        // ===== NOVO: VERIFICA SE O PEDIDO EXPIROU =====
         if (isWaiting && hasOrder && !isLeaving)
         {
             if (!orderManager.activeOrders.Contains(myOrder))

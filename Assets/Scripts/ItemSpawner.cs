@@ -3,7 +3,7 @@ using UnityEngine;
 // spawner pode ser interagido
 public class ItemSpawner : MonoBehaviour, IInteractable
 {
-    public GameObject itemPrefab; // Prefab do item
+    public GameObject itemPrefab; 
     public float spawnDelay = 2f;
 
     private GameObject currentItem; // Item atual
