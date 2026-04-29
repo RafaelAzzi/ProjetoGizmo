@@ -11,14 +11,16 @@ public class RobotSpawner : MonoBehaviour
 
     public OrderManager orderManager;
 
-    public float spawnInterval = 5f;
+    public DifficultyManager difficultyManager;
+
     private float timer;
 
     void Update()
     {
         timer += Time.deltaTime;
 
-        if (timer >= spawnInterval)
+        // só tenta spawnar quando atingir o delay da fase
+        if (timer >= difficultyManager.GetSpawnDelay())
         {
             TrySpawnRobot();
             timer = 0f;
@@ -27,6 +29,16 @@ public class RobotSpawner : MonoBehaviour
 
     void TrySpawnRobot()
     {
+        // conta quantos robôs existem atualmente
+        int currentRobots = CountActiveRobots();
+
+        // pega limite da fase
+        int maxRobots = difficultyManager.GetMaxRobots();
+
+        // se já atingiu limite, não faz nada
+        if (currentRobots >= maxRobots)
+            return;
+
         // procura slot livre
         foreach (RobotSlot slot in slots)
         {
@@ -52,6 +64,12 @@ public class RobotSpawner : MonoBehaviour
 
         // libera slot quando robô sair
         StartCoroutine(FreeSlotWhenDestroyed(robot, slot));
+    }
+
+    int CountActiveRobots()
+    {
+        // conta todos robôs na cena
+        return FindObjectsOfType<RobotCustomer>().Length;
     }
 
     System.Collections.IEnumerator FreeSlotWhenDestroyed(RobotCustomer robot, RobotSlot slot)
