@@ -18,6 +18,9 @@ public class Player : MonoBehaviour, IItemHolder
 
     void Update()
     {
+        // bloqueia tudo se o jogo não estiver rodando
+        if (!GameManager.Instance.IsGamePlaying()) return;
+        
         Move();
 
         if (Input.GetKeyDown(interactKey))

@@ -114,6 +114,8 @@ public class OrderManager : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.Instance.IsGamePlaying()) return;
+        
         UpdateOrders();
         UpdateUI();
 

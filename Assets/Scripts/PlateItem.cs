@@ -9,6 +9,9 @@ public class PlateItem : Item
     // Lista de itens dentro do prato
     public List<ItemType> itemsInside = new List<ItemType>();
 
+    // guarda os objetos reais (para verificar qualidade)
+    public List<Item> itemsObjects = new List<Item>();
+
     [Header("Pontos onde os itens ficam no prato")]
     public List<Transform> slotPoints = new List<Transform>();
 
@@ -16,12 +19,23 @@ public class PlateItem : Item
     private Dictionary<Item, Vector3> originalScales = new Dictionary<Item, Vector3>();
 
     // ===== ADICIONAR ITEM AO PRATO =====
-    public void AddItem(Item item, Transform slotPoint)
+    public bool AddItem(Item item, Transform slotPoint)
     {
-        if (item == null) return;
+        // NÃO permite adicionar item estragado
+        if (item.quality == ItemQuality.Spoiled)
+        {
+            Debug.Log("Item estragado não pode ir para o prato!");
+            return false;
+        }
+
+        if (item == null) 
+            return false;
 
         // adiciona tipo na lista
         itemsInside.Add(item.itemType);
+
+        // guarda o item real também
+        itemsObjects.Add(item);
 
         // salva escala original
         originalScales[item] = item.transform.localScale;
@@ -49,6 +63,7 @@ public class PlateItem : Item
         {
             col.enabled = false;
         }
+        return true;
     }
 
     // ===== PEGAR ITENS (para validação) =====
@@ -61,5 +76,11 @@ public class PlateItem : Item
     public bool CanAddItem()
     {
         return itemsInside.Count < slotPoints.Count;
+    }
+
+    // retorna os itens reais (para checar qualidade)
+    public List<Item> GetItemObjects()
+    {
+        return itemsObjects;
     }
 }

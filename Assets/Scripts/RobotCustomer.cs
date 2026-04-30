@@ -105,6 +105,8 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     // ===== INTERAÇÃO COM PLAYER =====
     public void Interact(Player player)
     {
+        if (!GameManager.Instance.IsGamePlaying()) return;
+        
         // ===== VALIDA DISTÂNCIA REAL =====
         if (interactPoint == null)
         {
@@ -194,6 +196,33 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         Debug.Log("Pedido COMPLETO com prato!");
 
         orderManager.activeOrders.Remove(myOrder);
+
+        // ===== SISTEMA DE SCORE POR QUALIDADE =====
+
+        List<Item> items = plate.GetItemObjects();
+
+        int totalPoints = 0;
+
+        foreach (Item item in items)
+        {
+            switch (item.quality)
+            {
+                case ItemQuality.Perfect:
+                totalPoints += 100;
+                break;
+
+                case ItemQuality.Undercooked:
+                totalPoints += 50;
+                break;
+
+                case ItemQuality.Overcooked:
+                totalPoints += 30;
+                break;
+            }
+        }
+
+        // envia pontuação total
+        ScoreManager.Instance.AddCustomScore(totalPoints);
 
         return true;
     }

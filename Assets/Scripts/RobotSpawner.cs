@@ -17,6 +17,8 @@ public class RobotSpawner : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.Instance.IsGamePlaying()) return;
+        
         timer += Time.deltaTime;
 
         // só tenta spawnar quando atingir o delay da fase

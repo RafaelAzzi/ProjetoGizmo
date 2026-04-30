@@ -1,25 +1,43 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
 {
+    [Header("Configuração de cliques por raridade")]
+    public int clicksRaro = 10;
+    public int clicksLendario = 20;
+
     public Transform holdPoint;
     public RecipeDatabase recipeDatabase;
 
-    // distância máxima para interagir com o ponto de crafting
     public float interactDistance = 2.5f;
 
+    // UI da barra
+    public Slider progressBar;
+
     private Item currentItem;
+    private Item secondItem;
+
+    private bool isProcessing = false;
+
+    private Recipe currentRecipe;
+
+    private float currentProgress = 0f;
+    private float requiredClicks = 10f; // base (ajustar depois)
 
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
-
-        //  VERIFICA DISTÂNCIA ATÉ O HOLDPOINT =====
         float distance = Vector3.Distance(player.transform.position, holdPoint.position);
 
         if (distance > interactDistance)
+            return;
+
+        // SE ESTÁ PROCESSANDO → só aceita cliques
+        if (isProcessing)
         {
-            return; // player está longe do ponto de crafting
+            ProcessClick();
+            return;
         }
 
         Item heldItem = player.GetHeldItem();
@@ -34,57 +52,111 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
             return;
         }
 
-        // bloqueia prato
+        // bloqueios
         if (heldItem is PlateItem)
-        {
             return;
-        }
 
-        // bloqueia bebidas
         if (heldItem.itemType == ItemType.OleoComum || 
             heldItem.itemType == ItemType.OleoAntiferrugem)
-        {
             return;
-        }
 
-        // BANCADA VAZIA → coloca item
+        // BANCADA VAZIA → coloca primeiro item
         if (!HasItem())
         {
             heldItem.SetHolder(this);
             return;
         }
 
-        // TENTA COMBINAR
-        TryCombine(player, heldItem, currentItem);
+        // JÁ TEM 1 ITEM → tenta iniciar processamento
+        TryStartProcessing(player, heldItem);
     }
 
-    // ===== COMBINAÇÃO =====
-    void TryCombine(Player player, Item heldItem, Item benchItem)
+    // ===== INICIAR PROCESSO =====
+    void TryStartProcessing(Player player, Item heldItem)
     {
-        Recipe recipe = recipeDatabase.GetRecipe(benchItem.itemType, heldItem.itemType);
+        Recipe recipe = recipeDatabase.GetRecipe(currentItem.itemType, heldItem.itemType);
 
         if (recipe != null)
         {
-            // limpa referência antes de destruir
+            secondItem = heldItem;
+            currentRecipe = recipe;
+
+            // destrói os dois itens
+            Destroy(currentItem.gameObject);
+            Destroy(secondItem.gameObject);
+
+            // limpa referências
             ClearItem();
+            secondItem = null; //  proteção contra bug futuro
 
-            Destroy(benchItem.gameObject);
-            Destroy(heldItem.gameObject);
+            // inicia processamento
+            isProcessing = true;
+            currentProgress = 0;
 
-            // cria resultado
-            GameObject resultGO = Instantiate(
-                recipe.resultPrefab,
-                holdPoint.position,
-                Quaternion.identity
-            );
+            // pega o item do resultado direto do prefab
+            Item resultItem = recipe.resultPrefab.GetComponent<Item>();
 
-            Item resultItem = resultGO.GetComponent<Item>();
+            // define cliques baseado na raridade do resultado
+            switch (resultItem.rarity)
+            {
+                case Rarity.Raro:
+                requiredClicks = clicksRaro;
+                break;
 
-            // coloca resultado na bancada usando o sistema correto
-            resultItem.SetHolder(this);
+                case Rarity.Lendario:
+                requiredClicks = clicksLendario;
+                break;
 
-            return;
+                default:
+                requiredClicks = 5; // segurança (caso tenha algo comum)
+                break;
+            }
+
+            // ativa barra
+            progressBar.gameObject.SetActive(true);
+            progressBar.value = 0f; //  garante que começa zerada
         }
+    }
+
+    // ===== PROCESSO DE CLIQUE =====
+    void ProcessClick()
+    {
+        if (!isProcessing) return; //  proteção extra
+
+        currentProgress++;
+
+        progressBar.value = currentProgress / requiredClicks;
+
+        if (currentProgress >= requiredClicks)
+        {
+            FinishProcessing();
+        }
+    }
+
+    // ===== FINALIZA PROCESSO =====
+    void FinishProcessing()
+    {
+        isProcessing = false;
+
+        // reseta barra antes de esconder
+        progressBar.value = 0f;
+
+        // desativa barra
+        progressBar.gameObject.SetActive(false);
+
+        // cria resultado
+        GameObject resultGO = Instantiate(
+            currentRecipe.resultPrefab,
+            holdPoint.position,
+            Quaternion.identity
+        );
+
+        Item resultItem = resultGO.GetComponent<Item>();
+        resultItem.SetHolder(this);
+
+        // limpa dados
+        currentRecipe = null;
+        currentProgress = 0;
     }
 
     // ===== IItemHolder =====

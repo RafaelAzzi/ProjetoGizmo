@@ -99,11 +99,17 @@ public class PlateBench : MonoBehaviour, IInteractable
         Transform freePoint = GetFreePointOnPlate(plateInSlot);
         if (freePoint == null) return;
 
-        // remove item do player corretamente
-        heldItem.SetHolder(null);
+        // tenta adicionar no prato PRIMEIRO
+        bool added = plateInSlot.AddItem(heldItem, freePoint);
 
-        // adiciona no prato
-        plateInSlot.AddItem(heldItem, freePoint);
+        if (!added)
+        {
+            // se não conseguiu (ex: item estragado), não faz nada
+            return;
+        }
+
+        // agora sim remove da mão do player
+        heldItem.SetHolder(null);
     }
 
     // ===== PEGAR PRATO =====

@@ -52,6 +52,15 @@ public enum ItemType
 
 }
 
+public enum ItemQuality
+{
+    Raw,           // ainda não processado
+    Perfect,       // perfeito
+    Undercooked,   // retirado antes do tempo
+    Overcooked,    // passou do ponto
+    Spoiled        // estragado (não pode usar)
+}
+
 public class Item : MonoBehaviour
 {
     [Header("Identidade do item")]
@@ -61,8 +70,17 @@ public class Item : MonoBehaviour
     public ItemPhase phase;
     public Rarity rarity;
 
+    // estado atual de qualidade do item
+    public ItemQuality quality = ItemQuality.Raw;
+
     // Diz se o item já foi preparado na DrinkBench
     public bool isProcessed = false;
+
+    // indica se o item estragou na DrinkBench
+    public bool isSpoiled = false;
+    
+    // ===== PROGRESSO DA DRINK BENCH =====
+    public float processProgress = 0f; // quanto já foi processado
 
 
 

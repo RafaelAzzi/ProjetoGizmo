@@ -13,6 +13,8 @@ public class Station : MonoBehaviour, IInteractable, IItemHolder
     // ===== INTERAÇÃO COM O PLAYER =====
     public void Interact(Player player) 
        {
+        if (!GameManager.Instance.IsGamePlaying()) return;
+        
         // PLAYER TEM ITEM → coloca na bancada
         if (!HasItem() && player.HasItem())
         {
