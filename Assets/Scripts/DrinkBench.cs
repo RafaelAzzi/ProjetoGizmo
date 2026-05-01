@@ -22,7 +22,6 @@ public class DrinkBench : MonoBehaviour, IInteractable
         public bool isProcessing;
         public bool isReady;
 
-        public bool isSpoiled;
         public float readyTimer;
 
         public GameObject progressBarInstance;
@@ -109,7 +108,6 @@ public class DrinkBench : MonoBehaviour, IInteractable
                     else if (item.quality == ItemQuality.Overcooked)
                     {
                         item.quality = ItemQuality.Spoiled;
-                        slot.isSpoiled = true;
 
                         // visual
                         Renderer rend = item.GetComponent<Renderer>();
@@ -157,7 +155,6 @@ public class DrinkBench : MonoBehaviour, IInteractable
         closestSlot.maxTime = processTime;
         closestSlot.isProcessing = true;
         closestSlot.isReady = false;
-        closestSlot.isSpoiled = false;
         closestSlot.readyTimer = 0f;
 
         closestSlot.progressBarInstance = Instantiate(
@@ -225,7 +222,6 @@ public class DrinkBench : MonoBehaviour, IInteractable
         closestSlot.timer = 0f;
         closestSlot.isReady = false;
         closestSlot.isProcessing = false;
-        closestSlot.isSpoiled = false;
     }
 
     // ===== SLOT VAZIO =====

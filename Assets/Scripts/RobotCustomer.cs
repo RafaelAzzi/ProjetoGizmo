@@ -195,34 +195,40 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         // ===== SUCESSO =====
         Debug.Log("Pedido COMPLETO com prato!");
 
+        // ===== CONTABILIZA PEDIDO =====
+        GameManager.Instance.ordersCompleted++;
+
         orderManager.activeOrders.Remove(myOrder);
 
         // ===== SISTEMA DE SCORE POR QUALIDADE =====
 
         List<Item> items = plate.GetItemObjects();
-
-        int totalPoints = 0;
-
         foreach (Item item in items)
         {
-            switch (item.quality)
+            // conta raridade
+            if (item.rarity == Rarity.Raro)
             {
-                case ItemQuality.Perfect:
-                totalPoints += 100;
-                break;
+                GameManager.Instance.rareItemsDelivered++;
+            }
+            else if (item.rarity == Rarity.Lendario)
+            {
+                GameManager.Instance.legendaryItemsDelivered++;
+            }
 
-                case ItemQuality.Undercooked:
-                totalPoints += 50;
-                break;
-
-                case ItemQuality.Overcooked:
-                totalPoints += 30;
-                break;
+            // conta óleos (ajuste conforme seus tipos)
+            if (item.itemType == ItemType.OleoComum || item.itemType == ItemType.OleoAntiferrugem)
+            {
+                GameManager.Instance.oilsDelivered++;
             }
         }
 
-        // envia pontuação total
-        ScoreManager.Instance.AddCustomScore(totalPoints);
+        int score = ScoreManager.Instance.CalculateOrderScore(
+            items,
+            myOrder.timeRemaining,
+            myOrder.maxTime
+        );
+
+        ScoreManager.Instance.AddCustomScore(score);
 
         return true;
     }

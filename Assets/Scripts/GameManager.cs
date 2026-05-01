@@ -4,6 +4,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // singleton
 
+    public GameObject resultPanel;
+
     // ===== CONFIGURAÇÃO =====
     public float matchTime = 120f; // tempo total da fase
 
@@ -18,6 +20,36 @@ public class GameManager : MonoBehaviour
     public int oneStarScore = 100;
     public int twoStarScore = 200;
     public int threeStarScore = 300;
+
+    // ===== ESTATÍSTICAS DA FASE =====
+
+    // pedidos
+    public int ordersCompleted = 0;
+    public int ordersFailed = 0;
+
+    // itens
+    public int rareItemsDelivered = 0;
+    public int legendaryItemsDelivered = 0;
+    public int oilsDelivered = 0;
+
+    // ===== RESULTADO FINAL DETALHADO =====
+    public class MatchResultData
+    {
+        public int rareItems;
+        public int rarePoints;
+
+        public int legendaryItems;
+        public int legendaryPoints;
+
+        public int oils;
+        public int oilPoints;
+
+        public int ordersCompleted;
+        public int ordersFailed;
+        public int failedPenalty;
+
+        public int totalScore;
+    }
 
     void Awake()
     {
@@ -35,6 +67,13 @@ public class GameManager : MonoBehaviour
     {
         // por enquanto começa automático
         StartGame();
+        // reset estatísticas
+        ordersCompleted = 0;
+        ordersFailed = 0;
+
+        rareItemsDelivered = 0;
+        legendaryItemsDelivered = 0;
+        oilsDelivered = 0;
     }
 
     void Update()
@@ -74,6 +113,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("Jogo terminou!");
         Debug.Log("Resultado: " + gameResult);
         Debug.Log("Estrelas: " + stars);
+
+        MatchResultData result = CalculateMatchResult();
+
+        Debug.Log("===== RESULTADO FINAL =====");
+        Debug.Log("Raros: " + result.rareItems + " -> " + result.rarePoints);
+        Debug.Log("Lendários: " + result.legendaryItems + " -> " + result.legendaryPoints);
+        Debug.Log("Óleos: " + result.oils + " -> " + result.oilPoints);
+        Debug.Log("Falhas: " + result.ordersFailed + " -> " + result.failedPenalty);
+        Debug.Log("TOTAL: " + result.totalScore);
+
+        resultPanel.GetComponent<ResultUI>().ShowResults();
     }
 
     // ===== CALCULAR ESTRELAS =====
@@ -101,6 +151,33 @@ public class GameManager : MonoBehaviour
     public float GetTimeRemaining()
     {
         return currentTime;
+    }
+
+    public MatchResultData CalculateMatchResult()
+    {
+        MatchResultData data = new MatchResultData();
+
+        // ===== ITENS RAROS =====
+        data.rareItems = rareItemsDelivered;
+        data.rarePoints = rareItemsDelivered * 50;
+
+        // ===== ITENS LENDÁRIOS =====
+        data.legendaryItems = legendaryItemsDelivered;
+        data.legendaryPoints = legendaryItemsDelivered * 70;
+
+        // ===== ÓLEOS =====
+        data.oils = oilsDelivered;
+        data.oilPoints = oilsDelivered * 80; // simplificado (depois podemos melhorar)
+
+        // ===== PEDIDOS =====
+        data.ordersCompleted = ordersCompleted;
+        data.ordersFailed = ordersFailed;
+        data.failedPenalty = ordersFailed * -10;
+
+        // ===== TOTAL =====
+        data.totalScore = ScoreManager.Instance.GetScore();
+
+        return data;
     }
 }
 

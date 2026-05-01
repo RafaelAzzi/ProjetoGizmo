@@ -1,15 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
     private int score = 0;
-
-    // valores base
-    public int perfectScore = 100;
-    public int partialScore = 50;
-    public int spoiledScore = 10;
 
     void Awake()
     {
@@ -22,31 +18,6 @@ public class ScoreManager : MonoBehaviour
         Instance = this;
     }
 
-    // ===== ADICIONAR PONTOS =====
-    public void AddScore(bool isPerfect, bool isSpoiled)
-    {
-        int points = 0;
-
-        if (isSpoiled)
-        {
-            points = spoiledScore;
-        }
-        else if (isPerfect)
-        {
-            points = perfectScore;
-        }
-        else
-        {
-            points = partialScore;
-        }
-
-        score += points;
-
-        Debug.Log("Pontuação atual: " + score);
-
-        // atualiza GameManager (para estrelas)
-        GameManager.Instance.score = score;
-    }
 
     public int GetScore()
     {
@@ -61,5 +32,70 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("Pontuação atual: " + score);
 
         GameManager.Instance.score = score;
+    }
+
+    public int CalculateOrderScore(List<Item> items, float timeRemaining, float maxTime)
+    {
+        int total = 0;
+
+        // ===== PONTOS POR ITEM =====
+        foreach (Item item in items)
+        {
+            // ----- QUALIDADE -----
+            switch (item.quality)
+            {
+                case ItemQuality.Perfect:
+                    total += 80;
+                    break;
+
+                case ItemQuality.Overcooked:
+                    total += 50;
+                    break;
+
+                case ItemQuality.Undercooked:
+                        total += 40;
+                        break;
+
+                case ItemQuality.Crude:
+                        total += 15;
+                        break;
+            }
+
+            // ----- RARIDADE -----
+            if (item.rarity == Rarity.Raro)
+            {
+                total += 50;
+            }
+            else if (item.rarity == Rarity.Lendario)
+            {
+                total += 70;
+            }
+        }
+
+        // ===== BÔNUS DE TEMPO =====
+        float percent = timeRemaining / maxTime;
+
+        if (percent >= 0.7f)
+        {
+            total += 40;
+        }
+        else if (percent >= 0.5f)
+        {
+            total += 30;
+        }
+        else if (percent >= 0.3f)
+        {
+            total += 25;
+        }
+        else if (percent >= 0.15f)
+        {
+            total += 20;
+        }
+        else if (percent >= 0.05f)
+        {
+            total += 10;
+        }
+
+        return total;
     }
 }

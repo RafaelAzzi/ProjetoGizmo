@@ -135,6 +135,12 @@ public class OrderManager : MonoBehaviour
             {
                 Debug.Log("Pedido EXPIRADO: " + order.requestedItem);
 
+                // ===== PENALIDADE =====
+                ScoreManager.Instance.AddCustomScore(-10);
+
+                // ===== CONTABILIZA FALHA =====
+                GameManager.Instance.ordersFailed++;
+
                 // remove pedido
                 activeOrders.RemoveAt(i);
 
