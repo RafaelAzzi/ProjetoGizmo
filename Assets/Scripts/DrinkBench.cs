@@ -188,8 +188,19 @@ public class DrinkBench : MonoBehaviour, IInteractable
         // ===== DEFINE QUALIDADE FINAL AO PEGAR =====
         if (!item.isProcessed)
         {
-            item.quality = ItemQuality.Undercooked;
-            Debug.Log("Pegou INCOMPLETO");
+            float progressPercent = closestSlot.timer / closestSlot.maxTime;
+
+            // MENOS DE 50% → CRU
+            if (progressPercent < 0.5f)
+            {
+                item.quality = ItemQuality.Crude;
+                Debug.Log("Pegou CRU");
+            }
+            else
+            {
+                item.quality = ItemQuality.Undercooked;
+                Debug.Log("Pegou INCOMPLETO");
+            }
         }
         else if (item.quality == ItemQuality.Overcooked)
         {

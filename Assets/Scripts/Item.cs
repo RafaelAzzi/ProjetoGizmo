@@ -56,7 +56,8 @@ public enum ItemQuality
 {
     Raw,           // ainda não processado
     Perfect,       // perfeito
-    Undercooked,   // retirado antes do tempo
+    Crude,         // menos de 50%
+    Undercooked,   // mais de 50% mas incompleto
     Overcooked,    // passou do ponto
     Spoiled        // estragado (não pode usar)
 }
