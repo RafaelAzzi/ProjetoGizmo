@@ -137,7 +137,11 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             return;
         }
 
-        bool success = TryDeliverPlate(plate);
+        bool success = DeliveryManager.Instance.TryDeliver(
+                        myOrder,
+                        plate,
+                        orderManager
+                    );
 
         if (success)
         {
@@ -156,80 +160,5 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             isWaiting = false;
             isLeaving = true;
         }
-    }
-
-    bool TryDeliverPlate(PlateItem plate)
-    {
-        // ===== VALIDAÇÕES =====
-        
-        if (myOrder == null || myOrder.requestedItems == null)
-        {
-            Debug.LogError("Pedido inválido!");
-            return false;
-        }
-
-        // ===== COPIA LISTAS =====
-        List<ItemType> orderItems = new List<ItemType>(myOrder.requestedItems);
-        List<ItemType> plateItems = new List<ItemType>(plate.GetItems());
-
-    
-        // ===== COMPARAÇÃO =====
-        foreach (var plateItem in plateItems)
-        {
-            if (orderItems.Contains(plateItem))
-            {
-                orderItems.Remove(plateItem);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        // ===== VERIFICA SE FALTOU ITEM =====
-        if (orderItems.Count > 0)
-        {
-            return false;
-        }
-
-        // ===== SUCESSO =====
-        Debug.Log("Pedido COMPLETO com prato!");
-
-        // ===== CONTABILIZA PEDIDO =====
-        GameManager.Instance.ordersCompleted++;
-
-        orderManager.activeOrders.Remove(myOrder);
-
-        // ===== SISTEMA DE SCORE POR QUALIDADE =====
-
-        List<Item> items = plate.GetItemObjects();
-        foreach (Item item in items)
-        {
-            // conta raridade
-            if (item.rarity == Rarity.Raro)
-            {
-                GameManager.Instance.rareItemsDelivered++;
-            }
-            else if (item.rarity == Rarity.Lendario)
-            {
-                GameManager.Instance.legendaryItemsDelivered++;
-            }
-
-            // conta óleos (ajuste conforme seus tipos)
-            if (item.itemType == ItemType.OleoComum || item.itemType == ItemType.OleoAntiferrugem)
-            {
-                GameManager.Instance.oilsDelivered++;
-            }
-        }
-
-        int score = ScoreManager.Instance.CalculateOrderScore(
-            items,
-            myOrder.timeRemaining,
-            myOrder.maxTime
-        );
-
-        ScoreManager.Instance.AddCustomScore(score);
-
-        return true;
-    }
+    }    
 }

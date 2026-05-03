@@ -31,7 +31,6 @@ public class ScoreManager : MonoBehaviour
 
         Debug.Log("Pontuação atual: " + score);
 
-        GameManager.Instance.score = score;
     }
 
     public int CalculateOrderScore(List<Item> items, float timeRemaining, float maxTime)

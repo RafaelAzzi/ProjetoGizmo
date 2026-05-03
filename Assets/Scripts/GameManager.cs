@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
     private GameState currentState = GameState.WaitingToStart;
     private GameResult gameResult = GameResult.None;
 
-    // ===== ESTRELAS (TEMPORÁRIO - depois ligamos com score) =====
-    public int score = 0;
 
     public int oneStarScore = 100;
     public int twoStarScore = 200;
@@ -129,9 +127,11 @@ public class GameManager : MonoBehaviour
     // ===== CALCULAR ESTRELAS =====
     int CalculateStars()
     {
-        if (score >= threeStarScore) return 3;
-        if (score >= twoStarScore) return 2;
-        if (score >= oneStarScore) return 1;
+        int currentScore = ScoreManager.Instance.GetScore();
+
+        if (currentScore >= threeStarScore) return 3;
+        if (currentScore >= twoStarScore) return 2;
+        if (currentScore >= oneStarScore) return 1;
 
         return 0;
     }

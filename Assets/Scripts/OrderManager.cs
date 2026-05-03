@@ -8,10 +8,6 @@ public class OrderManager : MonoBehaviour
     public int minItemsPerOrder = 1;
     public int maxItemsPerOrder = 1;
 
-    public TextMeshProUGUI ordersText;
-
-    float blinkTimer = 0f;
-
     public float orderTime = 20f; // tempo padrão por pedido
 
     // lista de pedidos ativos
@@ -114,12 +110,7 @@ public class OrderManager : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.Instance.IsGamePlaying()) return;
-        
         UpdateOrders();
-        UpdateUI();
-
-        blinkTimer += Time.deltaTime;
     }
 
     // ===== SISTEMA DE TEMPO =====
@@ -150,53 +141,5 @@ public class OrderManager : MonoBehaviour
                 // futura penalidade aqui
             }
         }
-    }
-
-    // ===== URGÊNCIA DO PEDIDO =====
-    string GetOrderUrgency(Order order)
-    {
-        float percent = order.timeRemaining / order.maxTime;
-
-        if (percent > 0.5f)
-            return "green";
-
-        if (percent > 0.25f)
-            return "yellow";
-
-        return "red";
-    }
-
-    void UpdateUI()
-    {
-        if (ordersText == null) return;
-
-        string text = "Pedidos:\n";
-
-        foreach (Order order in activeOrders)
-        {
-            string color = GetOrderUrgency(order);
-
-            // piscar se estiver crítico
-            if (color == "red")
-            {
-                bool blink = Mathf.FloorToInt(blinkTimer * 30) % 2 == 0;
-                color = blink ? "red" : "yellow";
-            }
-
-            text += "<color=" + color + ">";
-            // mostra todos os itens do pedido
-            for (int j = 0; j < order.requestedItems.Count; j++)
-            {
-                text += order.requestedItems[j].ToString();
-
-                if (j < order.requestedItems.Count - 1)
-                text += ", ";
-            }
-            text += " -> ";
-            text += Mathf.Ceil(order.timeRemaining) + "s";
-            text += "</color>\n";
-        }
-
-        ordersText.text = text;
-    }
+    } 
 }
