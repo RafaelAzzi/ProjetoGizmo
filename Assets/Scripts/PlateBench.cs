@@ -72,6 +72,13 @@ public class PlateBench : MonoBehaviour, IInteractable
             float distance = Vector3.Distance(player.transform.position, closestSlot.position);
             if (distance > interactDistance) return;
 
+            // verifica se o slot já está ocupado
+            if (plates.ContainsKey(closestSlot) && plates[closestSlot] != null)
+            {
+                // slot ocupado → não faz nada
+                return;
+            }
+
             // devolve prato ao slot
             plate.SetHolder(null);
 

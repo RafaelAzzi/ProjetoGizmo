@@ -5,12 +5,6 @@ public class DifficultyManager : MonoBehaviour
 {
     public DifficultySettings currentDifficulty;
 
-    // retorna quantos robôs podem existir
-    public int GetMaxRobots()
-    {
-        return currentDifficulty.maxRobots;
-    }
-
     // tempo entre spawns
     public float GetSpawnDelay()
     {

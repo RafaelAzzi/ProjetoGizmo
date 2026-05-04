@@ -29,17 +29,9 @@ public class RobotSpawner : MonoBehaviour
         }
     }
 
-    void TrySpawnRobot()
+   void TrySpawnRobot()
     {
-        // conta quantos robôs existem atualmente
-        int currentRobots = CountActiveRobots();
-
-        // pega limite da fase
-        int maxRobots = difficultyManager.GetMaxRobots();
-
-        // se já atingiu limite, não faz nada
-        if (currentRobots >= maxRobots)
-            return;
+        //  REMOVIDO limite de robôs
 
         // procura slot livre
         foreach (RobotSlot slot in slots)
