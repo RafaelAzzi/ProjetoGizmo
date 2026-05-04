@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class ResultUI : MonoBehaviour
 {
@@ -14,13 +15,16 @@ public class ResultUI : MonoBehaviour
     public TextMeshProUGUI ordersHeaderText;
 
     // imagens das estrelas
-    public UnityEngine.UI.Image star1;
-    public UnityEngine.UI.Image star2;
-    public UnityEngine.UI.Image star3;
+    public Image star1;
+    public Image star2;
+    public Image star3;
 
     // sprites
     public Sprite fullStar;
     public Sprite emptyStar;
+
+    // ===== NOVO: referência ao LevelLoader =====
+    public LevelLoader levelLoader;
 
     public void ShowResults()
     {
@@ -66,5 +70,26 @@ public class ResultUI : MonoBehaviour
 
         if (stars >= 3)
             star3.sprite = fullStar;
+    }
+
+    // ===== BOTÃO: PRÓXIMA FASE =====
+    public void OnClickNext()
+    {
+        // carrega próxima fase
+        levelLoader.LoadNextLevel();
+    }
+
+    // ===== BOTÃO: REINICIAR =====
+    public void OnClickRestart()
+    {
+        // reinicia fase atual
+        levelLoader.RestartLevel();
+    }
+
+    // ===== BOTÃO: MENU PRINCIPAL =====
+    public void OnClickMenu()
+    {
+        // volta para o menu
+        levelLoader.LoadMainMenu();
     }
 }
