@@ -16,12 +16,17 @@ public class Player : MonoBehaviour, IItemHolder
     // Item que o jogador está segurando
     private Item heldItem;
 
+    // HoldPoint atualmente destacado
+    private HoldPoint currentHighlight;
+
     void Update()
     {
         // bloqueia tudo se o jogo não estiver rodando
         if (!GameManager.Instance.IsGamePlaying()) return;
         
         Move();
+
+        HandleHighlight();
 
         if (Input.GetKeyDown(interactKey))
         {
@@ -54,8 +59,11 @@ public class Player : MonoBehaviour, IItemHolder
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
 
-        IInteractable closestInteractable = null;
-        float closestDistance = Mathf.Infinity;
+        IInteractable closestHoldPoint = null;
+        float closestHoldPointDistance = Mathf.Infinity;
+
+        IInteractable closestFallback = null;
+        float closestFallbackDistance = Mathf.Infinity;
 
         foreach (Collider hit in hits)
         {
@@ -65,38 +73,53 @@ public class Player : MonoBehaviour, IItemHolder
             if (heldItem != null && hit.transform == heldItem.transform)
                 continue;
 
-            //  Interface → usar GetComponent 
             IInteractable interactable = hit.GetComponent<IInteractable>();
 
-            if (interactable != null)
+            if (interactable == null) continue;
+
+            // posição base
+            Vector3 targetPosition = hit.transform.position;
+
+            if (hit.TryGetComponent(out IItemHolder holder))
             {
-                // posição padrão
-                Vector3 targetPosition = hit.transform.position;
+                Transform hold = holder.GetHoldPoint();
 
-                //  aqui usar TryGetComponent  (seguro)
-                if (hit.TryGetComponent(out IItemHolder holder))
+                if (hold != null)
                 {
-                    Transform hold = holder.GetHoldPoint();
-
-                    if (hold != null)
-                    {
-                        targetPosition = hold.position;
-                    }
+                    targetPosition = hold.position;
                 }
+            }
 
-                float distance = Vector3.Distance(transform.position, targetPosition);
+            float distance = Vector3.Distance(transform.position, targetPosition);
 
-                if (distance < closestDistance)
+            // ===== PRIORIDADE: HOLDPOINT =====
+            if (hit.GetComponent<HoldPoint>() != null)
+            {
+                if (distance < closestHoldPointDistance)
                 {
-                    closestDistance = distance;
-                    closestInteractable = interactable;
+                    closestHoldPointDistance = distance;
+                    closestHoldPoint = interactable;
+                }
+            }
+            else
+            {
+                // ===== FALLBACK =====
+                if (distance < closestFallbackDistance)
+                {
+                    closestFallbackDistance = distance;
+                    closestFallback = interactable;
                 }
             }
         }
 
-        if (closestInteractable != null)
+        // ===== DECISÃO FINAL =====
+        if (closestHoldPoint != null)
         {
-            closestInteractable.Interact(this);
+            closestHoldPoint.Interact(this);
+        }
+        else if (closestFallback != null)
+        {
+            closestFallback.Interact(this);
         }
     }
 
@@ -121,6 +144,44 @@ public class Player : MonoBehaviour, IItemHolder
 
         // define que o player é o holder
         item.SetHolder(this);
+    }
+
+    void HandleHighlight()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
+
+        HoldPoint closestHoldPoint = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider hit in hits)
+        {
+            HoldPoint hp = hit.GetComponent<HoldPoint>();
+
+            if (hp == null) continue;
+
+            float distance = Vector3.Distance(transform.position, hp.transform.position);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestHoldPoint = hp;
+            }
+        }
+
+        // ===== ATUALIZA HIGHLIGHT =====
+
+        if (currentHighlight != closestHoldPoint)
+        {
+            // Desliga anterior
+            if (currentHighlight != null)
+                currentHighlight.HideHighlight();
+
+            // Liga novo
+            if (closestHoldPoint != null)
+                closestHoldPoint.ShowHighlight();
+
+            currentHighlight = closestHoldPoint;
+        }
     }
 
     // ===== IMPLEMENTAÇÃO DO IItemHolder =====

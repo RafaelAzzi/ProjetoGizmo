@@ -84,9 +84,12 @@ MonoBehaviour:
   itemType: 0
   phase: 0
   rarity: 0
+  quality: 0
   isProcessed: 0
+  processProgress: 0
   originalSlot: {fileID: 0}
   itemsInside: 
+  itemsObjects: []
   slotPoints:
   - {fileID: 3964008242904142172}
   - {fileID: 8572028807412417434}
@@ -140,7 +143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 566ebf6ede7bdbf4d9c12fc890526d3c, type: 2}
+  - {fileID: 2100000, guid: d75ddb0454fcb2945b4f1b8ef6727d42, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
