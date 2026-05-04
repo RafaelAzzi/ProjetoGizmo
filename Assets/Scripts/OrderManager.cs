@@ -48,12 +48,6 @@ public class OrderManager : MonoBehaviour
             newOrder.requestedItems.Add(randomItem);
         }
 
-        // compatibilidade
-        if (newOrder.requestedItems.Count > 0)
-        {
-            newOrder.requestedItem = newOrder.requestedItems[0];
-        }
-
         // define tempo
         newOrder.maxTime = orderTime;
         newOrder.timeRemaining = orderTime;
@@ -124,7 +118,15 @@ public class OrderManager : MonoBehaviour
 
             if (order.timeRemaining <= 0)
             {
-                Debug.Log("Pedido EXPIRADO: " + order.requestedItem);
+                // mostra todos os itens do pedido
+                string items = "";
+
+                foreach (var item in order.requestedItems)
+                {
+                    items += item.ToString() + " ";
+                }
+
+                Debug.Log("Pedido EXPIRADO: " + items);
 
                 // ===== PENALIDADE =====
                 ScoreManager.Instance.AddCustomScore(-10);
