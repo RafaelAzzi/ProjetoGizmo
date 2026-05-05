@@ -51,7 +51,7 @@ public class DeliveryManager : MonoBehaviour
         // ===== SUCESSO =====
         Debug.Log("Pedido COMPLETO com prato!");
 
-        GameManager.Instance.ordersCompleted++;
+        GameStatsManager.Instance.ordersCompleted++;
         orderManager.activeOrders.Remove(order);
 
         List<Item> items = plate.GetItemObjects();
@@ -59,13 +59,13 @@ public class DeliveryManager : MonoBehaviour
         foreach (Item item in items)
         {
             if (item.rarity == Rarity.Raro)
-                GameManager.Instance.rareItemsDelivered++;
+                GameStatsManager.Instance.rareItemsDelivered++;
 
             else if (item.rarity == Rarity.Lendario)
-                GameManager.Instance.legendaryItemsDelivered++;
+                GameStatsManager.Instance.legendaryItemsDelivered++;
 
             if (item.itemType == ItemType.OleoComum || item.itemType == ItemType.OleoAntiferrugem)
-                GameManager.Instance.oilsDelivered++;
+                GameStatsManager.Instance.oilsDelivered++;
         }
 
         int score = ScoreManager.Instance.CalculateOrderScore(

@@ -465,6 +465,7 @@ Transform:
   - {fileID: 1400357504}
   - {fileID: 301623941}
   - {fileID: 859455634}
+  - {fileID: 207073781}
   - {fileID: 1764482880}
   - {fileID: 48999610}
   m_Father: {fileID: 0}
@@ -620,6 +621,55 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2596647976541462630, guid: 94c4bbced3e6f6c42a444fab1dd58b23, type: 3}
   m_PrefabInstance: {fileID: 4865548796486256976}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &207073780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207073781}
+  - component: {fileID: 207073782}
+  m_Layer: 0
+  m_Name: GameStatsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &207073781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207073780}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 174359654}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &207073782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207073780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9253a1632910a214caa2e13c351104e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ordersCompleted: 0
+  ordersFailed: 0
+  rareItemsDelivered: 0
+  legendaryItemsDelivered: 0
+  oilsDelivered: 0
 --- !u!1 &241719821
 GameObject:
   m_ObjectHideFlags: 0
@@ -2050,11 +2100,6 @@ MonoBehaviour:
   oneStarScore: 100
   twoStarScore: 200
   threeStarScore: 300
-  ordersCompleted: 0
-  ordersFailed: 0
-  rareItemsDelivered: 0
-  legendaryItemsDelivered: 0
-  oilsDelivered: 0
 --- !u!4 &859455634
 Transform:
   m_ObjectHideFlags: 0

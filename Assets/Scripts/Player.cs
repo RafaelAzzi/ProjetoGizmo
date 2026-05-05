@@ -13,6 +13,9 @@ public class Player : MonoBehaviour, IItemHolder
     public float interactRange = 2f;
     public KeyCode interactKey = KeyCode.E;
 
+    // direção do raycast
+    public float interactWidth = 0.5f; // largura do "cone" de interação
+
     // Item que o jogador está segurando
     private Item heldItem;
 
@@ -57,7 +60,14 @@ public class Player : MonoBehaviour, IItemHolder
     // ===== SISTEMA DE INTERAÇÃO =====
     void TryInteract()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
+        // cria um "raio largo" na frente do player
+        RaycastHit[] hits = Physics.SphereCastAll(
+            transform.position,
+            interactWidth, // largura
+            transform.forward, // direção
+            interactRange, // distância
+            interactLayer
+        );
 
         IInteractable closestHoldPoint = null;
         float closestHoldPointDistance = Mathf.Infinity;
@@ -65,35 +75,32 @@ public class Player : MonoBehaviour, IItemHolder
         IInteractable closestFallback = null;
         float closestFallbackDistance = Mathf.Infinity;
 
-        foreach (Collider hit in hits)
+        foreach (RaycastHit hit in hits)
         {
-            if (hit.gameObject == gameObject) continue;
+            if (hit.collider.gameObject == gameObject) continue;
 
             // IGNORA ITEM QUE O PLAYER ESTÁ SEGURANDO
             if (heldItem != null && hit.transform == heldItem.transform)
                 continue;
 
-            IInteractable interactable = hit.GetComponent<IInteractable>();
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
 
             if (interactable == null) continue;
 
-            // posição base
             Vector3 targetPosition = hit.transform.position;
 
-            if (hit.TryGetComponent(out IItemHolder holder))
+            if (hit.collider.TryGetComponent(out IItemHolder holder))
             {
                 Transform hold = holder.GetHoldPoint();
 
                 if (hold != null)
-                {
                     targetPosition = hold.position;
-                }
             }
 
             float distance = Vector3.Distance(transform.position, targetPosition);
 
-            // ===== PRIORIDADE: HOLDPOINT =====
-            if (hit.GetComponent<HoldPoint>() != null)
+            // PRIORIDADE: HOLDPOINT
+            if (hit.collider.GetComponent<HoldPoint>() != null)
             {
                 if (distance < closestHoldPointDistance)
                 {
@@ -103,7 +110,6 @@ public class Player : MonoBehaviour, IItemHolder
             }
             else
             {
-                // ===== FALLBACK =====
                 if (distance < closestFallbackDistance)
                 {
                     closestFallbackDistance = distance;
@@ -112,7 +118,7 @@ public class Player : MonoBehaviour, IItemHolder
             }
         }
 
-        // ===== DECISÃO FINAL =====
+        // decisão final
         if (closestHoldPoint != null)
         {
             closestHoldPoint.Interact(this);
@@ -148,14 +154,20 @@ public class Player : MonoBehaviour, IItemHolder
 
     void HandleHighlight()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
+        RaycastHit[] hits = Physics.SphereCastAll(
+            transform.position,
+            interactWidth,
+            transform.forward,
+            interactRange,
+            interactLayer
+        );
 
         HoldPoint closestHoldPoint = null;
         float closestDistance = Mathf.Infinity;
 
-        foreach (Collider hit in hits)
+        foreach (RaycastHit hit in hits)
         {
-            HoldPoint hp = hit.GetComponent<HoldPoint>();
+            HoldPoint hp = hit.collider.GetComponent<HoldPoint>();
 
             if (hp == null) continue;
 
@@ -168,15 +180,12 @@ public class Player : MonoBehaviour, IItemHolder
             }
         }
 
-        // ===== ATUALIZA HIGHLIGHT =====
-
+        // atualização do highlight (igual antes)
         if (currentHighlight != closestHoldPoint)
         {
-            // Desliga anterior
             if (currentHighlight != null)
                 currentHighlight.HideHighlight();
 
-            // Liga novo
             if (closestHoldPoint != null)
                 closestHoldPoint.ShowHighlight();
 

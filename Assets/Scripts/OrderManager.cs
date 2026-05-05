@@ -4,6 +4,8 @@ using TMPro;
 
 public class OrderManager : MonoBehaviour
 {
+    public static OrderManager Instance;
+
     [Header("Quantidade de itens por pedido")]
     public int minItemsPerOrder = 1;
     public int maxItemsPerOrder = 1;
@@ -18,6 +20,18 @@ public class OrderManager : MonoBehaviour
 
     // quantidade máxima de pedidos simultâneos
     public int maxOrders = 3;
+
+    void Awake()
+    {
+        // garante que só existe um OrderManager
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
 
     void Start()
     {
@@ -132,7 +146,7 @@ public class OrderManager : MonoBehaviour
                 ScoreManager.Instance.AddCustomScore(-10);
 
                 // ===== CONTABILIZA FALHA =====
-                GameManager.Instance.ordersFailed++;
+                GameStatsManager.Instance.ordersFailed++;
 
                 // remove pedido
                 activeOrders.RemoveAt(i);

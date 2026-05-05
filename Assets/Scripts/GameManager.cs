@@ -19,17 +19,6 @@ public class GameManager : MonoBehaviour
     public int twoStarScore = 200;
     public int threeStarScore = 300;
 
-    // ===== ESTATÍSTICAS DA FASE =====
-
-    // pedidos
-    public int ordersCompleted = 0;
-    public int ordersFailed = 0;
-
-    // itens
-    public int rareItemsDelivered = 0;
-    public int legendaryItemsDelivered = 0;
-    public int oilsDelivered = 0;
-
     // ===== RESULTADO FINAL DETALHADO =====
     public class MatchResultData
     {
@@ -63,15 +52,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // por enquanto começa automático
         StartGame();
-        // reset estatísticas
-        ordersCompleted = 0;
-        ordersFailed = 0;
-
-        rareItemsDelivered = 0;
-        legendaryItemsDelivered = 0;
-        oilsDelivered = 0;
     }
 
     void Update()
@@ -157,22 +138,25 @@ public class GameManager : MonoBehaviour
     {
         MatchResultData data = new MatchResultData();
 
+        // pega referência do novo manager de stats
+        var stats = GameStatsManager.Instance;
+
         // ===== ITENS RAROS =====
-        data.rareItems = rareItemsDelivered;
-        data.rarePoints = rareItemsDelivered * 50;
+        data.rareItems = stats.rareItemsDelivered;
+        data.rarePoints = stats.rareItemsDelivered * 50;
 
         // ===== ITENS LENDÁRIOS =====
-        data.legendaryItems = legendaryItemsDelivered;
-        data.legendaryPoints = legendaryItemsDelivered * 70;
+        data.legendaryItems = stats.legendaryItemsDelivered;
+        data.legendaryPoints = stats.legendaryItemsDelivered * 70;
 
         // ===== ÓLEOS =====
-        data.oils = oilsDelivered;
-        data.oilPoints = oilsDelivered * 80; // simplificado (depois podemos melhorar)
+        data.oils = stats.oilsDelivered;
+        data.oilPoints = stats.oilsDelivered * 80;
 
         // ===== PEDIDOS =====
-        data.ordersCompleted = ordersCompleted;
-        data.ordersFailed = ordersFailed;
-        data.failedPenalty = ordersFailed * -10;
+        data.ordersCompleted = stats.ordersCompleted;
+        data.ordersFailed = stats.ordersFailed;
+        data.failedPenalty = stats.ordersFailed * -10;
 
         // ===== TOTAL =====
         data.totalScore = ScoreManager.Instance.GetScore();

@@ -12,8 +12,8 @@ public class OrderUI : MonoBehaviour
 
     void Start()
     {
-        // pega referência do OrderManager na cena
-        orderManager = FindObjectOfType<OrderManager>();
+        // pega referência via Singleton
+        orderManager = OrderManager.Instance;
     }
 
     void Update()

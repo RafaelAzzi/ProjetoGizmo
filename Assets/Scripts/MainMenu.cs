@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
     // Botão Jogar
     public void PlayGame()
     {
-        SceneManager.LoadScene("Fase1");
+        SceneManager.LoadScene(1);
     }
 
     // Botão Sair
