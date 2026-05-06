@@ -46,6 +46,8 @@ public class SupportBench : MonoBehaviour, IInteractable
         if (distance > interactDistance) return;
 
         playerItem.SetHolder(closestSlot);
+
+        playerItem.ShowIcon();
     }
 
     // ===== PEGAR ITEM =====
@@ -60,7 +62,16 @@ public class SupportBench : MonoBehaviour, IInteractable
 
         if (distance > interactDistance) return;
 
-        closestSlot.GetItem().SetHolder(player);
+        // pega o item antes de remover do slot
+        Item item = closestSlot.GetItem();
+
+        if (item == null) return;
+
+        // move o item para o player
+        item.SetHolder(player);
+
+        // mostra o ícone
+        item.ShowIcon();
     }
 
     // ===== SLOT VAZIO MAIS PRÓXIMO =====

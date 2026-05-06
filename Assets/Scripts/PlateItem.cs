@@ -63,6 +63,10 @@ public class PlateItem : Item
         {
             col.enabled = false;
         }
+
+        // mostra o ícone do item dentro do prato
+        item.ShowIcon();
+        
         return true;
     }
 

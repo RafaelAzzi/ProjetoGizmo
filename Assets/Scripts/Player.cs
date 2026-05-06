@@ -203,6 +203,11 @@ public class Player : MonoBehaviour, IItemHolder
     public void SetItem(Item item)
     {
         heldItem = item;
+
+        if (item != null)
+        {
+            item.ShowIcon(); // mostra ícone quando pega
+        }
     }
 
     public Item GetItem()
@@ -223,6 +228,11 @@ public class Player : MonoBehaviour, IItemHolder
     public Item GetHeldItem()
     {
         return heldItem;
+
+        if (heldItem != null)
+        {
+            heldItem.HideIcon(); // esconde ao soltar
+        }
     }
 
     public void SetHeldItem(Item item)

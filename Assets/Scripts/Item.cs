@@ -80,6 +80,49 @@ public class Item : MonoBehaviour
     // ===== PROGRESSO DA DRINK BENCH =====
     public float processProgress = 0f; // quanto já foi processado
 
+    // ===== SISTEMA DE ÍCONE =====
+
+    // sprite do item (você coloca no inspector)
+    [Header("Ícone do Item")]
+    public Sprite iconSprite;
+
+    // referência do objeto visual do ícone
+    public GameObject iconRoot;
+
+    // referência da imagem do ícone
+    private UnityEngine.UI.Image iconImage;
+
+    void Start()
+    {
+        // pega a imagem dentro do ícone
+        if (iconRoot != null)
+        {
+            iconImage = iconRoot.GetComponentInChildren<UnityEngine.UI.Image>();
+
+            if (iconImage != null && iconSprite != null)
+            {
+                iconImage.sprite = iconSprite;
+            }
+
+            // começa escondido
+            iconRoot.SetActive(false);
+        }
+    }
+
+    // mostra o ícone
+    public void ShowIcon()
+    {
+        if (iconRoot != null)
+            iconRoot.SetActive(true);
+    }
+
+    // esconde o ícone
+    public void HideIcon()
+    {
+        if (iconRoot != null)
+            iconRoot.SetActive(false);
+    }
+
 
 
 // ===== SISTEMA DE HOLDER =====
@@ -144,6 +187,12 @@ public class Item : MonoBehaviour
         if (col != null)
         {
             col.enabled = false;
+        }
+
+        // se não tem holder → está no mundo → esconde ícone
+        if (newHolder == null)
+        {
+            HideIcon();
         }
     }
 }

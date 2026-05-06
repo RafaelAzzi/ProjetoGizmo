@@ -1790,6 +1790,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2251848428181228499, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -103
+      objectReference: {fileID: 0}
+    - target: {fileID: 2251848428181228499, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -304
+      objectReference: {fileID: 0}
     - target: {fileID: 2640127528297156758, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
       propertyPath: levelLoader
       value: 
@@ -1873,6 +1881,18 @@ PrefabInstance:
     - target: {fileID: 4189287540675530671, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8990259008635401878, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -225
+      objectReference: {fileID: 0}
+    - target: {fileID: 9022813696311766654, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 410
+      objectReference: {fileID: 0}
+    - target: {fileID: 9022813696311766654, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -265
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4472,6 +4492,7 @@ MonoBehaviour:
   holdPoint: {fileID: 195602643}
   interactRange: 1
   interactKey: 101
+  interactWidth: 0.5
 --- !u!1 &2058063944
 GameObject:
   m_ObjectHideFlags: 0

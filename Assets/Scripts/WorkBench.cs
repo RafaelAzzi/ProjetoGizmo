@@ -81,6 +81,9 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
             secondItem = heldItem;
             currentRecipe = recipe;
 
+            currentItem.HideIcon();
+            secondItem.HideIcon();
+
             // destrói os dois itens
             Destroy(currentItem.gameObject);
             Destroy(secondItem.gameObject);
@@ -154,6 +157,8 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
         Item resultItem = resultGO.GetComponent<Item>();
         resultItem.SetHolder(this);
 
+        resultItem.ShowIcon();
+
         // limpa dados
         currentRecipe = null;
         currentProgress = 0;
@@ -169,6 +174,10 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     public void SetItem(Item item)
     {
         currentItem = item;
+        if (item != null)
+        {
+            item.ShowIcon(); // mostra ícone
+        }
     }
 
     public Item GetItem()

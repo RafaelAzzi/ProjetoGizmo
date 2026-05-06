@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // necessário para trocar de cena
 
 public class ResultUI : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class ResultUI : MonoBehaviour
     public Sprite fullStar;
     public Sprite emptyStar;
 
-    // ===== NOVO: referência ao LevelLoader =====
+    // ===== referência ao LevelLoader =====
     public LevelLoader levelLoader;
 
     public void ShowResults()
@@ -84,6 +85,13 @@ public class ResultUI : MonoBehaviour
     {
         // reinicia fase atual
         levelLoader.RestartLevel();
+    }
+
+    // ===== BOTÃO: SELEÇÃO DE FASE =====
+    public void OnClickLevelSelect()
+    {
+        // carrega a cena de seleção de fases
+        SceneManager.LoadScene("LevelSelect");
     }
 
     // ===== BOTÃO: MENU PRINCIPAL =====
