@@ -10,10 +10,4 @@ public class DifficultyManager : MonoBehaviour
     {
         return currentDifficulty.spawnDelay;
     }
-
-    // tempo de pedido
-    public float GetOrderTime()
-    {
-        return currentDifficulty.orderTime;
-    }
 }

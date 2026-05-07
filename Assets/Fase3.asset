@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 956e5cd60e591324ea6e2c1f3fbd0163, type: 3}
   m_Name: Fase3
   m_EditorClassIdentifier: 
-  maxRobots: 4
   spawnDelay: 4
   orderTime: 40

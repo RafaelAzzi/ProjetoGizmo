@@ -5,5 +5,4 @@ using UnityEngine;
 public class DifficultySettings : ScriptableObject
 {
     public float spawnDelay = 4f;    // tempo entre tentativas de spawn
-    public float orderTime = 40f;    // tempo para completar pedido
 }

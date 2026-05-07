@@ -10,7 +10,13 @@ public class OrderManager : MonoBehaviour
     public int minItemsPerOrder = 1;
     public int maxItemsPerOrder = 1;
 
-    public float orderTime = 20f; // tempo padrão por pedido
+    [Header("Tempo por raridade")]
+    public float commonOrderTime = 30f;
+    public float rareOrderTime = 45f;
+    public float legendaryOrderTime = 60f;
+
+    [Header("Lista de todos os prefabs de itens")]
+    public List<Item> allItems;
 
     // lista de pedidos ativos
     public List<Order> activeOrders = new List<Order>();
@@ -62,9 +68,12 @@ public class OrderManager : MonoBehaviour
             newOrder.requestedItems.Add(randomItem);
         }
 
-        // define tempo
-        newOrder.maxTime = orderTime;
-        newOrder.timeRemaining = orderTime;
+        // calcula tempo total baseado nos itens do pedido
+        float totalOrderTime = CalculateOrderTime(newOrder.requestedItems);
+
+        // define tempo do pedido
+        newOrder.maxTime = totalOrderTime;
+        newOrder.timeRemaining = totalOrderTime;
 
         // adiciona na lista
         activeOrders.Add(newOrder);
@@ -115,6 +124,47 @@ public class OrderManager : MonoBehaviour
         Debug.Log("Item não corresponde a nenhum pedido");
         return false;
     }
+
+    // calcula tempo do pedido baseado na raridade dos itens
+    float CalculateOrderTime(List<ItemType> items)
+    {
+        float totalTime = 0f;
+
+        // percorre todos os itens do pedido
+        foreach (ItemType itemType in items)
+        {
+            // procura o prefab correspondente
+            foreach (Item itemPrefab in allItems)
+            {
+                // encontrou o item correto
+                if (itemPrefab.itemType == itemType)
+                {
+                    // adiciona tempo baseado na raridade
+                    switch (itemPrefab.rarity)
+                    {
+                        case Rarity.Comum:
+                            totalTime += commonOrderTime;
+                            break;
+
+                        case Rarity.Raro:
+                            totalTime += rareOrderTime;
+                            break;
+
+                        case Rarity.Lendario:
+                            totalTime += legendaryOrderTime;
+                            break;
+                    }
+
+                    // já encontrou, então para o loop
+                    break;
+                }
+            }
+        }
+
+        return totalTime;
+    }
+
+    
 
     void Update()
     {

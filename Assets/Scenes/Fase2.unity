@@ -490,7 +490,7 @@ Transform:
   - {fileID: 301623941}
   - {fileID: 859455634}
   - {fileID: 207073781}
-  - {fileID: 1764482880}
+  - {fileID: 1080648743}
   - {fileID: 48999610}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2088,7 +2088,7 @@ MonoBehaviour:
   - {fileID: 682542088}
   spawnPoint: {fileID: 241719822}
   exitPoint: {fileID: 925756110}
-  orderManager: {fileID: 1764482879}
+  orderManager: {fileID: 1080648744}
   difficultyManager: {fileID: 301623940}
 --- !u!1 &859455632
 GameObject:
@@ -2613,6 +2613,86 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1080648742
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1080648743}
+  - component: {fileID: 1080648744}
+  m_Layer: 0
+  m_Name: OrderManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1080648743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080648742}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.4474607, y: 5.1576037, z: 1.1051757}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 174359654}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1080648744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080648742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 818cec14ba258e349946447c8d1d39e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minItemsPerOrder: 2
+  maxItemsPerOrder: 2
+  orderTime: 40
+  commonOrderTime: 30
+  rareOrderTime: 45
+  legendaryOrderTime: 60
+  allItems:
+  - {fileID: 2118862421441323440, guid: 626f951e3097c284e8d863ae0b2d677e, type: 3}
+  - {fileID: 5084964220170153173, guid: 9b14dfffb5843a243aa3d4303c5d638b, type: 3}
+  - {fileID: 1763715349322480721, guid: ca88b6f00aa3229488b7c85c7840fd73, type: 3}
+  - {fileID: 4731683331988745333, guid: 29cd5930c985abe4896f63d16c69b27c, type: 3}
+  - {fileID: 5855531882417914334, guid: 778aabfc8602ced4c9f2d3a1bcb09e29, type: 3}
+  - {fileID: 3286620458674609551, guid: dc08b826493f85d439f96b25be51727e, type: 3}
+  - {fileID: 355563481959909562, guid: a7b6d4d26ce0a5042bd774c1ac0729e4, type: 3}
+  - {fileID: 3069990746352827408, guid: dca66d6274962b64580acc76337dc57f, type: 3}
+  - {fileID: 6183638314747675563, guid: 9fb70ccc0ac566c48b8bc5108b91dcdf, type: 3}
+  - {fileID: 6566474472456590935, guid: fb1193ff14767234bac80dce4048accd, type: 3}
+  - {fileID: 5546505327605604677, guid: 7184d00f1bdd19647b64d611c7669ce9, type: 3}
+  - {fileID: 8756395627905042808, guid: a5c787636f2eb27488132b3fde93b638, type: 3}
+  - {fileID: 731862673101877046, guid: 7ef72f0a9e3f89545a2c1dad926b5b2e, type: 3}
+  - {fileID: 190688331113471723, guid: a50c34b374d7c6040bd3b0e1c76fe2bb, type: 3}
+  - {fileID: 6325213300660314189, guid: 043cbebb942662e4388432998cd73526, type: 3}
+  - {fileID: 1001936677036929174, guid: 02bc823857a1b024196e7a8763af39c6, type: 3}
+  - {fileID: 841866471449922903, guid: 33d8cdd40e3918e499c4ba520189083c, type: 3}
+  - {fileID: 4559476774415264403, guid: bbb23f632aa218b4e9e889a39c436386, type: 3}
+  - {fileID: 8178668020177121289, guid: 7b9a94d44abceae4390becc89e02a0a1, type: 3}
+  - {fileID: 2967678259923797980, guid: 087023dddd148ef4c941104b21d5a0c5, type: 3}
+  - {fileID: 4357394934761447319, guid: 18d56ad60b6e90348b4122746f369c96, type: 3}
+  - {fileID: 386479077373136811, guid: a7594255971384e44852b896d553c60d, type: 3}
+  - {fileID: 1482929350779115010, guid: 0b63f10162616aa419eff0b03c597b23, type: 3}
+  - {fileID: 2161981722392302313, guid: 65739e7f0672d464096a0cb6b90b11c0, type: 3}
+  - {fileID: 5169812472139967065, guid: 3320926b5cab70240ac565bf7b3bd082, type: 3}
+  - {fileID: 1110602946007641326, guid: 66a9dfcc16141584b9e70435f952bbb7, type: 3}
+  activeOrders: []
+  possibleItems: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
+  maxOrders: 3
 --- !u!1 &1106214437
 GameObject:
   m_ObjectHideFlags: 0
@@ -4141,56 +4221,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1689827968}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1764482878
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1764482880}
-  - component: {fileID: 1764482879}
-  m_Layer: 0
-  m_Name: OrderManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1764482879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1764482878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 818cec14ba258e349946447c8d1d39e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minItemsPerOrder: 1
-  maxItemsPerOrder: 1
-  orderTime: 40
-  activeOrders: []
-  possibleItems: 190000001800000017000000160000001500000014000000130000001200000011000000100000000f0000000e0000000d0000000c0000000b0000000a00000009000000080000000700000006000000050000000400000003000000
-  maxOrders: 3
---- !u!4 &1764482880
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1764482878}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.4474607, y: 5.1576037, z: 1.1051757}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 174359654}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1778539897
 GameObject:
   m_ObjectHideFlags: 0
@@ -4654,6 +4684,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clicksRaro: 10
   clicksLendario: 20
+  workBenchEnabled: 1
+  allowLegendaryCraft: 0
   holdPoint: {fileID: 318747590}
   recipeDatabase: {fileID: 11400000, guid: 677423f5b8fafc1478f85589764e8a63, type: 2}
   interactDistance: 2.5

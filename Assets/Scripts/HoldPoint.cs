@@ -27,6 +27,15 @@ public class HoldPoint : MonoBehaviour, IInteractable
     // ===== ATIVAR HIGHLIGHT =====
     public void ShowHighlight()
     {
+        // verifica se o objeto pai é uma WorkBench
+        WorkBench workBench = parentInteractable as WorkBench;
+
+        // se existir e estiver desativada, não mostra highlight
+        if (workBench != null && !workBench.IsWorkbenchEnabled())
+        {
+            return;
+        }
+
         if (highlightVisual != null)
             highlightVisual.SetActive(true);
     }

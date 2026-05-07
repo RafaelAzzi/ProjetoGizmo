@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 // spawner pode ser interagido
 public class ItemSpawner : MonoBehaviour, IInteractable
@@ -43,6 +44,9 @@ public class ItemSpawner : MonoBehaviour, IInteractable
             rb.isKinematic = true;
             rb.useGravity = false;
         }
+
+        // inicia rotina para mostrar ícone
+        StartCoroutine(ShowSpawnIcon());
     }
 
     // ===== INTERAÇÃO DO PLAYER =====
@@ -62,5 +66,25 @@ public class ItemSpawner : MonoBehaviour, IInteractable
 
         // remove referência (para permitir respawn)
         currentItem = null;
+    }
+
+    // espera 1 frame antes de mostrar o ícone
+    IEnumerator ShowSpawnIcon()
+    {
+        // espera o Start() do Item acontecer
+        yield return null;
+
+        // segurança
+        if (currentItem == null)
+            yield break;
+
+        // pega item
+        Item item = currentItem.GetComponent<Item>();
+
+        // mostra ícone
+        if (item != null)
+        {
+            item.ShowIcon();
+        }
     }
 }

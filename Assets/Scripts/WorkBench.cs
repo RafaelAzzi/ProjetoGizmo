@@ -7,6 +7,12 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     public int clicksRaro = 10;
     public int clicksLendario = 20;
 
+    [Header("Configuração da bancada")]
+    public bool workBenchEnabled = true;
+
+    // permite criar itens lendários nessa fase
+    public bool allowLegendaryCraft = true;
+
     public Transform holdPoint;
     public RecipeDatabase recipeDatabase;
 
@@ -28,6 +34,12 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
     {
+        // verifica se a bancada está habilitada nessa fase
+        if (!workBenchEnabled)
+        {
+            return;
+        }
+
         float distance = Vector3.Distance(player.transform.position, holdPoint.position);
 
         if (distance > interactDistance)
@@ -78,6 +90,16 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
 
         if (recipe != null)
         {
+            // pega o item do resultado direto do prefab
+            Item resultItem = recipe.resultPrefab.GetComponent<Item>();
+
+            // bloqueia craft lendário se estiver desativado
+            if (!allowLegendaryCraft && resultItem.rarity == Rarity.Lendario)
+            {
+                Debug.Log("Craft lendário bloqueado nessa fase");
+                return;
+            }
+
             secondItem = heldItem;
             currentRecipe = recipe;
 
@@ -90,34 +112,31 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
 
             // limpa referências
             ClearItem();
-            secondItem = null; //  proteção contra bug futuro
+            secondItem = null; // proteção contra bug futuro
 
             // inicia processamento
             isProcessing = true;
             currentProgress = 0;
 
-            // pega o item do resultado direto do prefab
-            Item resultItem = recipe.resultPrefab.GetComponent<Item>();
-
             // define cliques baseado na raridade do resultado
             switch (resultItem.rarity)
             {
                 case Rarity.Raro:
-                requiredClicks = clicksRaro;
-                break;
+                    requiredClicks = clicksRaro;
+                    break;
 
                 case Rarity.Lendario:
-                requiredClicks = clicksLendario;
-                break;
+                    requiredClicks = clicksLendario;
+                    break;
 
                 default:
-                requiredClicks = 5; // segurança (caso tenha algo comum)
-                break;
+                    requiredClicks = 5; // segurança (caso tenha algo comum)
+                    break;
             }
 
             // ativa barra
             progressBar.gameObject.SetActive(true);
-            progressBar.value = 0f; //  garante que começa zerada
+            progressBar.value = 0f; // garante que começa zerada
         }
     }
 
@@ -193,5 +212,11 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     public bool HasItem()
     {
         return currentItem != null;
+    }
+
+    // retorna se a bancada pode ser utilizada
+    public bool IsWorkbenchEnabled()
+    {
+        return workBenchEnabled;
     }
 }

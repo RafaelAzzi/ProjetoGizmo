@@ -7,7 +7,4 @@ public class Recipe : ScriptableObject
     public ItemType itemB; // segundo item    
 
     public GameObject resultPrefab; // resultado
-
-    public float craftTime; // tempo preparo (pra depois)
-    // teste
 }
