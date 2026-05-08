@@ -47,7 +47,7 @@ public class PlateItem : Item
         item.transform.localRotation = Quaternion.identity;
 
         // reduz tamanho (40%)
-        item.transform.localScale *= 0.6f;
+        item.transform.localScale *= 0.9f;
 
         // desativa física
         Rigidbody rb = item.GetComponent<Rigidbody>();

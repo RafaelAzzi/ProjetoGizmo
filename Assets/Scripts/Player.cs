@@ -22,11 +22,15 @@ public class Player : MonoBehaviour, IItemHolder
     // HoldPoint atualmente destacado
     private HoldPoint currentHighlight;
 
+    private CharacterController controller;
+
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+    }
+
     void Update()
     {
-        // bloqueia tudo se o jogo não estiver rodando
-        if (!GameManager.Instance.IsGamePlaying()) return;
-        
         Move();
 
         HandleHighlight();
@@ -45,12 +49,10 @@ public class Player : MonoBehaviour, IItemHolder
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
-        direction = direction.normalized;
+        // movimentação
+        controller.Move(direction * speed * Time.deltaTime);
 
-        // move o personagem
-        transform.Translate(direction * speed * Time.deltaTime, Space.World);
-
-        //  ROTACIONA NA DIREÇÃO DO MOVIMENTO =====
+        // rotação
         if (direction != Vector3.zero)
         {
             transform.forward = direction;
