@@ -1,75 +1,99 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class OrderUI : MonoBehaviour
 {
-    public TextMeshProUGUI ordersText;
+    [Header("Referências")]
 
+    // container onde os cards ficarão
+    public Transform ordersContainer;
+
+    // prefab visual do card
+    public OrderCardUI orderCardPrefab;
+
+    // banco visual
+    public ItemVisualDatabase visualDatabase;
+
+    // database de receitas
+    public RecipeDatabase recipeDatabase;
+
+    // manager de pedidos
     private OrderManager orderManager;
 
-    float blinkTimer = 0f;
+    // relação pedido -> card
+    private Dictionary<Order, OrderCardUI> activeCards =
+        new Dictionary<Order, OrderCardUI>();
 
     void Start()
     {
-        // pega referência via Singleton
+        // pega singleton
         orderManager = OrderManager.Instance;
     }
 
     void Update()
     {
-        if (!GameManager.Instance.IsGamePlaying()) return;
+        // segurança
+        if (orderManager == null)
+            return;
 
-        blinkTimer += Time.deltaTime;
-
-        UpdateUI();
+        // atualiza cards
+        RefreshOrders();
     }
 
-    void UpdateUI()
+    // atualiza lista visual de pedidos
+    void RefreshOrders()
     {
-        if (ordersText == null || orderManager == null) return;
-
-        string text = "Pedidos:\n";
-
+        // cria cards que ainda não existem
         foreach (Order order in orderManager.activeOrders)
         {
-            string color = GetOrderUrgency(order);
+            // já existe
+            if (activeCards.ContainsKey(order))
+                continue;
 
-            // efeito de piscar
-            if (color == "red")
-            {
-                bool blink = Mathf.FloorToInt(blinkTimer * 30) % 2 == 0;
-                color = blink ? "red" : "yellow";
-            }
-
-            text += "<color=" + color + ">";
-
-            for (int j = 0; j < order.requestedItems.Count; j++)
-            {
-                text += order.requestedItems[j].ToString();
-
-                if (j < order.requestedItems.Count - 1)
-                    text += ", ";
-            }
-
-            text += " -> ";
-            text += Mathf.Ceil(order.timeRemaining) + "s";
-            text += "</color>\n";
+            CreateCard(order);
         }
 
-        ordersText.text = text;
+        // lista temporária
+        List<Order> ordersToRemove =
+            new List<Order>();
+
+        // verifica cards inválidos
+        foreach (var pair in activeCards)
+        {
+            // pedido ainda existe
+            if (orderManager.activeOrders.Contains(pair.Key))
+                continue;
+
+            // destrói card
+            Destroy(pair.Value.gameObject);
+
+            // marca para remover
+            ordersToRemove.Add(pair.Key);
+        }
+
+        // remove do dicionário
+        foreach (Order order in ordersToRemove)
+        {
+            activeCards.Remove(order);
+        }
     }
 
-    string GetOrderUrgency(Order order)
+    // cria card visual
+    void CreateCard(Order order)
     {
-        float percent = order.timeRemaining / order.maxTime;
+        // instancia prefab
+        OrderCardUI newCard =
+            Instantiate(
+                orderCardPrefab,
+                ordersContainer);
 
-        if (percent > 0.5f)
-            return "green";
+        // configura card
+        newCard.Setup(
+            order,
+            visualDatabase,
+            recipeDatabase);
 
-        if (percent > 0.25f)
-            return "yellow";
-
-        return "red";
+        // salva no dicionário
+        activeCards.Add(order, newCard);
     }
 }
