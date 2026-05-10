@@ -31,6 +31,10 @@ public class Player : MonoBehaviour, IItemHolder
 
     void Update()
     {
+        // impede movimentação/interação após fim da partida
+        if (!GameManager.Instance.IsGamePlaying())
+            return;
+            
         Move();
 
         HandleHighlight();

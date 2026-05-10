@@ -168,6 +168,10 @@ public class OrderManager : MonoBehaviour
 
     void Update()
     {
+        // não atualiza pedidos se a partida acabou
+        if (!GameManager.Instance.IsGamePlaying())
+            return;
+            
         UpdateOrders();
     }
 
