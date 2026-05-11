@@ -13,6 +13,8 @@ public class DrinkBench : MonoBehaviour, IInteractable
     public class DrinkSlot : IItemHolder
     {
         public Transform holdPoint;
+        // ponto onde a barra de progresso aparecerá
+        public Transform uiAnchor;
 
         private Item currentItem;
 
@@ -157,11 +159,27 @@ public class DrinkBench : MonoBehaviour, IInteractable
         closestSlot.isReady = false;
         closestSlot.readyTimer = 0f;
 
-        closestSlot.progressBarInstance = Instantiate(
-            progressBarPrefab,
-            closestSlot.holdPoint.position + progressBarOffset,
-            Quaternion.identity
-        );
+     // posição da barra
+    Vector3 barPosition;
+
+    // usa UIAnchor se existir
+    if (closestSlot.uiAnchor != null)
+    {
+        barPosition = closestSlot.uiAnchor.position;
+    }
+    else
+    {
+        // fallback antigo
+        barPosition =
+            closestSlot.holdPoint.position +
+            progressBarOffset;
+    }
+
+    closestSlot.progressBarInstance = Instantiate(
+        progressBarPrefab,
+        barPosition,
+        closestSlot.uiAnchor.rotation
+    );
 
         closestSlot.progressBar = closestSlot.progressBarInstance.GetComponentInChildren<Slider>();
     }
