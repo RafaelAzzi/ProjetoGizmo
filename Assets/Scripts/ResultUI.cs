@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement; // necessário para trocar de cena
 
 public class ResultUI : MonoBehaviour
 {
+    public TextMeshProUGUI comumText;
     public TextMeshProUGUI rareText;
     public TextMeshProUGUI legendaryText;
     public TextMeshProUGUI oilText;
@@ -31,6 +32,7 @@ public class ResultUI : MonoBehaviour
     {
         var data = GameManager.Instance.CalculateMatchResult();
 
+        comumText.text = "Itens comuns: " + data.comumItems + " -> " + data.comumPoints;
         rareText.text = "Itens raros: " + data.rareItems + " -> " + data.rarePoints;
         legendaryText.text = "Itens lendários: " + data.legendaryItems + " -> " + data.legendaryPoints;
         oilText.text = "Óleos: " + data.oils + " -> " + data.oilPoints;

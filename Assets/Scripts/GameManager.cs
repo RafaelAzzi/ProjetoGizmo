@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     // ===== RESULTADO FINAL DETALHADO =====
     public class MatchResultData
     {
+        public int comumItems;
+        public int comumPoints;
+
         public int rareItems;
         public int rarePoints;
 
@@ -96,6 +99,7 @@ public class GameManager : MonoBehaviour
         MatchResultData result = CalculateMatchResult();
 
         Debug.Log("===== RESULTADO FINAL =====");
+        Debug.Log("Comuns: " + result.comumItems + " -> " + result.comumPoints);
         Debug.Log("Raros: " + result.rareItems + " -> " + result.rarePoints);
         Debug.Log("Lendários: " + result.legendaryItems + " -> " + result.legendaryPoints);
         Debug.Log("Óleos: " + result.oils + " -> " + result.oilPoints);
@@ -140,6 +144,10 @@ public class GameManager : MonoBehaviour
 
         // pega referência do novo manager de stats
         var stats = GameStatsManager.Instance;
+
+        // ===== ITENS COMUNS =====
+        data.comumItems = stats.comumItemsDelivered;
+        data.comumPoints = stats.comumItemsDelivered * 20;
 
         // ===== ITENS RAROS =====
         data.rareItems = stats.rareItemsDelivered;

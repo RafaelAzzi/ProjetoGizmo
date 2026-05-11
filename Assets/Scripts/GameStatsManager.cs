@@ -9,6 +9,7 @@ public class GameStatsManager : MonoBehaviour
     public int ordersCompleted = 0;
     public int ordersFailed = 0;
 
+    public int comumItemsDelivered = 0;
     public int rareItemsDelivered = 0;
     public int legendaryItemsDelivered = 0;
     public int oilsDelivered = 0;
@@ -36,6 +37,7 @@ public class GameStatsManager : MonoBehaviour
         ordersCompleted = 0;
         ordersFailed = 0;
 
+        comumItemsDelivered = 0;
         rareItemsDelivered = 0;
         legendaryItemsDelivered = 0;
         oilsDelivered = 0;

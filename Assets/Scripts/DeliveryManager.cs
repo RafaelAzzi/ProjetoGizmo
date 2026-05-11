@@ -58,14 +58,24 @@ public class DeliveryManager : MonoBehaviour
 
         foreach (Item item in items)
         {
-            if (item.rarity == Rarity.Raro)
+            // ===== ITENS COMUNS =====
+            if (item.rarity == Rarity.Comum)
+                GameStatsManager.Instance.comumItemsDelivered++;
+
+            // ===== ITENS RAROS =====
+            else if (item.rarity == Rarity.Raro)
                 GameStatsManager.Instance.rareItemsDelivered++;
 
+            // ===== ITENS LENDÁRIOS =====
             else if (item.rarity == Rarity.Lendario)
                 GameStatsManager.Instance.legendaryItemsDelivered++;
 
-            if (item.itemType == ItemType.OleoComum || item.itemType == ItemType.OleoAntiferrugem)
+            // ===== ÓLEOS =====
+            if (item.itemType == ItemType.OleoComum ||
+                item.itemType == ItemType.OleoAntiferrugem)
+            {
                 GameStatsManager.Instance.oilsDelivered++;
+            }
         }
 
         int score = ScoreManager.Instance.CalculateOrderScore(

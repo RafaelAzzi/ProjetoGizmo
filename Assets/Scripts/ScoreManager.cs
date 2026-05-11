@@ -61,13 +61,22 @@ public class ScoreManager : MonoBehaviour
             }
 
             // ----- RARIDADE -----
-            if (item.rarity == Rarity.Raro)
+            // item comum
+            if (item.rarity == Rarity.Comum)
             {
-                total += 50;
+                total += 20;
             }
+
+            // item raro
+            else if (item.rarity == Rarity.Raro)
+            {
+                total += 40;
+            }
+
+            // item lendário
             else if (item.rarity == Rarity.Lendario)
             {
-                total += 70;
+                total += 60;
             }
         }
 

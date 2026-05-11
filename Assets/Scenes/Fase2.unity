@@ -2199,9 +2199,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resultPanel: {fileID: 967780141}
   matchTime: 180
-  oneStarScore: 200
-  twoStarScore: 350
-  threeStarScore: 450
+  oneStarScore: 300
+  twoStarScore: 400
+  threeStarScore: 500
 --- !u!4 &859455634
 Transform:
   m_ObjectHideFlags: 0
@@ -4170,6 +4170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ordersCompleted: 0
   ordersFailed: 0
+  comumItemsDelivered: 0
   rareItemsDelivered: 0
   legendaryItemsDelivered: 0
   oilsDelivered: 0
