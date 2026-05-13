@@ -4949,8 +4949,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 818cec14ba258e349946447c8d1d39e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minItemsPerOrder: 1
-  maxItemsPerOrder: 1
+  minItemsPerOrder: 2
+  maxItemsPerOrder: 2
   commonOrderTime: 40
   rareOrderTime: 60
   legendaryOrderTime: 80

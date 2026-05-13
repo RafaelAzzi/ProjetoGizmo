@@ -6,24 +6,18 @@ public class OrderCardUI : MonoBehaviour
 {
     [Header("UI Principal")]
 
-    // ícone principal do item
+    // ícone principal do pedido
     public Image mainItemIcon;
-
-    // nome do item
-    public TextMeshProUGUI itemNameText;
-
-    // texto do timer
-    public TextMeshProUGUI orderTimerText;
+    // preenchimento da barra de tempo
+    public Image timerFill;
 
     [Header("Recipe Panel")]
 
-    // painel da receita
-    public GameObject recipePanel;
+    // container das receitas
+    public GameObject recipeContainer;
 
-    // ícones da receita
-    public Image ingredientAIcon;
-    public Image ingredientBIcon;
-    public Image resultIcon;
+    // prefab da linha de receita
+    public RecipeRowUI recipeRowPrefab;
 
     // pedido atual
     private Order currentOrder;
@@ -62,49 +56,45 @@ public class OrderCardUI : MonoBehaviour
         UpdateTimer();
     }
 
-    // atualiza visual completo
+   // atualiza visual completo
     void RefreshVisual()
     {
         // segurança
         if (currentOrder.requestedItems.Count <= 0)
             return;
 
-        // pega primeiro item do pedido
-        ItemType itemType = currentOrder.requestedItems[0];
+        // pega item principal
+        ItemType mainItem =
+            currentOrder.requestedItems[0];
 
         // atualiza ícone principal
         mainItemIcon.sprite =
-            visualDatabase.GetIcon(itemType);
+            visualDatabase.GetIcon(mainItem);
 
-        // atualiza nome
-        itemNameText.text =
-            visualDatabase.GetDisplayName(itemType);
-
-        // tenta mostrar receita
-        TryShowRecipe(itemType);
+        // monta receitas
+        BuildRecipeChain(mainItem);
     }
 
-    // atualiza timer
+    // atualiza timer visual
     void UpdateTimer()
     {
-        // atualiza texto
-        orderTimerText.text =
-            Mathf.Ceil(currentOrder.timeRemaining) + "s";
-
         // porcentagem restante
         float percent =
             currentOrder.timeRemaining /
             currentOrder.maxTime;
 
+        // atualiza barra
+        timerFill.fillAmount = percent;
+
         // verde
         if (percent > 0.5f)
         {
-            orderTimerText.color = Color.green;
+            timerFill.color = Color.green;
         }
         // amarelo
         else if (percent > 0.25f)
         {
-            orderTimerText.color = Color.yellow;
+            timerFill.color = Color.yellow;
         }
         // vermelho piscando
         else
@@ -114,20 +104,73 @@ public class OrderCardUI : MonoBehaviour
             bool blink =
                 Mathf.FloorToInt(blinkTimer * 8) % 2 == 0;
 
-            orderTimerText.color =
+            timerFill.color =
                 blink ? Color.red : Color.yellow;
         }
     }
 
-    // tenta mostrar receita
-    void TryShowRecipe(ItemType resultType)
+    // monta cadeia de receitas
+    void BuildRecipeChain(ItemType resultType)
     {
-        Recipe foundRecipe = null;
+        // limpa receitas antigas
+        foreach (Transform child in recipeContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
 
-        // procura receita correspondente
+        // busca receita principal
+        Recipe recipe =
+            FindRecipeByResult(resultType);
+
+        // item comum → sem receita
+        if (recipe == null)
+        {
+            recipeContainer.SetActive(false);
+            return;
+        }
+
+        // ativa container
+        recipeContainer.SetActive(true);
+
+        // cria cadeia recursiva
+        CreateRecipeRecursive(resultType);
+    }
+
+    // cria receitas recursivamente
+    void CreateRecipeRecursive(ItemType resultType)
+    {
+        // procura receita
+        Recipe recipe =
+            FindRecipeByResult(resultType);
+
+        // segurança
+        if (recipe == null)
+            return;
+
+        // verifica ingrediente A
+        CreateRecipeRecursive(recipe.itemA);
+
+        // verifica ingrediente B
+        CreateRecipeRecursive(recipe.itemB);
+
+        // cria linha visual
+        RecipeRowUI row =
+            Instantiate(
+                recipeRowPrefab,
+                recipeContainer.transform);
+
+        // configura ícones
+        row.Setup(
+            visualDatabase.GetIcon(recipe.itemA),
+            visualDatabase.GetIcon(recipe.itemB));
+    }
+
+    // procura receita pelo resultado
+    Recipe FindRecipeByResult(ItemType resultType)
+    {
         foreach (Recipe recipe in recipeDatabase.recipes)
         {
-            // pega item resultante
+            // pega item do prefab
             Item resultItem =
                 recipe.resultPrefab.GetComponent<Item>();
 
@@ -135,34 +178,14 @@ public class OrderCardUI : MonoBehaviour
             if (resultItem == null)
                 continue;
 
-            // encontrou receita
+            // encontrou
             if (resultItem.itemType == resultType)
             {
-                foundRecipe = recipe;
-                break;
+                return recipe;
             }
         }
 
-        // item comum → sem receita
-        if (foundRecipe == null)
-        {
-            recipePanel.SetActive(false);
-            return;
-        }
-
-        // ativa painel
-        recipePanel.SetActive(true);
-
-        // ingrediente A
-        ingredientAIcon.sprite =
-            visualDatabase.GetIcon(foundRecipe.itemA);
-
-        // ingrediente B
-        ingredientBIcon.sprite =
-            visualDatabase.GetIcon(foundRecipe.itemB);
-
-        // resultado
-        resultIcon.sprite =
-            visualDatabase.GetIcon(resultType);
+        return null;
     }
+    
 }
