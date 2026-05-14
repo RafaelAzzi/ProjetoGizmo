@@ -153,6 +153,9 @@ public class DrinkBench : MonoBehaviour, IInteractable
 
         playerItem.SetHolder(closestSlot);
 
+        // marca que o item já passou pela DrinkBench
+        playerItem.hasPassedDrinkBench = true;
+
         closestSlot.timer = playerItem.processProgress;
         closestSlot.maxTime = processTime;
         closestSlot.isProcessing = true;

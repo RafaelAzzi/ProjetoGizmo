@@ -28,6 +28,20 @@ public class PlateItem : Item
             return false;
         }
 
+        // ===== BLOQUEIO DE ÓLEOS NÃO PROCESSADOS =====
+
+        // verifica se é um dos óleos do jogo
+        bool isOil =
+            item.itemType == ItemType.OleoComum ||
+            item.itemType == ItemType.OleoAntiferrugem;
+
+        // se for óleo e nunca passou pela DrinkBench
+        if (isOil && !item.hasPassedDrinkBench)
+        {
+            Debug.Log("Esse óleo precisa ser preparado!");
+            return false;
+        }
+
         if (item == null) 
             return false;
 

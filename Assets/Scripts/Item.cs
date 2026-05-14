@@ -77,6 +77,9 @@ public class Item : MonoBehaviour
     // Diz se o item já foi preparado na DrinkBench
     public bool isProcessed = false;
 
+    // Diz se o item já passou pela DrinkBench ao menos uma vez
+    public bool hasPassedDrinkBench = false;
+
     // ===== PROGRESSO DA DRINK BENCH =====
     public float processProgress = 0f; // quanto já foi processado
 
