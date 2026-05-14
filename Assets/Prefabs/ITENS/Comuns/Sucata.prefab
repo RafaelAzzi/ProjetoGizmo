@@ -272,7 +272,7 @@ MonoBehaviour:
   quality: 0
   isProcessed: 0
   processProgress: 0
-  iconSprite: {fileID: 21300000, guid: 8de2f8abca84fb346a1fcad891215711, type: 3}
+  iconSprite: {fileID: 21300000, guid: 5c83f3afe330b834fa178c84125d0e3d, type: 3}
   iconRoot: {fileID: 97812693784198087}
 --- !u!23 &4584253787816959646
 MeshRenderer:

@@ -13,6 +13,15 @@ public class OrderCardUI : MonoBehaviour
 
     [Header("Recipe Panel")]
 
+    public RectTransform cardRect;
+
+    public float baseHeight = 140;
+
+    public float extraHeightPerRecipe = 40f;
+
+    public float recipeStartY = 110;
+
+
     // container das receitas
     public GameObject recipeContainer;
 

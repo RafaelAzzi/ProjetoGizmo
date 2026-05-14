@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17893517, g: 0.22405326, b: 0.30589774, a: 1}
+  m_IndirectSpecularColor: {r: 0.17893547, g: 0.22405344, b: 0.3058983, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4949,8 +4949,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 818cec14ba258e349946447c8d1d39e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minItemsPerOrder: 2
-  maxItemsPerOrder: 2
+  minItemsPerOrder: 1
+  maxItemsPerOrder: 1
   commonOrderTime: 40
   rareOrderTime: 60
   legendaryOrderTime: 80
@@ -4982,7 +4982,7 @@ MonoBehaviour:
   - {fileID: 5169812472139967065, guid: 3320926b5cab70240ac565bf7b3bd082, type: 3}
   - {fileID: 1110602946007641326, guid: 66a9dfcc16141584b9e70435f952bbb7, type: 3}
   activeOrders: []
-  possibleItems: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
+  possibleItems: 14000000
   maxOrders: 3
 --- !u!4 &1764482880
 Transform:
