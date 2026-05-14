@@ -10,4 +10,11 @@ public class Order
 
     public float timeRemaining;
     public float maxTime;
+
+    // ID visual usado pelo pedido
+    public int visualID = -1;
+
+    // cor visual do pedido
+    [HideInInspector]
+    public Color visualColor = Color.white;
 }

@@ -29,6 +29,18 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     private bool hasOrder = false;
     private Order myOrder;
 
+    // anchor do bubble
+    public Transform bubbleAnchor;
+
+    // prefab do bubble
+    public RobotThoughtBubble bubblePrefab;
+
+    // bubble atual
+    private RobotThoughtBubble activeBubble;
+
+    // banco visual dos ícones
+    public ItemVisualDatabase visualDatabase;
+
     // distância para considerar que chegou no destino
     public float stopDistance = 0.1f;
 
@@ -59,6 +71,9 @@ public class RobotCustomer : MonoBehaviour, IInteractable
                     if (myOrder != null)
                     {
                         hasOrder = true;
+
+                        // cria bubble visual
+                        SpawnBubble();
                     }
                 }
             }
@@ -70,6 +85,9 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             if (!orderManager.activeOrders.Contains(myOrder))
             {
                 Debug.Log("Pedido do robô expirou, indo embora...");
+
+                // remove bubble
+                DestroyBubble();
 
                 isWaiting = false;
                 isLeaving = true;
@@ -157,8 +175,66 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             
             Destroy(plate.gameObject);
 
+            // remove bubble
+            DestroyBubble();
+
             isWaiting = false;
             isLeaving = true;
         }
-    }    
+    } 
+
+    // cria bubble visual
+    void SpawnBubble()
+    {
+        // segurança
+        if (bubblePrefab == null)
+            return;
+
+        // segurança
+        if (bubbleAnchor == null)
+            return;
+
+        // segurança
+        if (myOrder == null)
+            return;
+
+        // segurança
+        if (myOrder.requestedItems.Count <= 0)
+            return;
+
+        // evita duplicar
+        if (activeBubble != null)
+            return;
+
+        // cria bubble
+        activeBubble =
+            Instantiate(
+                bubblePrefab,
+                bubbleAnchor);
+
+        // pega item principal
+        ItemType mainItem =
+            myOrder.requestedItems[0];
+
+        // pega ícone
+        Sprite icon =
+            visualDatabase.GetIcon(mainItem);
+
+        // configura visual
+        activeBubble.Setup(
+            icon,
+            myOrder.visualColor);
+    } 
+
+    // destrói bubble atual
+    void DestroyBubble()
+    {
+        // segurança
+        if (activeBubble == null)
+            return;
+
+        Destroy(activeBubble.gameObject);
+
+        activeBubble = null;
+    }  
 }

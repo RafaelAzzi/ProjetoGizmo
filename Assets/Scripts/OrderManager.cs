@@ -53,6 +53,15 @@ public class OrderManager : MonoBehaviour
 
         Order newOrder = new Order();
 
+        // reserva um visual único para o pedido
+        newOrder.visualID =
+        OrderVisualManager.Instance.ReserveVisualID();
+
+        // salva cor visual do pedido
+        newOrder.visualColor =
+            OrderVisualManager.Instance
+                .GetColor(newOrder.visualID);
+
         // define quantos itens o pedido terá
         int itemCount = Random.Range(minItemsPerOrder, maxItemsPerOrder + 1);
 
@@ -114,7 +123,7 @@ public class OrderManager : MonoBehaviour
                 {
                     Debug.Log("Pedido COMPLETO!");
 
-                    activeOrders.RemoveAt(i);
+                    RemoveOrder(order);
                 }
 
                 return true;
@@ -203,7 +212,7 @@ public class OrderManager : MonoBehaviour
                 GameStatsManager.Instance.ordersFailed++;
 
                 // remove pedido
-                activeOrders.RemoveAt(i);
+                RemoveOrder(order);
 
                 //  NÃO gera novo automaticamente
                 // robôs vão gerar novos pedidos depois
@@ -212,4 +221,15 @@ public class OrderManager : MonoBehaviour
             }
         }
     } 
+
+    // remove pedido corretamente
+    void RemoveOrder(Order order)
+    {
+        // libera visual usado
+        OrderVisualManager.Instance
+            .ReleaseVisualID(order.visualID);
+
+        // remove da lista
+        activeOrders.Remove(order);
+    }
 }

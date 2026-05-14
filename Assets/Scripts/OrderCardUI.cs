@@ -11,15 +11,27 @@ public class OrderCardUI : MonoBehaviour
     // preenchimento da barra de tempo
     public Image timerFill;
 
+    [Header("Visual do Pedido")]
+
+    // imagem principal do card
+    public Image cardBackground;
+
     [Header("Recipe Panel")]
 
+    // rect do fundo do card
     public RectTransform cardRect;
 
-    public float baseHeight = 140;
+    // altura do card sem receitas
+    public float baseHeight = 140f;
 
+    // quanto cada linha adiciona
     public float extraHeightPerRecipe = 40f;
 
-    public float recipeStartY = 110;
+    // posição inicial das receitas
+    public float recipeStartY = -110f;
+
+    // espaço entre receitas
+    public float recipeSpacing = 35f;
 
 
     // container das receitas
@@ -27,6 +39,9 @@ public class OrderCardUI : MonoBehaviour
 
     // prefab da linha de receita
     public RecipeRowUI recipeRowPrefab;
+
+    // quantidade total de receitas atuais
+    private int totalRecipeRows;
 
     // pedido atual
     private Order currentOrder;
@@ -50,6 +65,9 @@ public class OrderCardUI : MonoBehaviour
         currentOrder = order;
         visualDatabase = visualDB;
         recipeDatabase = recipeDB;
+
+        // aplica cor visual do pedido
+        ApplyVisualColor();
 
         // atualiza visual
         RefreshVisual();
@@ -134,12 +152,36 @@ public class OrderCardUI : MonoBehaviour
         // item comum → sem receita
         if (recipe == null)
         {
+            // volta altura normal
+            cardRect.sizeDelta =
+                new Vector2(
+                    cardRect.sizeDelta.x,
+                    baseHeight);
+
             recipeContainer.SetActive(false);
             return;
         }
 
         // ativa container
         recipeContainer.SetActive(true);
+
+        // quantidade de receitas
+        int recipeCount =
+            CountRecipesRecursive(resultType);
+
+            // salva total atual
+            totalRecipeRows = recipeCount;
+
+        // calcula nova altura
+        float newHeight =
+            baseHeight +
+            (recipeCount * extraHeightPerRecipe);
+
+        // aplica altura
+        cardRect.sizeDelta =
+            new Vector2(
+                cardRect.sizeDelta.x,
+                newHeight);
 
         // cria cadeia recursiva
         CreateRecipeRecursive(resultType);
@@ -168,6 +210,32 @@ public class OrderCardUI : MonoBehaviour
                 recipeRowPrefab,
                 recipeContainer.transform);
 
+                // pega rect da linha
+                RectTransform rowRect =
+                    row.GetComponent<RectTransform>();
+
+                // índice atual
+                int rowIndex =
+                    recipeContainer.transform.childCount - 1;
+
+                // altura total do bloco
+                float totalHeight =
+                    (totalRecipeRows - 1) * recipeSpacing;
+
+                // ponto inicial centralizado
+                float startOffset =
+                    totalHeight / 2f;
+
+                // posição final
+                float posY =
+                    recipeStartY +
+                    startOffset -
+                    (rowIndex * recipeSpacing);
+
+                // aplica posição
+                rowRect.anchoredPosition =
+                    new Vector2(0, posY);
+
         // configura ícones
         row.Setup(
             visualDatabase.GetIcon(recipe.itemA),
@@ -195,6 +263,43 @@ public class OrderCardUI : MonoBehaviour
         }
 
         return null;
+    }
+
+    // conta quantidade de receitas
+    int CountRecipesRecursive(ItemType resultType)
+    {
+        // procura receita
+        Recipe recipe =
+            FindRecipeByResult(resultType);
+
+        // item comum
+        if (recipe == null)
+            return 0;
+
+        // conta esta receita
+        int count = 1;
+
+        // soma ingredientes
+        count += CountRecipesRecursive(recipe.itemA);
+        count += CountRecipesRecursive(recipe.itemB);
+
+        return count;
+    }
+
+    // aplica cor visual do pedido
+    void ApplyVisualColor()
+    {
+        // segurança
+        if (cardBackground == null)
+            return;
+
+        // pega cor do pedido
+        Color visualColor =
+            OrderVisualManager.Instance
+            .GetColor(currentOrder.visualID);
+
+        // aplica na borda
+        cardBackground.color = visualColor;
     }
     
 }
