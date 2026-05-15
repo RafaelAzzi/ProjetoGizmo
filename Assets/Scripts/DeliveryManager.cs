@@ -52,7 +52,8 @@ public class DeliveryManager : MonoBehaviour
         Debug.Log("Pedido COMPLETO com prato!");
 
         GameStatsManager.Instance.ordersCompleted++;
-        orderManager.activeOrders.Remove(order);
+        // remove pedido corretamente
+        orderManager.RemoveOrder(order);
 
         List<Item> items = plate.GetItemObjects();
 

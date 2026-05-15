@@ -14,6 +14,9 @@ public class PauseManager : MonoBehaviour
 
     // painel de como jogar
     public GameObject howToPlayPanel;
+    
+    // painel de opções
+    public GameObject optionsPanel;
 
     // botão de pause da HUD
     public GameObject pauseButton;
@@ -41,6 +44,8 @@ public class PauseManager : MonoBehaviour
         // começa mostrando apenas janela do pause
         pauseWindow.SetActive(true);
         howToPlayPanel.SetActive(false);
+
+        optionsPanel.SetActive(false);
 
         // garante tempo normal
         Time.timeScale = 1f;
@@ -82,6 +87,8 @@ public class PauseManager : MonoBehaviour
         pauseWindow.SetActive(true);
         howToPlayPanel.SetActive(false);
 
+        optionsPanel.SetActive(false);
+
         // congela jogo
         Time.timeScale = 0f;
     }
@@ -108,10 +115,21 @@ public class PauseManager : MonoBehaviour
         howToPlayPanel.SetActive(true);
     }
 
+    // ===== ABRIR OPÇÕES =====
+    public void OpenOptions()
+    {
+        pauseWindow.SetActive(false);
+        howToPlayPanel.SetActive(false);
+
+        optionsPanel.SetActive(true);
+    }
+
     // ===== VOLTAR PARA PAUSE =====
     public void BackToPauseMenu()
     {
         howToPlayPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+
         pauseWindow.SetActive(true);
     }
 

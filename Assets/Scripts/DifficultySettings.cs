@@ -4,5 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewDifficulty", menuName = "Game/Difficulty")]
 public class DifficultySettings : ScriptableObject
 {
-    public float spawnDelay = 4f;    // tempo entre tentativas de spawn
+    // SISTEMA ANTIGO DE SPAWN
+    // não está mais sendo usado
+    // public float spawnDelay = 4f;
 }

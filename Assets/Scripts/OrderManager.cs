@@ -15,6 +15,9 @@ public class OrderManager : MonoBehaviour
     public float rareOrderTime = 45f;
     public float legendaryOrderTime = 60f;
 
+    [Header("Tempo especial dos óleos")]
+    public float oilOrderTime = 55f;
+
     [Header("Lista de todos os prefabs de itens")]
     public List<Item> allItems;
 
@@ -56,6 +59,14 @@ public class OrderManager : MonoBehaviour
         // reserva um visual único para o pedido
         newOrder.visualID =
         OrderVisualManager.Instance.ReserveVisualID();
+
+        // segurança:
+        // se não houver visual disponível,
+        // não cria pedido
+        if (newOrder.visualID == -1)
+        {
+            return null;
+        }
 
         // salva cor visual do pedido
         newOrder.visualColor =
@@ -134,6 +145,13 @@ public class OrderManager : MonoBehaviour
         return false;
     }
 
+    // verifica se o item é um óleo
+    bool IsOil(ItemType itemType)
+    {
+        return itemType == ItemType.OleoComum ||
+            itemType == ItemType.OleoAntiferrugem;
+    }
+
     // calcula tempo do pedido baseado na raridade dos itens
     float CalculateOrderTime(List<ItemType> items)
     {
@@ -148,20 +166,29 @@ public class OrderManager : MonoBehaviour
                 // encontrou o item correto
                 if (itemPrefab.itemType == itemType)
                 {
-                    // adiciona tempo baseado na raridade
-                    switch (itemPrefab.rarity)
+                    // verifica primeiro se o item é óleo
+                    if (IsOil(itemPrefab.itemType))
                     {
-                        case Rarity.Comum:
-                            totalTime += commonOrderTime;
-                            break;
+                        // usa tempo especial dos óleos
+                        totalTime += oilOrderTime;
+                    }
+                    else
+                    {
+                        // adiciona tempo baseado na raridade
+                        switch (itemPrefab.rarity)
+                        {
+                            case Rarity.Comum:
+                                totalTime += commonOrderTime;
+                                break;
 
-                        case Rarity.Raro:
-                            totalTime += rareOrderTime;
-                            break;
+                            case Rarity.Raro:
+                                totalTime += rareOrderTime;
+                                break;
 
-                        case Rarity.Lendario:
-                            totalTime += legendaryOrderTime;
-                            break;
+                            case Rarity.Lendario:
+                                totalTime += legendaryOrderTime;
+                                break;
+                        }
                     }
 
                     // já encontrou, então para o loop
@@ -223,7 +250,7 @@ public class OrderManager : MonoBehaviour
     } 
 
     // remove pedido corretamente
-    void RemoveOrder(Order order)
+    public void RemoveOrder(Order order)
     {
         // libera visual usado
         OrderVisualManager.Instance

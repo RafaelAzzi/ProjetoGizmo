@@ -1,4 +1,18 @@
 using UnityEngine;
+using System.Collections.Generic;
+
+// representa uma etapa do spawn
+[System.Serializable]
+public class SpawnStage
+{
+    [Header("Tempo da etapa")]
+    public float startTime;
+    public float endTime;
+
+    [Header("Delay de spawn")]
+    public float minSpawnDelay;
+    public float maxSpawnDelay;
+}
 
 public class RobotSpawner : MonoBehaviour
 {
@@ -11,9 +25,19 @@ public class RobotSpawner : MonoBehaviour
 
     public OrderManager orderManager;
 
-    public DifficultyManager difficultyManager;
+    // lista de etapas do spawn
+    public List<SpawnStage> spawnStages = new List<SpawnStage>();
 
+    // timer interno do spawn
     private float timer;
+
+    // próximo delay aleatório
+    private float currentSpawnDelay;
+
+    void Start()
+    {
+        currentSpawnDelay = GetCurrentSpawnDelay();
+    }
 
     void Update()
     {
@@ -21,12 +45,44 @@ public class RobotSpawner : MonoBehaviour
         
         timer += Time.deltaTime;
 
-        // só tenta spawnar quando atingir o delay da fase
-        if (timer >= difficultyManager.GetSpawnDelay())
+        // tenta spawnar quando atingir o delay atual
+        if (timer >= currentSpawnDelay)
         {
             TrySpawnRobot();
+
+            // reseta timer
             timer = 0f;
+
+            // gera novo delay aleatório
+            currentSpawnDelay = GetCurrentSpawnDelay();
         }
+    }
+
+    // pega delay aleatório baseado na etapa atual
+    float GetCurrentSpawnDelay()
+    {
+        // calcula quanto tempo já passou da partida
+        float elapsedTime =
+            GameManager.Instance.matchTime -
+            GameManager.Instance.GetTimeRemaining();
+
+        // percorre todas as etapas
+        foreach (SpawnStage stage in spawnStages)
+        {
+            // verifica se o tempo atual está dentro da etapa
+            if (elapsedTime >= stage.startTime &&
+                elapsedTime <= stage.endTime)
+            {
+                // retorna delay aleatório da etapa
+                return Random.Range(
+                    stage.minSpawnDelay,
+                    stage.maxSpawnDelay
+                );
+            }
+        }
+
+        // fallback de segurança
+        return 3f;
     }
 
    void TrySpawnRobot()

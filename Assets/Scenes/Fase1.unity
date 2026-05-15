@@ -453,7 +453,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1400357504}
-  - {fileID: 301623941}
   - {fileID: 859455634}
   - {fileID: 1502806435}
   - {fileID: 1764482880}
@@ -612,6 +611,11 @@ MeshFilter:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2596647976541462630, guid: 94c4bbced3e6f6c42a444fab1dd58b23, type: 3}
   m_PrefabInstance: {fileID: 4865548796486256976}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &215347471 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4566985456384190214, guid: a71cf92eeecd5624399803651e49836e, type: 3}
+  m_PrefabInstance: {fileID: 8470170601781758423}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &241719821
 GameObject:
@@ -775,51 +779,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 267335694}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &301623939
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 301623941}
-  - component: {fileID: 301623940}
-  m_Layer: 0
-  m_Name: DifficultyManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &301623940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301623939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1fd93034c991614d970fc4c7d974cb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentDifficulty: {fileID: 11400000, guid: 4858de0dc97c10641b53fa552701bbf0, type: 2}
---- !u!4 &301623941
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301623939}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.94683623, y: 5.4330106, z: 4.284981}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 174359654}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &305707744
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,7 +2242,19 @@ MonoBehaviour:
   spawnPoint: {fileID: 241719822}
   exitPoint: {fileID: 925756110}
   orderManager: {fileID: 1764482879}
-  difficultyManager: {fileID: 301623940}
+  spawnStages:
+  - startTime: 0
+    endTime: 60
+    minSpawnDelay: 5
+    maxSpawnDelay: 7
+  - startTime: 60
+    endTime: 120
+    minSpawnDelay: 4
+    maxSpawnDelay: 6
+  - startTime: 120
+    endTime: 180
+    minSpawnDelay: 4
+    maxSpawnDelay: 5
 --- !u!1 &859455632
 GameObject:
   m_ObjectHideFlags: 0
@@ -4566,6 +4537,7 @@ MonoBehaviour:
   pausePanel: {fileID: 777459274}
   pauseWindow: {fileID: 8470170601781758425}
   howToPlayPanel: {fileID: 1837507725}
+  optionsPanel: {fileID: 215347471}
   pauseButton: {fileID: 549160708}
 --- !u!4 &1673974845
 Transform:
@@ -4699,6 +4671,7 @@ MonoBehaviour:
   commonOrderTime: 40
   rareOrderTime: 60
   legendaryOrderTime: 80
+  oilOrderTime: 55
   allItems:
   - {fileID: 2118862421441323440, guid: 626f951e3097c284e8d863ae0b2d677e, type: 3}
   - {fileID: 5084964220170153173, guid: 9b14dfffb5843a243aa3d4303c5d638b, type: 3}
@@ -6075,10 +6048,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5551873894351992079, guid: a71cf92eeecd5624399803651e49836e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1673974844}
+    - target: {fileID: 5551873894351992079, guid: a71cf92eeecd5624399803651e49836e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenOptions
+      objectReference: {fileID: 0}
     - target: {fileID: 6129235757083408055, guid: a71cf92eeecd5624399803651e49836e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1673974844}
+    - target: {fileID: 7109898864224506655, guid: a71cf92eeecd5624399803651e49836e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1673974844}
+    - target: {fileID: 7109898864224506655, guid: a71cf92eeecd5624399803651e49836e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BackToPauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109898864224506655, guid: a71cf92eeecd5624399803651e49836e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 7254509511153602387, guid: a71cf92eeecd5624399803651e49836e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

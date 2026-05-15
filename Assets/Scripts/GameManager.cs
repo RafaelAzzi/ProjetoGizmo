@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject resultPanel;
 
     // ===== CONFIGURAÇÃO =====
-    public float matchTime = 120f; // tempo total da fase
+    public float matchTime = 180f; // tempo total da fase
 
     // ===== ESTADO =====
     private float currentTime;
@@ -15,9 +15,9 @@ public class GameManager : MonoBehaviour
     private GameResult gameResult = GameResult.None;
 
 
-    public int oneStarScore = 100;
-    public int twoStarScore = 200;
-    public int threeStarScore = 300;
+    public int oneStarScore = 250;
+    public int twoStarScore = 350;
+    public int threeStarScore = 450;
 
     // ===== RESULTADO FINAL DETALHADO =====
     public class MatchResultData
