@@ -5,14 +5,12 @@ using UnityEngine.UI; //  Para Slider
 public class MainMenu : MonoBehaviour
 {
     public GameObject optionsPanel; // Painel de opções
-    public Slider musicSlider; // Slider da música
     public Slider sfxSlider; // Slider dos efeitos sonoros
     public GameObject comoJogarPanel;
 
     void Start()
     {
         // valores iniciais
-        musicSlider.value = AudioListener.volume;
         sfxSlider.value = 1f;
     }
 
@@ -39,12 +37,6 @@ public class MainMenu : MonoBehaviour
     public void CloseOptions()
     {
         optionsPanel.SetActive(false); // Esconde painel
-    }
-
-    // Ajusta volume da música
-    public void SetMusicVolume(float volume)
-    {
-        AudioListener.volume = volume; // Controla volume global
     }
 
     // Ajusta volume de efeitos (por enquanto sem som)
