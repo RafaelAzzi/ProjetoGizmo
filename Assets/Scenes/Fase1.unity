@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17893517, g: 0.22405326, b: 0.30589774, a: 1}
+  m_IndirectSpecularColor: {r: 0.17893547, g: 0.22405344, b: 0.3058983, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3616,13 +3616,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: -1.7, y: 19.23, z: -10.34}
+  m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: -1.7, y: 20.96, z: -8.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 55, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
 --- !u!1 &967780141 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 119343912242480698, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
@@ -5508,8 +5508,8 @@ MonoBehaviour:
     readyTimer: 0
     progressBarInstance: {fileID: 0}
     progressBar: {fileID: 0}
-  processTime: 5
-  readyDuration: 5
+  processTime: 10
+  readyDuration: 4
   progressBarPrefab: {fileID: 3768298048779962989, guid: e08b5d2c2aa011046b7e4ba01b49b64c, type: 3}
   allowedItems: 0300000004000000
   interactDistance: 2.5
