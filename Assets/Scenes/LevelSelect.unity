@@ -1358,6 +1358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2209c183245a244b03e4fb5cb8a2d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: 82976780a8cdada4ab3d2869b1587e74, type: 2}
   enableDynamicPitch: 0
   normalPitch: 1
   fastPitch: 1.25

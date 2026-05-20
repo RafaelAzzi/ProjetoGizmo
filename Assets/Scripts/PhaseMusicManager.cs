@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PhaseMusicManager : MonoBehaviour
 {
@@ -7,6 +8,11 @@ public class PhaseMusicManager : MonoBehaviour
 
     // referência do AudioSource
     private AudioSource audioSource;
+
+    [Header("Audio Mixer")]
+
+    // referência do mixer principal
+    public AudioMixer audioMixer;
 
     [Header("Dynamic Pitch")]
 
@@ -48,7 +54,7 @@ public class PhaseMusicManager : MonoBehaviour
         float savedVolume =
             PlayerPrefs.GetFloat("MusicVolume", 1f);
 
-        audioSource.volume = savedVolume;
+        SetMusicVolume(savedVolume);
 
         // velocidade inicial
         audioSource.pitch = normalPitch;
@@ -101,11 +107,22 @@ public class PhaseMusicManager : MonoBehaviour
         }
     }
 
-    // chamado pelo slider
     public void SetMusicVolume(float volume)
     {
-        // altera volume atual
-        audioSource.volume = volume;
+        // segurança caso mixer não esteja configurado
+        if (audioMixer == null)
+        {
+            Debug.LogError("AudioMixer não foi atribuído no PhaseMusicManager!");
+            return;
+        }
+        // evita log de zero infinito
+        volume = Mathf.Clamp(volume, 0.0001f, 1f);
+
+        // converte volume linear para decibéis
+        float dB = Mathf.Log10(volume) * 20f;
+
+        // aplica no mixer
+        audioMixer.SetFloat("MusicVolume", dB);
 
         // salva volume
         PlayerPrefs.SetFloat("MusicVolume", volume);
