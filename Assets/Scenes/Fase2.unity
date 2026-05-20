@@ -1954,6 +1954,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressBarOffset: {x: 0, y: 2, z: -0.5}
+  slowTickInterval: 2
+  fastTickInterval: 0.3
+  tickStartDelay: 2
   slots:
   - holdPoint: {fileID: 662229669}
     uiAnchor: {fileID: 1862374876}
@@ -1964,6 +1967,10 @@ MonoBehaviour:
     readyTimer: 0
     progressBarInstance: {fileID: 0}
     progressBar: {fileID: 0}
+    audioSource: {fileID: 0}
+    tickTimer: 0
+    currentTickInterval: 0
+    tickDelayTimer: 0
   - holdPoint: {fileID: 1257684498}
     uiAnchor: {fileID: 1972380153}
     timer: 0
@@ -1973,6 +1980,10 @@ MonoBehaviour:
     readyTimer: 0
     progressBarInstance: {fileID: 0}
     progressBar: {fileID: 0}
+    audioSource: {fileID: 0}
+    tickTimer: 0
+    currentTickInterval: 0
+    tickDelayTimer: 0
   processTime: 10
   readyDuration: 4
   progressBarPrefab: {fileID: 3768298048779962989, guid: e08b5d2c2aa011046b7e4ba01b49b64c, type: 3}

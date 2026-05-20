@@ -147,6 +147,11 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
 
         currentProgress++;
 
+        // toca som de clique do crafting
+        SFXManager.Instance.PlaySFX(
+            SFXType.WorkbenchClick
+        );
+
         progressBar.value = currentProgress / requiredClicks;
 
         if (currentProgress >= requiredClicks)
@@ -158,6 +163,11 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     // ===== FINALIZA PROCESSO =====
     void FinishProcessing()
     {
+        // toca som de craft concluído
+        SFXManager.Instance.PlaySFX(
+            SFXType.WorkbenchComplete
+        );
+        
         isProcessing = false;
 
         // reseta barra antes de esconder

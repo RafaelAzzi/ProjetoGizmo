@@ -156,6 +156,11 @@ public class Player : MonoBehaviour, IItemHolder
 
         // define que o player é o holder
         item.SetHolder(this);
+
+        // toca som de pickup
+        SFXManager.Instance.PlaySFX(
+            SFXType.Pickup
+            );
     }
 
     void HandleHighlight()

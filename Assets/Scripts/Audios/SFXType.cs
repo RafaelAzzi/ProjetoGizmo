@@ -18,6 +18,11 @@ public enum SFXType
     DrinkComplete,
     DrinkBurn,
 
+    DrinkLoop,
+    DrinkReady,
+    DrinkTick,
+    DrinkSpoiled,
+
     // UI
     UIButton,
 }

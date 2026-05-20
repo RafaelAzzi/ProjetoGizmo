@@ -8,17 +8,32 @@ public class AudioOptionsUI : MonoBehaviour
     // slider da música
     public Slider musicSlider;
 
+    // slider dos efeitos sonoros
+    public Slider sfxSlider;
+
     void Start()
     {
-        // pega volume salvo
-        float savedVolume =
+        // ===== MUSIC =====
+
+        float savedMusicVolume =
             PlayerPrefs.GetFloat("MusicVolume", 1f);
 
-        // atualiza valor visual do slider
-        musicSlider.value = savedVolume;
+        musicSlider.value = savedMusicVolume;
 
-        // adiciona listener no slider
-        musicSlider.onValueChanged.AddListener(SetMusicVolume);
+        musicSlider.onValueChanged.AddListener(
+            SetMusicVolume
+        );
+
+        // ===== SFX =====
+
+        float savedSFXVolume =
+            PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+        sfxSlider.value = savedSFXVolume;
+
+        sfxSlider.onValueChanged.AddListener(
+            SetSFXVolume
+        );
     }
 
     // altera volume da música
@@ -29,6 +44,16 @@ public class AudioOptionsUI : MonoBehaviour
         {
             // altera volume atual
             PhaseMusicManager.Instance.SetMusicVolume(volume);
+        }
+    }
+
+    // altera volume dos efeitos sonoros
+    public void SetSFXVolume(float volume)
+    {
+        // verifica se existe SFXManager
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.SetSFXVolume(volume);
         }
     }
 }

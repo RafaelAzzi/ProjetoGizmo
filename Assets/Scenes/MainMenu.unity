@@ -422,6 +422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSlider: {fileID: 1462739016365558083}
+  sfxSlider: {fileID: 6549531750504296869}
 --- !u!4 &276349417
 Transform:
   m_ObjectHideFlags: 0
