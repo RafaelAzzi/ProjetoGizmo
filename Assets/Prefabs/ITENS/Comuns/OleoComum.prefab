@@ -156,8 +156,9 @@ MonoBehaviour:
   rarity: 0
   quality: 0
   isProcessed: 0
+  hasPassedDrinkBench: 0
   processProgress: 0
-  iconSprite: {fileID: 21300000, guid: 1721da8c16339a94494e079fb6cb91ab, type: 3}
+  iconSprite: {fileID: 21300000, guid: 03d2bfc879caf5a4483c13d5f54edc31, type: 3}
   iconRoot: {fileID: 5730804611248958468}
 --- !u!33 &5830831571976291281
 MeshFilter:
