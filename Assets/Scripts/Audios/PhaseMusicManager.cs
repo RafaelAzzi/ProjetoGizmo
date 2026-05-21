@@ -14,6 +14,14 @@ public class PhaseMusicManager : MonoBehaviour
     // referência do mixer principal
     public AudioMixer audioMixer;
 
+    [Header("Result Music")]
+
+    // música de vitória
+    public AudioClip victoryMusic;
+
+    // música de derrota
+    public AudioClip defeatMusic;
+
     [Header("Dynamic Pitch")]
 
     // ativa/desativa aceleração da música
@@ -38,6 +46,9 @@ public class PhaseMusicManager : MonoBehaviour
 
     // evita parar a música várias vezes
     private bool musicStopped = false;
+
+    // indica se música de resultado está tocando
+    private bool playingResultMusic = false;
 
     void Awake()
     {
@@ -66,6 +77,11 @@ public class PhaseMusicManager : MonoBehaviour
         // não faz lógica de aceleração
         if (!enableDynamicPitch)
             return;
+
+            // se estiver tocando música final
+            // ignora lógica da música da fase
+            if (playingResultMusic)
+                return;
 
         // segurança
         if (GameManager.Instance == null)
@@ -129,5 +145,50 @@ public class PhaseMusicManager : MonoBehaviour
 
         // garante salvamento imediato
         PlayerPrefs.Save();
+    }
+
+    // ===== TOCAR MÚSICA DE VITÓRIA =====
+    public void PlayVictoryMusic()
+    {
+        // ativa modo de música final
+        playingResultMusic = true;
+
+        // segurança
+        if (victoryMusic == null)
+        {
+            Debug.LogWarning("Victory Music não atribuída!");
+            return;
+        }
+
+        // troca música
+        audioSource.Stop();
+        audioSource.pitch = 1f;
+        audioSource.clip = victoryMusic;
+
+        // música de vitória toca apenas uma vez
+        audioSource.loop = false;
+
+        audioSource.Play();
+    }
+
+    // ===== TOCAR MÚSICA DE DERROTA =====
+    public void PlayDefeatMusic()
+    {
+        // ativa modo de música final
+        playingResultMusic = true;
+
+        // segurança
+        if (defeatMusic == null)
+        {
+            Debug.LogWarning("Defeat Music não atribuída!");
+            return;
+        }
+
+        // troca música
+        audioSource.Stop();
+        audioSource.pitch = 1f;
+        audioSource.clip = defeatMusic;
+        audioSource.loop = false;
+        audioSource.Play();
     }
 }

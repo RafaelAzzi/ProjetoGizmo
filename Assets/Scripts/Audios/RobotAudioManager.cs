@@ -9,13 +9,17 @@ public class RobotAudioManager : MonoBehaviour
 
     [Header("Robot Loop Clips")]
 
-    // todos os loops disponíveis
+    // todos os clips disponíveis
     public List<AudioClip> robotLoopClips =
         new List<AudioClip>();
 
     // clips atualmente em uso
     private List<AudioClip> clipsInUse =
         new List<AudioClip>();
+
+    // fila rotativa dos clips
+    private Queue<AudioClip> clipQueue =
+        new Queue<AudioClip>();
 
     void Awake()
     {
@@ -27,47 +31,69 @@ public class RobotAudioManager : MonoBehaviour
         }
 
         Instance = this;
+
+        // cria fila inicial
+        SetupQueue();
     }
 
-    // reserva um clip disponível
-    public AudioClip ReserveClip()
+    // monta fila inicial
+    void SetupQueue()
     {
-        // lista temporária
-        List<AudioClip> availableClips =
-            new List<AudioClip>();
+        clipQueue.Clear();
 
-        // procura clips livres
         foreach (AudioClip clip in robotLoopClips)
         {
-            if (!clipsInUse.Contains(clip))
-            {
-                availableClips.Add(clip);
-            }
-        }
+            // ignora nulos
+            if (clip == null)
+                continue;
 
-        // nenhum disponível
-        if (availableClips.Count <= 0)
+            clipQueue.Enqueue(clip);
+        }
+    }
+
+    // reserva próximo clip disponível
+    public AudioClip ReserveClip()
+    {
+        // segurança
+        if (clipQueue.Count <= 0)
         {
             Debug.LogWarning(
-                "Nenhum loop de robô disponível!"
+                "Nenhum clip configurado no RobotAudioManager!"
             );
 
             return null;
         }
 
-        // escolhe aleatório
-        AudioClip selectedClip =
-            availableClips[
-                Random.Range(0, availableClips.Count)
-            ];
+        int attempts = clipQueue.Count;
 
-        // marca como usado
-        clipsInUse.Add(selectedClip);
+        // tenta encontrar clip livre
+        for (int i = 0; i < attempts; i++)
+        {
+            // pega primeiro da fila
+            AudioClip clip = clipQueue.Dequeue();
 
-        return selectedClip;
+            // joga para o final
+            clipQueue.Enqueue(clip);
+
+            // verifica se está livre
+            if (!clipsInUse.Contains(clip))
+            {
+                // marca como usado
+                clipsInUse.Add(clip);
+
+                return clip;
+            }
+        }
+
+        // nenhum disponível
+        Debug.LogWarning(
+            "Todos os loops de robô estão em uso!"
+        );
+
+        return null;
     }
 
-    // libera clip quando robô sai
+    // libera clip
     public void ReleaseClip(AudioClip clip)
     {
         // segurança

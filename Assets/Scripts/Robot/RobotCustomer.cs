@@ -38,6 +38,35 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     // bubble atual
     private RobotThoughtBubble activeBubble;
 
+    [Header("Robot Audio")]
+
+    // intervalo do estado crítico
+    public float minCriticalDelay = 4f;
+    public float maxCriticalDelay = 5f;
+
+    // volume do robô
+    [Range(0f, 1f)]
+    public float audioVolume = 0.15f;
+
+    // spatial blend leve
+    [Range(0f, 1f)]
+    public float spatialBlend = 0.25f;
+
+    // clip reservado para esse robô
+    private AudioClip robotLoopClip;
+
+    // source das chamadas críticas
+    private AudioSource criticalAudioSource;
+
+    // controla estado crítico
+    private bool criticalAudioActive = false;
+
+    // timer entre chamadas críticas
+    private float criticalTimer;
+
+    // delay atual do crítico
+    private float currentCriticalDelay;
+
     // banco visual dos ícones
     public ItemVisualDatabase visualDatabase;
 
@@ -52,8 +81,19 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         orderManager = manager;
     }
 
+    void Start()
+    {
+        SetupAudio();
+    }
+
     void Update()
     {
+        // controla pause
+        HandlePauseAudio();
+
+        // controla game over
+        HandleGameOverAudio();
+
         // ===== IR ATÉ O SLOT =====
         if (!isWaiting && !isLeaving)
         {
@@ -62,6 +102,9 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             if (Vector3.Distance(transform.position, targetPoint.position) < stopDistance)
             {
                 isWaiting = true;
+
+                // toca fala inicial do robô
+                PlayCriticalCall();
 
                 // ===== NOVO: GERA PEDIDO AUTOMATICAMENTE =====
                 if (!hasOrder)
@@ -98,6 +141,9 @@ public class RobotCustomer : MonoBehaviour, IInteractable
                 isLeaving = true;
             }
         }
+
+        // controla áudio crítico
+        HandleCriticalAudio();
 
         // ===== SAIR DO MAPA =====
         if (isLeaving)
@@ -242,4 +288,162 @@ public class RobotCustomer : MonoBehaviour, IInteractable
 
         activeBubble = null;
     }  
+
+    // configura áudio do robô
+    void SetupAudio()
+    {
+        // ===== SOURCE DAS FALAS =====
+
+        criticalAudioSource =
+            gameObject.AddComponent<AudioSource>();
+
+        criticalAudioSource.playOnAwake = false;
+        criticalAudioSource.loop = false;
+
+        criticalAudioSource.volume =
+            audioVolume;
+
+        criticalAudioSource.spatialBlend =
+            spatialBlend;
+
+        criticalAudioSource.minDistance = 3f;
+        criticalAudioSource.maxDistance = 15f;
+
+        // reserva clip exclusivo
+        robotLoopClip =
+            RobotAudioManager.Instance
+                .ReserveClip();
+    }
+
+    // controla áudio de urgência
+    void HandleCriticalAudio()
+    {
+        // precisa ter pedido
+        if (!hasOrder)
+            return;
+
+        // ignora se saiu
+        if (isLeaving)
+            return;
+
+        // ignora se pedido sumiu
+        if (!orderManager.activeOrders.Contains(myOrder))
+            return;
+
+        // calcula porcentagem restante
+        float percent =
+            myOrder.timeRemaining /
+            myOrder.maxTime;
+
+        // abaixo de 50%
+        bool isCritical =
+            percent <= 0.5f;
+
+        // não crítico
+        if (!isCritical)
+        {
+            criticalAudioActive = false;
+            return;
+        }
+
+        // entra no crítico
+        if (!criticalAudioActive)
+        {
+            criticalAudioActive = true;
+
+            // sorteia primeiro delay
+            currentCriticalDelay =
+                Random.Range(
+                    minCriticalDelay,
+                    maxCriticalDelay
+                );
+
+            criticalTimer = 0f;
+        }
+
+        // acumula timer
+        criticalTimer += Time.deltaTime;
+
+        // espera delay
+        if (criticalTimer < currentCriticalDelay)
+            return;
+
+        // reseta timer
+        criticalTimer = 0f;
+
+        // sorteia próximo delay
+        currentCriticalDelay =
+            Random.Range(
+                minCriticalDelay,
+                maxCriticalDelay
+            );
+
+        // toca chamada
+        PlayCriticalCall();
+    }
+
+    // toca chamada crítica
+    void PlayCriticalCall()
+    {
+        // segurança
+        if (robotLoopClip == null)
+            return;
+
+        // segurança
+        if (criticalAudioSource == null)
+            return;
+
+        // evita sobrepor chamadas
+        if (criticalAudioSource.isPlaying)
+            return;
+
+        // toca chamada
+        criticalAudioSource.PlayOneShot(
+            robotLoopClip
+        );
+    }
+
+   // para áudio do robô
+    void StopRobotAudio()
+    {
+        // para chamadas
+        if (
+            criticalAudioSource != null &&
+            criticalAudioSource.isPlaying
+        )
+        {
+            criticalAudioSource.Stop();
+        }
+    }
+
+    // controla pause
+    void HandlePauseAudio()
+    {
+        if (
+            PauseManager.Instance != null &&
+            PauseManager.Instance.IsPaused()
+        )
+        {
+            StopRobotAudio();
+        }
+    }
+
+    // controla fim de partida
+    void HandleGameOverAudio()
+    {
+        if (!GameManager.Instance.IsGamePlaying())
+        {
+            StopRobotAudio();
+        }
+    }
+
+    void OnDestroy()
+    {
+        // libera clip reservado
+        if (RobotAudioManager.Instance != null)
+        {
+            RobotAudioManager.Instance
+                .ReleaseClip(robotLoopClip);
+        }
+    }
 }

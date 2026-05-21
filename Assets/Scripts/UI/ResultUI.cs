@@ -12,9 +12,14 @@ public class ResultUI : MonoBehaviour
     public TextMeshProUGUI completedOrdersText;
     public TextMeshProUGUI failedOrdersText;
     public TextMeshProUGUI totalText;
-    public TextMeshProUGUI titleText;
     public TextMeshProUGUI itemsHeaderText;
     public TextMeshProUGUI ordersHeaderText;
+
+    // texto de vitória/derrota
+    public TextMeshProUGUI resultText;
+
+    // botão de próxima fase
+    public GameObject nextButton;
 
     // imagens das estrelas
     public Image star1;
@@ -30,7 +35,8 @@ public class ResultUI : MonoBehaviour
 
     public void ShowResults()
     {
-        var data = GameManager.Instance.CalculateMatchResult();
+        // pega resultado já processado
+        var data = MatchResultManager.Instance.GetMatchData();
 
         comumText.text = "Itens comuns: " + data.comumItems + " -> " + data.comumPoints;
         rareText.text = "Itens raros: " + data.rareItems + " -> " + data.rarePoints;
@@ -40,19 +46,38 @@ public class ResultUI : MonoBehaviour
         completedOrdersText.text = "Pedidos completos: " + data.ordersCompleted;
         failedOrdersText.text = "Pedidos falhados: " + data.ordersFailed + " -> " + data.failedPenalty;
 
-        titleText.text = "RESULTADO";
         itemsHeaderText.text = "ITENS";
         ordersHeaderText.text = "PEDIDOS";
 
         totalText.text = "TOTAL\n" + data.totalScore;
 
-        int currentScore = ScoreManager.Instance.GetScore();
-
-        int stars = currentScore >= GameManager.Instance.threeStarScore ? 3 :
-                    currentScore >= GameManager.Instance.twoStarScore ? 2 :
-                    currentScore >= GameManager.Instance.oneStarScore ? 1 : 0;
+        // pega estrelas calculadas pelo MatchResultManager
+        int stars = MatchResultManager.Instance.GetStars();
 
         SetStars(stars);
+
+       if (MatchResultManager.Instance.IsVictory())
+        {
+            // mostra texto de vitória
+            resultText.text = "VITÓRIA";
+
+            // habilita botão de continuar
+            nextButton.SetActive(true);
+
+            // toca música de vitória
+            PhaseMusicManager.Instance.PlayVictoryMusic();
+        }
+        else
+        {
+            // mostra texto de derrota
+            resultText.text = "DERROTA";
+
+            // esconde botão de continuar
+            nextButton.SetActive(false);
+
+            // toca música de derrota
+            PhaseMusicManager.Instance.PlayDefeatMusic();
+        }
 
         gameObject.SetActive(true);
     }

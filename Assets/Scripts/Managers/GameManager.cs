@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour
     // ===== ESTADO =====
     private float currentTime;
     private GameState currentState = GameState.WaitingToStart;
-    private GameResult gameResult = GameResult.None;
-
 
     public int oneStarScore = 250;
     public int twoStarScore = 350;
@@ -85,40 +83,12 @@ public class GameManager : MonoBehaviour
     {
         currentState = GameState.GameOver;
 
-        int stars = CalculateStars();
-
-        if (stars > 0)
-            gameResult = GameResult.Victory;
-        else
-            gameResult = GameResult.Defeat;
+        // processa resultado final da partida
+        MatchResultManager.Instance.ProcessMatchResult();
 
         Debug.Log("Jogo terminou!");
-        Debug.Log("Resultado: " + gameResult);
-        Debug.Log("Estrelas: " + stars);
-
-        MatchResultData result = CalculateMatchResult();
-
-        Debug.Log("===== RESULTADO FINAL =====");
-        Debug.Log("Comuns: " + result.comumItems + " -> " + result.comumPoints);
-        Debug.Log("Raros: " + result.rareItems + " -> " + result.rarePoints);
-        Debug.Log("Lendários: " + result.legendaryItems + " -> " + result.legendaryPoints);
-        Debug.Log("Óleos: " + result.oils + " -> " + result.oilPoints);
-        Debug.Log("Falhas: " + result.ordersFailed + " -> " + result.failedPenalty);
-        Debug.Log("TOTAL: " + result.totalScore);
 
         resultPanel.GetComponent<ResultUI>().ShowResults();
-    }
-
-    // ===== CALCULAR ESTRELAS =====
-    int CalculateStars()
-    {
-        int currentScore = ScoreManager.Instance.GetScore();
-
-        if (currentScore >= threeStarScore) return 3;
-        if (currentScore >= twoStarScore) return 2;
-        if (currentScore >= oneStarScore) return 1;
-
-        return 0;
     }
 
     // ===== GETTERS =====
@@ -138,39 +108,6 @@ public class GameManager : MonoBehaviour
         return currentTime;
     }
 
-    public MatchResultData CalculateMatchResult()
-    {
-        MatchResultData data = new MatchResultData();
-
-        // pega referência do novo manager de stats
-        var stats = GameStatsManager.Instance;
-
-        // ===== ITENS COMUNS =====
-        data.comumItems = stats.comumItemsDelivered;
-        data.comumPoints = stats.comumItemsDelivered * 20;
-
-        // ===== ITENS RAROS =====
-        data.rareItems = stats.rareItemsDelivered;
-        data.rarePoints = stats.rareItemsDelivered * 50;
-
-        // ===== ITENS LENDÁRIOS =====
-        data.legendaryItems = stats.legendaryItemsDelivered;
-        data.legendaryPoints = stats.legendaryItemsDelivered * 70;
-
-        // ===== ÓLEOS =====
-        data.oils = stats.oilsDelivered;
-        data.oilPoints = stats.oilsDelivered * 80;
-
-        // ===== PEDIDOS =====
-        data.ordersCompleted = stats.ordersCompleted;
-        data.ordersFailed = stats.ordersFailed;
-        data.failedPenalty = stats.ordersFailed * -10;
-
-        // ===== TOTAL =====
-        data.totalScore = ScoreManager.Instance.GetScore();
-
-        return data;
-    }
 }
 
 // ===== ENUMS =====

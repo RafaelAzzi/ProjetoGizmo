@@ -2896,6 +2896,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 82976780a8cdada4ab3d2869b1587e74, type: 2}
+  victoryMusic: {fileID: 8300000, guid: a156677609854754cb09e2577ca34a20, type: 3}
+  defeatMusic: {fileID: 8300000, guid: abfbcaffaca30954782e16dcc9cf7432, type: 3}
   enableDynamicPitch: 1
   normalPitch: 1
   fastPitch: 1.25
@@ -3001,6 +3003,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 305707748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &856053396
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 856053398}
+  - component: {fileID: 856053397}
+  m_Layer: 0
+  m_Name: MatchResultManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &856053397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856053396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb4058beff0b824ab19eca32aac8c2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &856053398
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856053396}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.9098743, y: 7.910216, z: -1.1824847}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &859452945
 GameObject:
   m_ObjectHideFlags: 0
@@ -3096,7 +3142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resultPanel: {fileID: 967780141}
-  matchTime: 180
+  matchTime: 80
   oneStarScore: 250
   twoStarScore: 350
   threeStarScore: 450
@@ -3399,7 +3445,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c73844a995c4def4bb5cbc9e6228112d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robotLoopClips: []
+  robotLoopClips:
+  - {fileID: 8300000, guid: d89518e654d50af449e6e7d6ea643ed7, type: 3}
+  - {fileID: 8300000, guid: 9919039396b7d5c489831feadbf93f78, type: 3}
+  - {fileID: 8300000, guid: 3d42a9813f0801e4d995f6314a25ac89, type: 3}
+  - {fileID: 8300000, guid: ca049893399d3da4984c5d6bc12732f6, type: 3}
+  - {fileID: 8300000, guid: 2952375bf96df6c4295c6051184aa434, type: 3}
+  - {fileID: 8300000, guid: 71ca7156240c3cb4c9c62f5bc1fcd89d, type: 3}
+  - {fileID: 8300000, guid: 0bbdf3f2c4c4bba4290b0a90d3372585, type: 3}
+  - {fileID: 8300000, guid: a80f1bd9774a7614d90ad5822eb8118a, type: 3}
+  - {fileID: 8300000, guid: fbff68162a7aa544b909dac2e12a6295, type: 3}
+  - {fileID: 8300000, guid: 1281c8ad60b52dc49be810d1d5ce5fa5, type: 3}
+  - {fileID: 8300000, guid: 4ad176d21e29b6a44b99a0b7466356df, type: 3}
+  - {fileID: 8300000, guid: f660469b72f7a9d409251c33156ed7a2, type: 3}
+  - {fileID: 8300000, guid: 37925fd9cc490184498f02a75e1b21ee, type: 3}
+  - {fileID: 8300000, guid: 8b69dc1aaaafdc646b1b77f8a6a21b2c, type: 3}
 --- !u!4 &903336644
 Transform:
   m_ObjectHideFlags: 0
@@ -8802,3 +8862,4 @@ SceneRoots:
   - {fileID: 602360077}
   - {fileID: 2095299308}
   - {fileID: 903336644}
+  - {fileID: 856053398}
