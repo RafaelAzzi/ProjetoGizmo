@@ -26,10 +26,16 @@ MonoBehaviour:
   - sfxType: 12
     clip: {fileID: 8300000, guid: 19c3374078d42ed45b62e0afa6a03421, type: 3}
   - sfxType: 13
-    clip: {fileID: 8300000, guid: ee5a5ccf3691df4438ca545e18fd54bf, type: 3}
+    clip: {fileID: 8300000, guid: 58d110e3ba469ab45a77ba4b6caf490e, type: 3}
   - sfxType: 14
     clip: {fileID: 8300000, guid: 694e5acd8ada1b94392157210d207627, type: 3}
   - sfxType: 15
     clip: {fileID: 8300000, guid: 694e5acd8ada1b94392157210d207627, type: 3}
   - sfxType: 1
     clip: {fileID: 8300000, guid: 32c46dbf7951fb646977b8f37cb63abf, type: 3}
+  - sfxType: 2
+    clip: {fileID: 8300000, guid: 2f1d55f012342ad4d9174c8c316ab7a7, type: 3}
+  - sfxType: 5
+    clip: {fileID: 8300000, guid: cd90373ba5ef57647820626c992700b2, type: 3}
+  - sfxType: 6
+    clip: {fileID: 8300000, guid: 578e2a0ce502aa345851ba3c0db3483f, type: 3}

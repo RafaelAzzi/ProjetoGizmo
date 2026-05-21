@@ -52,6 +52,12 @@ public class TrashStation : MonoBehaviour, IInteractable
         // remove corretamente do sistema de holder
         item.SetHolder(null);
 
+        // toca som de item jogado fora
+        SFXManager.Instance.PlaySFX(
+            SFXType.Trash
+        );
+
+
         // destrói o item
         Destroy(item.gameObject);
     }

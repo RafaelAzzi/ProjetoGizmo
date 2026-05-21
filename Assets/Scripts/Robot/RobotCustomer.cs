@@ -86,6 +86,11 @@ public class RobotCustomer : MonoBehaviour, IInteractable
             {
                 Debug.Log("Pedido do robô expirou, indo embora...");
 
+                // toca som de pedido expirado
+                SFXManager.Instance.PlaySFX(
+                    SFXType.DeliveryFail
+                );
+
                 // remove bubble
                 DestroyBubble();
 

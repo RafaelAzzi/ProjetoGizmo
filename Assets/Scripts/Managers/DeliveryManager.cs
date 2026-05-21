@@ -51,6 +51,11 @@ public class DeliveryManager : MonoBehaviour
         // ===== SUCESSO =====
         Debug.Log("Pedido COMPLETO com prato!");
 
+        // toca som de entrega concluída
+        SFXManager.Instance.PlaySFX(
+            SFXType.DeliverySuccess
+        );
+
         GameStatsManager.Instance.ordersCompleted++;
         // remove pedido corretamente
         orderManager.RemoveOrder(order);
