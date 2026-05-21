@@ -88,6 +88,11 @@ public class PlateBench : MonoBehaviour, IInteractable
 
             // atualiza referência
             plates[closestSlot] = plate;
+            
+            // toca som de devolver prato
+            SFXManager.Instance.PlaySFX(
+                SFXType.PlateReturn
+            );
 
             return;
         }
@@ -115,7 +120,12 @@ public class PlateBench : MonoBehaviour, IInteractable
             return;
         }
 
-        // agora sim remove da mão do player
+        // toca som global de colocar item no prato
+        SFXManager.Instance.PlaySFX(
+            SFXType.Place
+        );
+
+        //  remove da mão do player
         heldItem.SetHolder(null);
     }
 
@@ -132,6 +142,11 @@ public class PlateBench : MonoBehaviour, IInteractable
         if (plate == null) return;
 
         plate.SetHolder(player);
+
+        // toca som de pegar prato
+        SFXManager.Instance.PlaySFX(
+        SFXType.PlatePickup
+        );
 
         // limpa o slot (fica sem prato até devolver)
         plates[closestSlot] = null;

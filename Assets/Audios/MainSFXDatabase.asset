@@ -27,3 +27,9 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 19c3374078d42ed45b62e0afa6a03421, type: 3}
   - sfxType: 13
     clip: {fileID: 8300000, guid: ee5a5ccf3691df4438ca545e18fd54bf, type: 3}
+  - sfxType: 14
+    clip: {fileID: 8300000, guid: 694e5acd8ada1b94392157210d207627, type: 3}
+  - sfxType: 15
+    clip: {fileID: 8300000, guid: 694e5acd8ada1b94392157210d207627, type: 3}
+  - sfxType: 1
+    clip: {fileID: 8300000, guid: 32c46dbf7951fb646977b8f37cb63abf, type: 3}

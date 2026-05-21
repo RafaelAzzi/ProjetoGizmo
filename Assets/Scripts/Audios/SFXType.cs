@@ -23,6 +23,10 @@ public enum SFXType
     DrinkTick,
     DrinkSpoiled,
 
+    // plate bench
+    PlatePickup,
+    PlateReturn,
+
     // UI
     UIButton,
 }

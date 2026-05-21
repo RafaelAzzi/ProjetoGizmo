@@ -140,6 +140,9 @@ public class Item : MonoBehaviour
             return;
         }
 
+        // guarda holder antigo para detectar tipo de transferência
+        IItemHolder previousHolder = currentHolder;
+
         // remove do holder anterior
         if (currentHolder != null)
         {
@@ -149,6 +152,35 @@ public class Item : MonoBehaviour
         // define novo holder
         currentHolder = newHolder;
 
+        // ===== SONS AUTOMÁTICOS =====
+
+        // pratos usam sons próprios
+        bool isPlate = this is PlateItem;
+
+        // item foi para o player
+        if (
+            !isPlate &&
+            newHolder is Player &&
+            !(previousHolder is Player)
+        )
+        {
+            SFXManager.Instance.PlaySFX(
+                SFXType.Pickup
+            );
+        }
+
+        // item saiu do player
+        else if (
+            !isPlate &&
+            previousHolder is Player &&
+            !(newHolder is Player) &&
+            newHolder != null
+        )
+        {
+            SFXManager.Instance.PlaySFX(
+                SFXType.Place
+            );
+        }
         // reativa colisão quando não tem holder
         Collider col = GetComponent<Collider>();
         if (col != null)
