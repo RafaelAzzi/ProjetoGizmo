@@ -154,6 +154,7 @@ MonoBehaviour:
   itemType: 3
   phase: 0
   rarity: 0
+  displayName: "\xD3leo Comum"
   quality: 0
   isProcessed: 0
   hasPassedDrinkBench: 0

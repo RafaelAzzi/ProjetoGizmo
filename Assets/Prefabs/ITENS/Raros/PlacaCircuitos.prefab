@@ -79,8 +79,10 @@ MonoBehaviour:
   itemType: 10
   phase: 1
   rarity: 1
+  displayName: Placa de Circuitos
   quality: 0
   isProcessed: 0
+  hasPassedDrinkBench: 0
   processProgress: 0
   iconSprite: {fileID: 21300000, guid: b5d91fd8d7defc9459a3612f1d5fe68b, type: 3}
   iconRoot: {fileID: 8499902245523619364}

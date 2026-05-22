@@ -79,8 +79,10 @@ MonoBehaviour:
   itemType: 7
   phase: 1
   rarity: 1
+  displayName: "C\xE9lula de Energia"
   quality: 0
   isProcessed: 0
+  hasPassedDrinkBench: 0
   processProgress: 0
   iconSprite: {fileID: 21300000, guid: c757dd8e20845ef4992c5c4c78c3e6e6, type: 3}
   iconRoot: {fileID: 4334606641501425988}

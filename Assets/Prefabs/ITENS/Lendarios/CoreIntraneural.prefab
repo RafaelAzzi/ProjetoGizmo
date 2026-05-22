@@ -78,6 +78,13 @@ MonoBehaviour:
   itemType: 22
   phase: 2
   rarity: 2
+  displayName: Core Intraneural
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &7413648681606805004
 MeshFilter:
   m_ObjectHideFlags: 0

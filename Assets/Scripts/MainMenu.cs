@@ -5,13 +5,11 @@ using UnityEngine.UI; //  Para Slider
 public class MainMenu : MonoBehaviour
 {
     public GameObject optionsPanel; // Painel de opções
-    public Slider sfxSlider; // Slider dos efeitos sonoros
     public GameObject comoJogarPanel;
 
     void Start()
     {
-        // valores iniciais
-        sfxSlider.value = 1f;
+       
     }
 
     // Botão Jogar
@@ -37,13 +35,6 @@ public class MainMenu : MonoBehaviour
     public void CloseOptions()
     {
         optionsPanel.SetActive(false); // Esconde painel
-    }
-
-    // Ajusta volume de efeitos (por enquanto sem som)
-    public void SetSFXVolume(float volume)
-    {
-        Debug.Log("Volume SFX: " + volume);
-        // Depois conectar a um AudioManager
     }
 
     // ===== NOVO: abrir "Como Jogar" =====

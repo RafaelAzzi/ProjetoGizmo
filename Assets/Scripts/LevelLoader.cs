@@ -40,18 +40,17 @@ public class LevelLoader : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    // ===== CARREGAR FASE ESPECÍFICA =====
-    public void LoadLevel(int levelIndex)
+   public void LoadLevel(int levelIndex)
     {
-        SceneManager.LoadScene(levelIndex);
-    }
-
-    void Update()
-    {
-        // pressiona N para próxima fase
-        if (Input.GetKeyDown(KeyCode.N))
+        // destrói música do menu
+        // antes de entrar na gameplay
+        if (MenuMusicManager.Instance != null)
         {
-            LoadNextLevel();
+            MenuMusicManager.Instance
+                .DestroyMusicManager();
         }
+
+        // carrega fase
+        SceneManager.LoadScene(levelIndex);
     }
 }

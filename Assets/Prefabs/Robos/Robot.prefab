@@ -191,7 +191,7 @@ MonoBehaviour:
   bubblePrefab: {fileID: 613374575312400516, guid: 7daaed64f58792449be3d4f7006ce6fc, type: 3}
   minCriticalDelay: 5
   maxCriticalDelay: 5
-  audioVolume: 0.2
+  audioVolume: 0.6
   spatialBlend: 0.25
   visualDatabase: {fileID: 11400000, guid: e50dc1c0feafff84cb4a86990f151eb7, type: 2}
   stopDistance: 0.1

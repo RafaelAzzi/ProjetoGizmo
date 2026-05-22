@@ -269,6 +269,7 @@ MonoBehaviour:
   itemType: 4
   phase: 0
   rarity: 0
+  displayName: "\xD3leo Antiferrugem"
   quality: 0
   isProcessed: 0
   hasPassedDrinkBench: 0

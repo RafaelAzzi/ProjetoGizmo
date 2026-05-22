@@ -78,6 +78,13 @@ MonoBehaviour:
   itemType: 14
   phase: 2
   rarity: 2
+  displayName: "M\xF4dulo de Automa\xE7\xE3o"
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &6853496420348552434
 MeshFilter:
   m_ObjectHideFlags: 0

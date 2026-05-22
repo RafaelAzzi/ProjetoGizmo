@@ -269,8 +269,10 @@ MonoBehaviour:
   itemType: 8
   phase: 1
   rarity: 1
+  displayName: Potencializador
   quality: 0
   isProcessed: 0
+  hasPassedDrinkBench: 0
   processProgress: 0
   iconSprite: {fileID: 21300000, guid: 9df3d223bf81b394684faab75de21a92, type: 3}
   iconRoot: {fileID: 92372348366326248}

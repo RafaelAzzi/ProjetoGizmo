@@ -78,6 +78,13 @@ MonoBehaviour:
   itemType: 25
   phase: 2
   rarity: 2
+  displayName: Malha Quantum
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &4752035783112804592
 MeshFilter:
   m_ObjectHideFlags: 0

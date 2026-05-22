@@ -71,6 +71,9 @@ public class Item : MonoBehaviour
     public ItemPhase phase;
     public Rarity rarity;
 
+    [Header("UI")]
+    public string displayName;
+
     // estado atual de qualidade do item
     public ItemQuality quality = ItemQuality.Raw;
 

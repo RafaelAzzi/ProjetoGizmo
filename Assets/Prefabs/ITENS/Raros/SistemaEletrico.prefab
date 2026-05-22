@@ -154,8 +154,10 @@ MonoBehaviour:
   itemType: 9
   phase: 1
   rarity: 1
+  displayName: "Sistema El\xE9trico"
   quality: 0
   isProcessed: 0
+  hasPassedDrinkBench: 0
   processProgress: 0
   iconSprite: {fileID: 21300000, guid: 4883ea6c995d93f47a6e26b50d0d5fab, type: 3}
   iconRoot: {fileID: 6528502526473702277}

@@ -191,4 +191,26 @@ public class PhaseMusicManager : MonoBehaviour
         audioSource.loop = false;
         audioSource.Play();
     }
+
+    // pausa música atual
+    public void PauseMusic()
+    {
+        // segurança
+        if (audioSource == null)
+            return;
+
+        // pausa mantendo posição atual
+        audioSource.Pause();
+    }
+
+    // continua música pausada
+    public void ResumeMusic()
+    {
+        // segurança
+        if (audioSource == null)
+            return;
+
+        // continua do ponto pausado
+        audioSource.UnPause();
+    }
 }

@@ -78,6 +78,13 @@ MonoBehaviour:
   itemType: 11
   phase: 2
   rarity: 2
+  displayName: "Unidade Ultra L\xF3gica"
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &8988851492817382849
 MeshFilter:
   m_ObjectHideFlags: 0

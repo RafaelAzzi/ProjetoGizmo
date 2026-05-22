@@ -79,8 +79,10 @@ MonoBehaviour:
   itemType: 5
   phase: 1
   rarity: 1
+  displayName: Chip Comum
   quality: 0
   isProcessed: 0
+  hasPassedDrinkBench: 0
   processProgress: 0
   iconSprite: {fileID: 21300000, guid: ad21b313935f7374481a6616884bdf1d, type: 3}
   iconRoot: {fileID: 3316362828452441525}

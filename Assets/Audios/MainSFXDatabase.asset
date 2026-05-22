@@ -16,7 +16,7 @@ MonoBehaviour:
   - sfxType: 0
     clip: {fileID: 8300000, guid: 32c46dbf7951fb646977b8f37cb63abf, type: 3}
   - sfxType: 3
-    clip: {fileID: 8300000, guid: 06b58f4c5c5f5b64e98d912dc43deeda, type: 3}
+    clip: {fileID: 8300000, guid: 0c9d08ea8a4ebde4d921cbe5d36570c3, type: 3}
   - sfxType: 4
     clip: {fileID: 8300000, guid: 99f6711b50b649d4c9dd876b8eee1150, type: 3}
   - sfxType: 10
@@ -28,9 +28,9 @@ MonoBehaviour:
   - sfxType: 13
     clip: {fileID: 8300000, guid: 58d110e3ba469ab45a77ba4b6caf490e, type: 3}
   - sfxType: 14
-    clip: {fileID: 8300000, guid: 694e5acd8ada1b94392157210d207627, type: 3}
+    clip: {fileID: 8300000, guid: 0c9d08ea8a4ebde4d921cbe5d36570c3, type: 3}
   - sfxType: 15
-    clip: {fileID: 8300000, guid: 694e5acd8ada1b94392157210d207627, type: 3}
+    clip: {fileID: 8300000, guid: 0c9d08ea8a4ebde4d921cbe5d36570c3, type: 3}
   - sfxType: 1
     clip: {fileID: 8300000, guid: 32c46dbf7951fb646977b8f37cb63abf, type: 3}
   - sfxType: 2

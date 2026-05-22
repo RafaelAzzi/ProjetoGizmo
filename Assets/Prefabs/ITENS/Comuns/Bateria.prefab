@@ -269,6 +269,7 @@ MonoBehaviour:
   itemType: 2
   phase: 0
   rarity: 0
+  displayName: Bateria
   quality: 0
   isProcessed: 0
   hasPassedDrinkBench: 0

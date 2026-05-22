@@ -78,6 +78,13 @@ MonoBehaviour:
   itemType: 20
   phase: 2
   rarity: 2
+  displayName: "C\xE9lula Tesla"
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &8922480159632434696
 MeshFilter:
   m_ObjectHideFlags: 0

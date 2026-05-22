@@ -39,11 +39,18 @@ public class AudioOptionsUI : MonoBehaviour
     // altera volume da música
     public void SetMusicVolume(float volume)
     {
-        // verifica se existe MusicManager na cena
+        // aplica no menu
+        if (MenuMusicManager.Instance != null)
+        {
+            MenuMusicManager.Instance
+                .SetMusicVolume(volume);
+        }
+
+        // aplica na gameplay
         if (PhaseMusicManager.Instance != null)
         {
-            // altera volume atual
-            PhaseMusicManager.Instance.SetMusicVolume(volume);
+            PhaseMusicManager.Instance
+                .SetMusicVolume(volume);
         }
     }
 

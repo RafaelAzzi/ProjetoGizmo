@@ -18,9 +18,6 @@ public class PauseManager : MonoBehaviour
     // painel de opções
     public GameObject optionsPanel;
 
-    // botão de pause da HUD
-    public GameObject pauseButton;
-
     // controla estado do pause
     private bool isPaused = false;
 
@@ -80,9 +77,6 @@ public class PauseManager : MonoBehaviour
         // ativa UI
         pausePanel.SetActive(true);
 
-        // esconde botão de pause
-        pauseButton.SetActive(false);
-
         // sempre volta para menu principal do pause
         pauseWindow.SetActive(true);
         howToPlayPanel.SetActive(false);
@@ -91,6 +85,12 @@ public class PauseManager : MonoBehaviour
 
         // congela jogo
         Time.timeScale = 0f;
+
+        // pausa música da fase
+        if (PhaseMusicManager.Instance != null)
+        {
+            PhaseMusicManager.Instance.PauseMusic();
+        }
     }
 
     // ===== VOLTAR AO JOGO =====
@@ -101,11 +101,14 @@ public class PauseManager : MonoBehaviour
         // esconde UI
         pausePanel.SetActive(false);
 
-        // mostra botão novamente
-        pauseButton.SetActive(true);
-
         // volta tempo normal
         Time.timeScale = 1f;
+
+        // continua música da fase
+        if (PhaseMusicManager.Instance != null)
+        {
+            PhaseMusicManager.Instance.ResumeMusic();
+        }
     }
 
     // ===== ABRIR COMO JOGAR =====

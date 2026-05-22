@@ -78,6 +78,13 @@ MonoBehaviour:
   itemType: 13
   phase: 2
   rarity: 2
+  displayName: Chip Aprimorado
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &7962107290358803597
 MeshFilter:
   m_ObjectHideFlags: 0

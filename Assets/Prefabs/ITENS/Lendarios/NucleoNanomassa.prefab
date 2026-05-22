@@ -78,6 +78,13 @@ MonoBehaviour:
   itemType: 12
   phase: 2
   rarity: 2
+  displayName: "N\xFAcleo Nanomassa"
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &6642051888315018017
 MeshFilter:
   m_ObjectHideFlags: 0

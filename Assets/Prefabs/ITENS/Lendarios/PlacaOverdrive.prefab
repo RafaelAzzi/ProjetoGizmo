@@ -75,9 +75,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451e8c5ca4616114381a2ffa1e9ed557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 22
+  itemType: 24
   phase: 2
   rarity: 2
+  displayName: Placa Overdrive
+  quality: 0
+  isProcessed: 0
+  hasPassedDrinkBench: 0
+  processProgress: 0
+  iconSprite: {fileID: 0}
+  iconRoot: {fileID: 0}
 --- !u!33 &1907096340589090882
 MeshFilter:
   m_ObjectHideFlags: 0

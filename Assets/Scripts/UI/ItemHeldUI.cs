@@ -13,11 +13,8 @@ public class ItemHeldUI : MonoBehaviour
 
         if (heldItem != null)
         {
-            // Remove o "(Clone)" do nome do objeto
-            string itemName = heldItem.name.Replace("(Clone)", "");
-
-            // Atualiza o texto
-            text.text = "Item segurado: " + itemName;
+            // Atualiza o texto usando o nome de exibição
+            text.text = "Item segurado: " + heldItem.displayName;
         }
         else
         {
