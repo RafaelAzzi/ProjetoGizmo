@@ -21,6 +21,9 @@ public class OrderCardUI : MonoBehaviour
     // rect do fundo do card
     public RectTransform cardRect;
 
+    // objeto visual que receberá animações
+    public RectTransform visualRoot;
+
     // altura do card sem receitas
     public float baseHeight = 140f;
 
@@ -55,6 +58,23 @@ public class OrderCardUI : MonoBehaviour
     // timer de piscar
     private float blinkTimer;
 
+    // ===== SHAKE =====
+
+    // intensidade do shake
+    public float shakeAmount = 1f;
+
+    // velocidade do shake
+    public float shakeSpeed = 15f;
+
+    // porcentagem para iniciar shake
+    public float shakeThreshold = 0.25f;
+
+    // posição original do card
+    private Vector2 originalCardPosition;
+
+    // controla estado do shake
+    private bool isShaking;
+
     // configura o card
     public void Setup(
         Order order,
@@ -71,6 +91,10 @@ public class OrderCardUI : MonoBehaviour
 
         // atualiza visual
         RefreshVisual();
+
+        // salva posição original do card
+        originalCardPosition =
+            cardRect.anchoredPosition;
     }
 
     void Update()
@@ -81,6 +105,9 @@ public class OrderCardUI : MonoBehaviour
 
         // atualiza timer
         UpdateTimer();
+
+        // atualiza shake visual
+        UpdateShake();
     }
 
    // atualiza visual completo
@@ -116,16 +143,22 @@ public class OrderCardUI : MonoBehaviour
         // verde
         if (percent > 0.5f)
         {
+            isShaking = false;
+
             timerFill.color = Color.green;
         }
         // amarelo
         else if (percent > 0.25f)
         {
+            isShaking = false;
+
             timerFill.color = Color.yellow;
         }
         // vermelho piscando
         else
         {
+            isShaking = true;
+
             blinkTimer += Time.deltaTime;
 
             bool blink =
@@ -301,5 +334,30 @@ public class OrderCardUI : MonoBehaviour
         // aplica na borda
         cardBackground.color = visualColor;
     }
-    
+
+   // ===== SHAKE VISUAL =====
+    void UpdateShake()
+    {
+        // segurança
+        if (visualRoot == null)
+            return;
+
+        // se NÃO estiver tremendo
+        if (!isShaking)
+        {
+            // volta posição visual normal
+            visualRoot.anchoredPosition = Vector2.zero;
+
+            return;
+        }
+
+        // gera offset horizontal
+        float offsetX =
+            Mathf.Sin(Time.time * shakeSpeed)
+            * shakeAmount;
+
+        // aplica shake SOMENTE no visual
+        visualRoot.anchoredPosition =
+            new Vector2(offsetX, 0);
+    }
 }

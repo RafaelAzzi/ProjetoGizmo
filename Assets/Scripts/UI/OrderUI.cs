@@ -57,6 +57,10 @@ public class OrderUI : MonoBehaviour
         List<Order> ordersToRemove =
             new List<Order>();
 
+        // lista temporária de cards
+        List<OrderCardUI> cardsToDestroy =
+            new List<OrderCardUI>();
+
         // verifica cards inválidos
         foreach (var pair in activeCards)
         {
@@ -64,17 +68,26 @@ public class OrderUI : MonoBehaviour
             if (orderManager.activeOrders.Contains(pair.Key))
                 continue;
 
-            // destrói card
-            Destroy(pair.Value.gameObject);
+            // adiciona card para destruir depois
+            cardsToDestroy.Add(pair.Value);
 
-            // marca para remover
+            // marca pedido para remover
             ordersToRemove.Add(pair.Key);
         }
 
-        // remove do dicionário
+        // remove do dicionário primeiro
         foreach (Order order in ordersToRemove)
         {
             activeCards.Remove(order);
+        }
+
+        // destrói cards depois
+        foreach (OrderCardUI card in cardsToDestroy)
+        {
+            if (card != null)
+            {
+                Destroy(card.gameObject);
+            }
         }
     }
 
