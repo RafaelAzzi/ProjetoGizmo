@@ -42,9 +42,20 @@ public class ScorePopup : MonoBehaviour
         }
     }
 
-    // configura valor do popup
-    public void Setup(int amount)
+    // configura popup
+    public void Setup(int amount, Color textColor)
     {
-        popupText.text = "+" + amount.ToString();
+        // define texto
+        if (amount >= 0)
+        {
+            popupText.text = "+" + amount.ToString();
+        }
+        else
+        {
+            popupText.text = amount.ToString();
+        }
+
+        // define cor
+        popupText.color = textColor;
     }
 }

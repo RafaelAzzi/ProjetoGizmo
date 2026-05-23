@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public enum ItemPhase 
@@ -95,19 +96,49 @@ public class Item : MonoBehaviour
     // referência do objeto visual do ícone
     public GameObject iconRoot;
 
-    // referência da imagem do ícone
-    private UnityEngine.UI.Image iconImage;
+    // imagem do ícone principal
+    private UnityEngine.UI.Image mainIconImage;
+
+    // imagem do ícone de status
+    private UnityEngine.UI.Image statusIconImage;
+
+    [Header("Status Visual")]
+    public ItemStatusIconDatabase statusIcons;
 
     void Start()
     {
-        // pega a imagem dentro do ícone
+        // pega referências das imagens
         if (iconRoot != null)
         {
-            iconImage = iconRoot.GetComponentInChildren<UnityEngine.UI.Image>();
+            // pega todas as imagens dentro do IconRoot
+            UnityEngine.UI.Image[] images =
+                iconRoot.GetComponentsInChildren<UnityEngine.UI.Image>(true);
 
-            if (iconImage != null && iconSprite != null)
+            foreach (var img in images)
             {
-                iconImage.sprite = iconSprite;
+                // procura MainIcon
+                if (img.gameObject.name == "MainIcon")
+                {
+                    mainIconImage = img;
+                }
+
+                // procura StatusIcon
+                else if (img.gameObject.name == "StatusIcon")
+                {
+                    statusIconImage = img;
+                }
+            }
+
+            // define sprite principal
+            if (mainIconImage != null && iconSprite != null)
+            {
+                mainIconImage.sprite = iconSprite;
+            }
+
+            // começa sem status
+            if (statusIconImage != null)
+            {
+                statusIconImage.gameObject.SetActive(false);
             }
 
             // começa escondido
@@ -129,9 +160,90 @@ public class Item : MonoBehaviour
             iconRoot.SetActive(false);
     }
 
+    // mostra ícone de pronto temporariamente
+    public void ShowReadyIcon(float duration = 1.5f)
+    {
+        if (
+            statusIconImage == null ||
+            statusIcons == null
+        )
+            return;
+
+        StopAllCoroutines();
+
+        StartCoroutine(
+            ShowTemporaryStatusIcon(
+                statusIcons.readyIcon,
+                duration
+            )
+        );
+    }
+
+    // mostra ícone de alerta temporariamente
+    public void ShowAlertIcon(float duration = 0.5f)
+    {
+        if (
+            statusIconImage == null ||
+            statusIcons == null
+        )
+            return;
+
+        StopAllCoroutines();
+
+        StartCoroutine(
+            ShowTemporaryStatusIcon(
+                statusIcons.alertIcon,
+                duration
+            )
+        );
+    }
+
+    // define visual permanente de estragado
+    public void SetSpoiledVisual()
+    {
+        if (
+            mainIconImage == null ||
+            statusIcons == null
+        )
+            return;
+
+        // troca ícone principal
+        mainIconImage.sprite =
+            statusIcons.spoiledIcon;
+
+        // remove status temporário
+        if (statusIconImage != null)
+        {
+            statusIconImage.gameObject.SetActive(false);
+        }
+    }
+
+    // coroutine de status temporário
+    IEnumerator ShowTemporaryStatusIcon(
+        Sprite icon,
+        float duration
+    )
+        {
+            // segurança
+            if (statusIconImage == null)
+                yield break;
+
+            // define sprite
+            statusIconImage.sprite = icon;
+
+            // mostra
+            statusIconImage.gameObject.SetActive(true);
+
+            // espera
+            yield return new WaitForSeconds(duration);
+
+            // esconde
+            statusIconImage.gameObject.SetActive(false);
+        }
 
 
-// ===== SISTEMA DE HOLDER =====
+
+    // ===== SISTEMA DE HOLDER =====
 
     private IItemHolder currentHolder;
 

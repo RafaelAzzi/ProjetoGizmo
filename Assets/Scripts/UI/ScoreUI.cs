@@ -13,6 +13,10 @@ public class ScoreUI : MonoBehaviour
     [Header("Spawn do popup")]
     public Transform popupSpawnPoint;
 
+    [Header("Cores do Popup")]
+    public Color positiveColor = Color.green;
+    public Color negativeColor = Color.red;
+
     // score exibido atualmente
     private int currentDisplayedScore = -1;
 
@@ -44,12 +48,35 @@ public class ScoreUI : MonoBehaviour
             int gainedAmount = realScore - currentDisplayedScore;
 
             // evita popup ao iniciar jogo
-            if (currentDisplayedScore >= 0 && gainedAmount > 0)
+            if (currentDisplayedScore >= 0)
             {
-                ShowPopup(gainedAmount);
+                // GANHOU pontos
+                if (gainedAmount > 0)
+                {
+                    ShowPopup(
+                        gainedAmount,
+                        positiveColor
+                    );
 
-                // anima score
-                StartCoroutine(AnimateScore());
+                    // anima score positivo
+                    StartCoroutine(
+                        AnimateScore(positiveColor)
+                    );
+                }
+
+                // PERDEU pontos
+                else if (gainedAmount < 0)
+                {
+                    ShowPopup(
+                        gainedAmount,
+                        negativeColor
+                    );
+
+                    // anima score negativo
+                    StartCoroutine(
+                        AnimateScore(negativeColor)
+                    );
+                }
             }
 
             // atualiza texto
@@ -61,7 +88,7 @@ public class ScoreUI : MonoBehaviour
     }
 
     // ===== POPUP =====
-    void ShowPopup(int amount)
+    void ShowPopup(int amount, Color popupColor)
     {
         // cria popup
         GameObject popup = Instantiate(
@@ -76,18 +103,18 @@ public class ScoreUI : MonoBehaviour
 
         if (popupScript != null)
         {
-            popupScript.Setup(amount);
+            popupScript.Setup(amount, popupColor);
         }
     }
 
     // ===== ANIMAÇÃO DO SCORE =====
-    IEnumerator AnimateScore()
+    IEnumerator AnimateScore(Color flashColor)
     {
         // aumenta escala
         scoreText.transform.localScale = originalScale * 1.2f;
 
         // muda cor
-        scoreText.color = Color.green;
+        scoreText.color = flashColor;
 
         // espera
         yield return new WaitForSecondsRealtime(0.3f);

@@ -186,6 +186,9 @@ void SetupAudioSources()
                         SFXType.DrinkReady
                     );
 
+                    // mostra ícone de pronto
+                    item.ShowReadyIcon();
+
                     item.isProcessed = true;
 
                     // DEFINE COMO PERFEITO
@@ -228,6 +231,9 @@ void SetupAudioSources()
                     SFXManager.Instance.PlaySFX(
                         SFXType.DrinkSpoiled
                     );
+
+                    // troca visual para estragado
+                    item.SetSpoiledVisual();
 
                     // para sistema de alerta
                     slot.isReady = false;
@@ -508,6 +514,9 @@ void SetupAudioSources()
             SFXManager.Instance.PlaySFX(
                 SFXType.DrinkTick
             );
+
+            // mostra alerta visual
+            slot.GetItem().ShowAlertIcon();
         }
     }
 
