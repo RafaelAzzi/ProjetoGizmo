@@ -58,7 +58,7 @@ public class DeliveryManager : MonoBehaviour
 
         GameStatsManager.Instance.ordersCompleted++;
         // remove pedido corretamente
-        orderManager.RemoveOrder(order);
+        orderManager.CompleteOrder(order);
 
         List<Item> items = plate.GetItemObjects();
 

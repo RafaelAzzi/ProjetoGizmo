@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -15,6 +16,9 @@ public class OrderCardUI : MonoBehaviour
 
     // imagem principal do card
     public Image cardBackground;
+
+    // overlay de feedback visual
+    public Image feedbackOverlay;
 
     [Header("Recipe Panel")]
 
@@ -74,6 +78,14 @@ public class OrderCardUI : MonoBehaviour
 
     // controla estado do shake
     private bool isShaking;
+
+    [Header("Feedback Visual")]
+
+    // duração do feedback
+    public float feedbackDuration = 0.35f;
+
+    // alpha máxima do overlay
+    public float feedbackAlpha = 0.45f;
 
     // configura o card
     public void Setup(
@@ -359,5 +371,74 @@ public class OrderCardUI : MonoBehaviour
         // aplica shake SOMENTE no visual
         visualRoot.anchoredPosition =
             new Vector2(offsetX, 0);
+    }
+
+    // toca feedback de sucesso
+    public void PlaySuccessFeedback()
+    {
+        StartCoroutine(
+            PlayFeedbackCoroutine(
+                new Color(0f, 1f, 0f),
+                true));
+    }
+
+    // toca feedback de falha
+    public void PlayFailFeedback()
+    {
+        StartCoroutine(
+            PlayFeedbackCoroutine(
+                new Color(1f, 0f, 0f),
+                false));
+    }
+
+    // coroutine principal do feedback
+    IEnumerator PlayFeedbackCoroutine(
+        Color feedbackColor,
+        bool success)
+    {
+        // segurança
+        if (feedbackOverlay == null)
+        {
+            Destroy(gameObject);
+            yield break;
+        }
+
+        // desativa shake durante feedback
+        isShaking = false;
+
+        // garante posição normal
+        visualRoot.anchoredPosition = Vector2.zero;
+
+        // timer
+        float timer = 0f;
+
+        while (timer < feedbackDuration)
+        {
+            timer += Time.deltaTime;
+
+            // porcentagem
+            float percent =
+                timer / feedbackDuration;
+
+            // fade do alpha
+            float alpha =
+                Mathf.Lerp(
+                    feedbackAlpha,
+                    0f,
+                    percent);
+
+            // aplica cor
+            feedbackOverlay.color =
+                new Color(
+                    feedbackColor.r,
+                    feedbackColor.g,
+                    feedbackColor.b,
+                    alpha);
+
+            yield return null;
+        }
+
+        // destrói card
+        Destroy(gameObject);
     }
 }

@@ -28,6 +28,9 @@ public class OrderUI : MonoBehaviour
     {
         // pega singleton
         orderManager = OrderManager.Instance;
+
+        OrderManager.OnOrderCompleted += HandleOrderCompleted;
+        OrderManager.OnOrderExpired += HandleOrderExpired;
     }
 
     void Update()
@@ -51,44 +54,7 @@ public class OrderUI : MonoBehaviour
                 continue;
 
             CreateCard(order);
-        }
-
-        // lista temporária
-        List<Order> ordersToRemove =
-            new List<Order>();
-
-        // lista temporária de cards
-        List<OrderCardUI> cardsToDestroy =
-            new List<OrderCardUI>();
-
-        // verifica cards inválidos
-        foreach (var pair in activeCards)
-        {
-            // pedido ainda existe
-            if (orderManager.activeOrders.Contains(pair.Key))
-                continue;
-
-            // adiciona card para destruir depois
-            cardsToDestroy.Add(pair.Value);
-
-            // marca pedido para remover
-            ordersToRemove.Add(pair.Key);
-        }
-
-        // remove do dicionário primeiro
-        foreach (Order order in ordersToRemove)
-        {
-            activeCards.Remove(order);
-        }
-
-        // destrói cards depois
-        foreach (OrderCardUI card in cardsToDestroy)
-        {
-            if (card != null)
-            {
-                Destroy(card.gameObject);
-            }
-        }
+        }      
     }
 
     // cria card visual
@@ -108,5 +74,47 @@ public class OrderUI : MonoBehaviour
 
         // salva no dicionário
         activeCards.Add(order, newCard);
+    }
+
+    void OnDestroy()
+    {
+        OrderManager.OnOrderCompleted -= HandleOrderCompleted;
+        OrderManager.OnOrderExpired -= HandleOrderExpired;
+    }
+
+    // pedido entregue
+    void HandleOrderCompleted(Order order)
+    {
+        // segurança
+        if (!activeCards.ContainsKey(order))
+            return;
+
+        // pega referência do card
+        OrderCardUI card =
+            activeCards[order];
+
+        // remove do dicionário
+        activeCards.Remove(order);
+
+        // toca feedback visual
+        card.PlaySuccessFeedback();
+    }
+
+    // pedido expirado
+    void HandleOrderExpired(Order order)
+    {
+        // segurança
+        if (!activeCards.ContainsKey(order))
+            return;
+
+        // pega referência do card
+        OrderCardUI card =
+            activeCards[order];
+
+        // remove do dicionário
+        activeCards.Remove(order);
+
+        // toca feedback visual
+        card.PlayFailFeedback();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -5,6 +6,12 @@ using TMPro;
 public class OrderManager : MonoBehaviour
 {
     public static OrderManager Instance;
+
+    // evento chamado quando pedido é entregue
+    public static event Action<Order> OnOrderCompleted;
+
+    // evento chamado quando pedido expira
+    public static event Action<Order> OnOrderExpired;
 
     [Header("Quantidade de itens por pedido")]
     public int minItemsPerOrder = 1;
@@ -74,7 +81,7 @@ public class OrderManager : MonoBehaviour
                 .GetColor(newOrder.visualID);
 
         // define quantos itens o pedido terá
-        int itemCount = Random.Range(minItemsPerOrder, maxItemsPerOrder + 1);
+        int itemCount = UnityEngine.Random.Range(minItemsPerOrder, maxItemsPerOrder + 1);
 
         // limpa lista
         newOrder.requestedItems.Clear();
@@ -82,7 +89,7 @@ public class OrderManager : MonoBehaviour
         // gera os itens
         for (int i = 0; i < itemCount; i++)
         {
-            int randomIndex = Random.Range(0, possibleItems.Length);
+            int randomIndex = UnityEngine.Random.Range(0, possibleItems.Length);
             ItemType randomItem = possibleItems[randomIndex];
 
             newOrder.requestedItems.Add(randomItem);
@@ -114,6 +121,8 @@ public class OrderManager : MonoBehaviour
     // ===== COMPLETAR PEDIDO =====
     public bool TryCompleteOrder(Item item)
     {
+        Debug.Log("ITEM ENTREGUE: " + item.itemType);
+
         for (int i = 0; i < activeOrders.Count; i++)
         {
             Order order = activeOrders[i];
@@ -121,18 +130,18 @@ public class OrderManager : MonoBehaviour
             // ===== NOVO SISTEMA (lista) =====
             if (order.requestedItems.Contains(item.itemType))
             {
-                Debug.Log("Item entregue: " + item.itemType);
-
                 // remove item da lista
                 order.requestedItems.Remove(item.itemType);
 
                 // destrói item entregue
                 Destroy(item.gameObject);
 
-                // se acabou a lista → pedido completo
                 if (order.requestedItems.Count == 0)
                 {
                     Debug.Log("Pedido COMPLETO!");
+
+                    // dispara evento de sucesso
+                    OnOrderCompleted?.Invoke(order);
 
                     RemoveOrder(order);
                 }
@@ -238,6 +247,9 @@ public class OrderManager : MonoBehaviour
                 // ===== CONTABILIZA FALHA =====
                 GameStatsManager.Instance.ordersFailed++;
 
+                // dispara evento de falha
+                OnOrderExpired?.Invoke(order);
+
                 // remove pedido
                 RemoveOrder(order);
 
@@ -258,5 +270,15 @@ public class OrderManager : MonoBehaviour
 
         // remove da lista
         activeOrders.Remove(order);
+    }
+
+    // conclui pedido corretamente
+    public void CompleteOrder(Order order)
+    {
+        // dispara evento visual
+        OnOrderCompleted?.Invoke(order);
+
+        // remove pedido
+        RemoveOrder(order);
     }
 }
