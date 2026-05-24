@@ -2269,6 +2269,7 @@ MonoBehaviour:
   pauseWindow: {fileID: 1068633734}
   howToPlayPanel: {fileID: 1068633733}
   optionsPanel: {fileID: 1068633736}
+  scoreUI: {fileID: 778997577}
 --- !u!1 &761522801
 GameObject:
   m_ObjectHideFlags: 0
@@ -2444,6 +2445,11 @@ PrefabInstance:
 --- !u!224 &778997576 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2597746560831637953, guid: f50b96c1b3faa534fa56c15677978561, type: 3}
+  m_PrefabInstance: {fileID: 778997575}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &778997577 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6581442582713233978, guid: f50b96c1b3faa534fa56c15677978561, type: 3}
   m_PrefabInstance: {fileID: 778997575}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &788799029
@@ -3180,8 +3186,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0:00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4f77315efdbe3034dae2a07f9341baf4, type: 2}
+  m_sharedMaterial: {fileID: 7884059913240855263, guid: 4f77315efdbe3034dae2a07f9341baf4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4002,8 +4008,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Item segurado: Nenhum'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4f77315efdbe3034dae2a07f9341baf4, type: 2}
+  m_sharedMaterial: {fileID: 7884059913240855263, guid: 4f77315efdbe3034dae2a07f9341baf4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
