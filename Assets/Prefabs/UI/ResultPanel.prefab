@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3856148579840748143}
   - component: {fileID: 9132634472819067109}
   - component: {fileID: 2640127528297156758}
+  - component: {fileID: 1103733592435445201}
   m_Layer: 5
   m_Name: ResultPanel
   m_TagString: Untagged
@@ -121,7 +122,21 @@ MonoBehaviour:
   star3: {fileID: 8604196119516850440}
   fullStar: {fileID: 21300000, guid: b720bebb59707ec459da6851a54c7b69, type: 3}
   emptyStar: {fileID: 21300000, guid: dfe02a9725d489f4aa8f72f2df5d3348, type: 3}
+  canvasGroup: {fileID: 1103733592435445201}
+  fadeDuration: 0.4
   levelLoader: {fileID: 0}
+--- !u!225 &1103733592435445201
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119343912242480698}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &439828591117764549
 GameObject:
   m_ObjectHideFlags: 0

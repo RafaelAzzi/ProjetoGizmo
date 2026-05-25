@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public int twoStarScore = 350;
     public int threeStarScore = 450;
 
+    public PhaseEndUI phaseEndUI;
+
     // ===== RESULTADO FINAL DETALHADO =====
     public class MatchResultData
     {
@@ -88,7 +90,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Jogo terminou!");
 
-        resultPanel.GetComponent<ResultUI>().ShowResults();
+        phaseEndUI.Show();
     }
 
     // ===== GETTERS =====

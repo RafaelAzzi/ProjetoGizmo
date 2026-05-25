@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -29,6 +30,11 @@ public class ResultUI : MonoBehaviour
     // sprites
     public Sprite fullStar;
     public Sprite emptyStar;
+
+    [Header("Fade")]
+    public CanvasGroup canvasGroup;
+
+    public float fadeDuration = 0.4f;
 
     // ===== referência ao LevelLoader =====
     public LevelLoader levelLoader;
@@ -80,6 +86,8 @@ public class ResultUI : MonoBehaviour
         }
 
         gameObject.SetActive(true);
+
+        StartCoroutine(FadeIn());
     }
 
     void SetStars(int stars)
@@ -126,5 +134,27 @@ public class ResultUI : MonoBehaviour
     {
         // volta para o menu
         levelLoader.LoadMainMenu();
+    }
+
+    IEnumerator FadeIn()
+    {
+        float timer = 0f;
+
+        // começa invisível
+        canvasGroup.alpha = 0f;
+
+        while (timer < fadeDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t = timer / fadeDuration;
+
+            // fade suave
+            canvasGroup.alpha = Mathf.Lerp(0f, 1f, t);
+
+            yield return null;
+        }
+
+        canvasGroup.alpha = 1f;
     }
 }
