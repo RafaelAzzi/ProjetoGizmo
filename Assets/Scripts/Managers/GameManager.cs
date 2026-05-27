@@ -17,6 +17,13 @@ public class GameManager : MonoBehaviour
     public int twoStarScore = 350;
     public int threeStarScore = 450;
 
+    [Header("Countdown Final")]
+    public AudioSource countdownAudioSource;
+    public AudioClip countdownTickSFX;
+
+    // guarda último segundo tocado
+    private int lastCountdownSecond = -1;
+
     public PhaseEndUI phaseEndUI;
 
     // ===== RESULTADO FINAL DETALHADO =====
@@ -64,6 +71,8 @@ public class GameManager : MonoBehaviour
 
         currentTime -= Time.deltaTime;
 
+        HandleFinalCountdown();
+
         if (currentTime <= 0f)
         {
             currentTime = 0f;
@@ -84,6 +93,9 @@ public class GameManager : MonoBehaviour
     void EndGame()
     {
         currentState = GameState.GameOver;
+
+        // congela gameplay
+        Time.timeScale = 0f;
 
         // processa resultado final da partida
         MatchResultManager.Instance.ProcessMatchResult();
@@ -108,6 +120,32 @@ public class GameManager : MonoBehaviour
     public float GetTimeRemaining()
     {
         return currentTime;
+    }
+
+    // ===== TICK FINAL =====
+    void HandleFinalCountdown()
+    {
+        // pega segundo inteiro atual
+        int currentSecond = Mathf.CeilToInt(currentTime);
+
+        // verifica últimos 10 segundos
+        if (currentSecond <= 10 && currentSecond > 0)
+        {
+            // evita repetir no mesmo segundo
+            if (currentSecond != lastCountdownSecond)
+            {
+                lastCountdownSecond = currentSecond;
+
+                // toca som
+                if (countdownAudioSource != null && countdownTickSFX != null)
+                {
+                    // pequena variação de pitch
+                   //countdownAudioSource.pitch = Random.Range(0.95f, 1.05f);
+
+                    countdownAudioSource.PlayOneShot(countdownTickSFX);
+                }
+            }
+        }
     }
 
 }

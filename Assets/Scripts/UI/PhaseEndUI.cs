@@ -36,6 +36,9 @@ public class PhaseEndUI : MonoBehaviour
     {
         canvasGroup.alpha = 1f;
 
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
+
         // ativa canvas
         gameObject.SetActive(true);
 
@@ -88,15 +91,17 @@ public class PhaseEndUI : MonoBehaviour
             yield return null;
         }
 
-canvasGroup.alpha = 0f;
+        // garante invisível
+        canvasGroup.alpha = 0f;
+
+        // desativa interação
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
 
         // ===== ABRE RESULTADO =====
         if (resultUI != null)
         {
             resultUI.ShowResults();
         }
-
-        // desativa tela
-        canvasGroup.alpha = 0f;
     }
 }

@@ -10,16 +10,28 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     [Header("Configuração da bancada")]
     public bool workBenchEnabled = true;
 
+    [Header("Ícone de bancada vazia")]
+    public GameObject emptyIconRoot;
+
     // permite criar itens lendários nessa fase
     public bool allowLegendaryCraft = true;
 
     public Transform holdPoint;
+
+    // ponto onde a barra aparecerá
+    public Transform uiAnchor;
     public RecipeDatabase recipeDatabase;
 
-    public float interactDistance = 2.5f;
+    // prefab da barra de progresso
+    public GameObject progressBarPrefab;
 
-    // UI da barra
-    public Slider progressBar;
+    // instância atual da barra
+    private GameObject progressBarInstance;
+
+    // slider da barra instanciada
+    private Slider progressBar;
+
+    public float interactDistance = 2.5f;
 
     private Item currentItem;
     private Item secondItem;
@@ -30,6 +42,11 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
 
     private float currentProgress = 0f;
     private float requiredClicks = 10f; // base (ajustar depois)
+
+    void Start()
+    {
+        UpdateEmptyIcon();
+    }
 
     // ===== INTERAÇÃO =====
     public void Interact(Player player)
@@ -110,13 +127,14 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
             Destroy(currentItem.gameObject);
             Destroy(secondItem.gameObject);
 
+            // inicia processamento ANTES
+            // de limpar item para evitar
+            // mostrar o ícone "+"
+            isProcessing = true;
+
             // limpa referências
             ClearItem();
-            secondItem = null; // proteção contra bug futuro
-
-            // inicia processamento
-            isProcessing = true;
-            currentProgress = 0;
+            secondItem = null;
 
             // define cliques baseado na raridade do resultado
             switch (resultItem.rarity)
@@ -134,9 +152,19 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
                     break;
             }
 
-            // ativa barra
-            progressBar.gameObject.SetActive(true);
-            progressBar.value = 0f; // garante que começa zerada
+            // cria barra de progresso
+            progressBarInstance = Instantiate(
+                progressBarPrefab,
+                uiAnchor.position,
+                uiAnchor.rotation
+            );
+
+            // pega slider dentro da prefab
+            progressBar =
+                progressBarInstance.GetComponentInChildren<Slider>();
+
+            // começa zerada
+            progressBar.value = 0f;
         }
     }
 
@@ -152,7 +180,11 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
             SFXType.WorkbenchClick
         );
 
-        progressBar.value = currentProgress / requiredClicks;
+        if (progressBar != null)
+        {
+            progressBar.value =
+                currentProgress / requiredClicks;
+        }
 
         if (currentProgress >= requiredClicks)
         {
@@ -170,11 +202,15 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
         
         isProcessing = false;
 
-        // reseta barra antes de esconder
-        progressBar.value = 0f;
+        // destrói barra de progresso
+        if (progressBarInstance != null)
+        {
+            Destroy(progressBarInstance);
+        }
 
-        // desativa barra
-        progressBar.gameObject.SetActive(false);
+        // limpa referências da barra
+        progressBarInstance = null;
+        progressBar = null;
 
         // cria resultado
         GameObject resultGO = Instantiate(
@@ -191,6 +227,9 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
         // limpa dados
         currentRecipe = null;
         currentProgress = 0;
+
+        // atualiza visual da bancada
+        UpdateEmptyIcon();
     }
 
     // ===== IItemHolder =====
@@ -207,6 +246,9 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
         {
             item.ShowIcon(); // mostra ícone
         }
+
+        // atualiza ícone da bancada
+        UpdateEmptyIcon();
     }
 
     public Item GetItem()
@@ -217,6 +259,9 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     public void ClearItem()
     {
         currentItem = null;
+
+        // atualiza ícone da bancada
+        UpdateEmptyIcon();
     }
 
     public bool HasItem()
@@ -228,5 +273,23 @@ public class WorkBench : MonoBehaviour, IInteractable, IItemHolder
     public bool IsWorkbenchEnabled()
     {
         return workBenchEnabled;
+    }
+
+    // atualiza visual do ícone de bancada vazia
+    void UpdateEmptyIcon()
+    {
+        // segurança
+        if (emptyIconRoot == null)
+            return;
+
+        // mostra apenas se:
+        // - não tiver item
+        // - não estiver processando
+        bool shouldShow =
+            workBenchEnabled &&
+            !HasItem() &&
+            !isProcessing;
+
+        emptyIconRoot.SetActive(shouldShow);
     }
 }
