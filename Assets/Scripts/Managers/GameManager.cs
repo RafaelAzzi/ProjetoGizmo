@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject resultPanel;
 
+    // ===== ID LÓGICO DA FASE =====
+    public int levelID = 1;
+
     // ===== CONFIGURAÇÃO =====
     public float matchTime = 180f; // tempo total da fase
 

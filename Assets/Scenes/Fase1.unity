@@ -3172,7 +3172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resultPanel: {fileID: 967780141}
-  matchTime: 15
+  matchTime: 100
   oneStarScore: 250
   twoStarScore: 350
   threeStarScore: 450
@@ -8976,6 +8976,10 @@ PrefabInstance:
     - target: {fileID: 4189287540675530671, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4548508170613043090, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 99
       objectReference: {fileID: 0}
     - target: {fileID: 8990259008635401878, guid: 48a498a5808f2104da3e0f017b78d3c9, type: 3}
       propertyPath: m_AnchoredPosition.y

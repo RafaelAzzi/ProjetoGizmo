@@ -41,6 +41,51 @@ public class MatchResultManager : MonoBehaviour
         Debug.Log("===== MATCH RESULT MANAGER =====");
         Debug.Log("Resultado: " + gameResult);
         Debug.Log("Stars: " + starsEarned);
+
+        // ===== SALVAR PROGRESSO =====
+
+        // verifica se ProgressManager existe
+        if (ProgressManager.Instance != null)
+        {
+            // pega ID lógico da fase
+            int currentLevelIndex =
+                GameManager.Instance.levelID;
+
+            // pega score atual
+            int currentScore =
+                ScoreManager.Instance.GetScore();
+
+            // salva best score
+            ProgressManager.Instance.SaveBestScore(
+                currentLevelIndex,
+                currentScore
+            );
+
+            // salva estrelas
+            ProgressManager.Instance.SaveStars(
+                currentLevelIndex,
+                starsEarned
+            );
+
+            // desbloqueia próxima fase se venceu
+            if (starsEarned > 0)
+            {
+                ProgressManager.Instance.UnlockLevel(
+                    currentLevelIndex + 1
+                );
+
+                Debug.Log(
+                    "Próxima fase desbloqueada!"
+                );
+            }
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ProgressManager não encontrado. " +
+                "Abra o jogo pelo menu principal."
+            );
+        }
     }
 
     // ===== CALCULAR ESTRELAS =====
