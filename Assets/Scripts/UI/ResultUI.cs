@@ -16,8 +16,24 @@ public class ResultUI : MonoBehaviour
     public TextMeshProUGUI itemsHeaderText;
     public TextMeshProUGUI ordersHeaderText;
 
-    // texto de vitória/derrota
-    public TextMeshProUGUI resultText;
+    [Header("Result Visuals")]
+
+    // banner de vitória
+    public GameObject victoryBanner;
+
+    // banner de derrota
+    public GameObject defeatBanner;
+
+    [Header("Character Visual")]
+
+    // imagem do personagem/robô
+    public Image resultCharacterImage;
+
+    // sprite do robô feliz
+    public Sprite victoryCharacterSprite;
+
+    // sprite do robô triste
+    public Sprite defeatCharacterSprite;
 
     // botão de próxima fase
     public GameObject nextButton;
@@ -64,8 +80,14 @@ public class ResultUI : MonoBehaviour
 
        if (MatchResultManager.Instance.IsVictory())
         {
-            // mostra texto de vitória
-            resultText.text = "VITÓRIA";
+            // ativa banner de vitória
+            victoryBanner.SetActive(true);
+
+            // desativa banner de derrota
+            defeatBanner.SetActive(false);
+
+            // troca sprite do robô/personagem
+            resultCharacterImage.sprite = victoryCharacterSprite;
 
             // habilita botão de continuar
             nextButton.SetActive(true);
@@ -75,8 +97,14 @@ public class ResultUI : MonoBehaviour
         }
         else
         {
-            // mostra texto de derrota
-            resultText.text = "DERROTA";
+            // desativa banner de vitória
+            victoryBanner.SetActive(false);
+
+            // ativa banner de derrota
+            defeatBanner.SetActive(true);
+
+            // troca sprite do robô/personagem
+            resultCharacterImage.sprite = defeatCharacterSprite;
 
             // esconde botão de continuar
             nextButton.SetActive(false);

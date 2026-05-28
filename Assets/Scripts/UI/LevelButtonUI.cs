@@ -64,7 +64,7 @@ public class LevelButtonUI : MonoBehaviour
         if (recordText != null)
         {
             recordText.text =
-                "Record: " + bestScore;
+                "Recorde: " + bestScore;
         }
 
         // ===== ESTRELAS =====
