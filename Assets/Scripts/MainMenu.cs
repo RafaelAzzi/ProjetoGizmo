@@ -7,6 +7,9 @@ public class MainMenu : MonoBehaviour
     public GameObject optionsPanel; // Painel de opções
     public GameObject comoJogarPanel;
 
+    // ===== BOTÕES PRINCIPAIS =====
+    public GameObject mainMenuButtons;
+
     void Start()
     {
        
@@ -28,13 +31,21 @@ public class MainMenu : MonoBehaviour
     // Botão Opções
     public void OpenOptions()
     {
-        optionsPanel.SetActive(true); // Mostra painel
+        // mostra painel de opções
+        optionsPanel.SetActive(true);
+
+        // esconde botões principais
+        mainMenuButtons.SetActive(false);
     }
 
     // Botão Fechar Opções
     public void CloseOptions()
     {
-        optionsPanel.SetActive(false); // Esconde painel
+        // esconde painel
+        optionsPanel.SetActive(false);
+
+        // mostra botões principais novamente
+        mainMenuButtons.SetActive(true);
     }
 
     // ===== NOVO: abrir "Como Jogar" =====
