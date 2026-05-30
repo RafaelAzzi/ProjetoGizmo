@@ -121,8 +121,8 @@ MonoBehaviour:
   victoryBanner: {fileID: 6308519875793880382}
   defeatBanner: {fileID: 193222209655004947}
   resultCharacterImage: {fileID: 2712664224362139365}
-  victoryCharacterSprite: {fileID: 21300000, guid: 1d28fe98cbdf5264d8230ceb91e7086e, type: 3}
-  defeatCharacterSprite: {fileID: 21300000, guid: 22aef49de91524547a49002f4c3dd639, type: 3}
+  victoryCharacterSprite: {fileID: 21300000, guid: 57b7183dca6357e41a6ea44577e046d0, type: 3}
+  defeatCharacterSprite: {fileID: 21300000, guid: 98ef96100dc2ad7458e2bf06fea4c6a8, type: 3}
   nextButton: {fileID: 658395961033964632}
   star1: {fileID: 7322345123896594926}
   star2: {fileID: 6983663918047830317}
