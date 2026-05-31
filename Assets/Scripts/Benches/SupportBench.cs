@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 public class SupportBench : MonoBehaviour, IInteractable
 {
-    // ===== SLOTS =====
-    public ItemHolder slot1;
-    public ItemHolder slot2;
-    public ItemHolder slot3;
+  // ===== SLOTS =====
+    public List<ItemHolder> slots = new List<ItemHolder>();
 
     // ===== NOVO: DISTÂNCIA DE INTERAÇÃO =====
     public float interactDistance = 2.5f;
@@ -77,8 +75,6 @@ public class SupportBench : MonoBehaviour, IInteractable
     // ===== SLOT VAZIO MAIS PRÓXIMO =====
     ItemHolder GetClosestAvailableSlot(Vector3 playerPos)
     {
-        List<ItemHolder> slots = new List<ItemHolder> { slot1, slot2, slot3 };
-
         ItemHolder closest = null;
         float minDistance = Mathf.Infinity;
 
@@ -102,8 +98,6 @@ public class SupportBench : MonoBehaviour, IInteractable
     // ===== SLOT COM ITEM MAIS PRÓXIMO =====
     ItemHolder GetClosestOccupiedSlot(Vector3 playerPos)
     {
-        List<ItemHolder> slots = new List<ItemHolder> { slot1, slot2, slot3 };
-
         ItemHolder closest = null;
         float minDistance = Mathf.Infinity;
 

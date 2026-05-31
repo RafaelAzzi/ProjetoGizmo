@@ -350,7 +350,7 @@ MonoBehaviour:
   isProcessed: 0
   hasPassedDrinkBench: 0
   processProgress: 0
-  iconSprite: {fileID: 21300000, guid: 9df3d223bf81b394684faab75de21a92, type: 3}
+  iconSprite: {fileID: 21300000, guid: c037f0f5e7b0fd345b54029154b9dd2c, type: 3}
   iconRoot: {fileID: 92372348366326248}
   statusIcons: {fileID: 11400000, guid: 44d25ca97d789a04196b66eb97fc254d, type: 2}
 --- !u!33 &5228009475108160724
