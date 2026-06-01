@@ -28,12 +28,6 @@ public class SupportBench : MonoBehaviour, IInteractable
         Item playerItem = player.GetHeldItem();
         if (playerItem == null) return;
 
-        // bloqueia prato
-        if (playerItem is PlateItem)
-        {
-            return;
-        }
-
         ItemHolder closestSlot = GetClosestAvailableSlot(player.transform.position);
 
         // ===== VALIDA DISTÂNCIA =====
@@ -43,6 +37,36 @@ public class SupportBench : MonoBehaviour, IInteractable
 
         if (distance > interactDistance) return;
 
+        // Verifica se já existe um prato no slot
+        PlateItem plate = closestSlot.GetItem() as PlateItem;
+
+        if (plate != null)
+        {
+            // Procura um ponto livre no prato
+            Transform freePoint = null;
+
+            foreach (Transform point in plate.slotPoints)
+            {
+                if (point.childCount == 0)
+                {
+                    freePoint = point;
+                    break;
+                }
+            }
+
+            if (freePoint == null)
+                return;
+
+            // Usa a mesma lógica já existente da PlateBench
+            bool added = plate.AddItem(playerItem, freePoint);
+
+            if (!added)
+                return;
+
+            return;
+        }
+
+        // Slot vazio → comportamento original
         playerItem.SetHolder(closestSlot);
 
         playerItem.ShowIcon();
@@ -80,9 +104,15 @@ public class SupportBench : MonoBehaviour, IInteractable
 
         foreach (ItemHolder slot in slots)
         {
-            if (!slot.HasItem())
+            // Agora considera:
+            // slot vazio
+            // prato com espaço
+            if (CanReceiveItem(slot))
             {
-                float distance = Vector3.Distance(playerPos, slot.transform.position);
+                float distance = Vector3.Distance(
+                    playerPos,
+                    slot.transform.position
+                );
 
                 if (distance < minDistance)
                 {
@@ -116,5 +146,27 @@ public class SupportBench : MonoBehaviour, IInteractable
         }
 
         return closest;
+    }
+
+    // Retorna se o slot pode receber um item
+    bool CanReceiveItem(ItemHolder slot)
+    {
+        // Slot vazio
+        if (!slot.HasItem())
+        {
+            return true;
+        }
+
+        // Verifica se o item do slot é um prato
+        PlateItem plate = slot.GetItem() as PlateItem;
+
+        if (plate != null)
+        {
+            // Só pode receber se ainda tiver espaço
+            return plate.CanAddItem();
+        }
+
+        // Item normal ocupa o slot
+        return false;
     }
 }
