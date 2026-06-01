@@ -71,6 +71,16 @@ public class PhaseMusicManager : MonoBehaviour
         audioSource.pitch = normalPitch;
     }
 
+    // inicia música da fase
+    public void PlayPhaseMusic()
+    {
+        // segurança
+        if (audioSource == null)
+            return;
+
+        audioSource.Play();
+    }
+
     void Update()
     {
         // se pitch dinâmico estiver desligado

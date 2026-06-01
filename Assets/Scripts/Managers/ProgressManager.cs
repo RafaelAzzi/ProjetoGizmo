@@ -135,4 +135,32 @@ public class ProgressManager : MonoBehaviour
     {
         return "Level_" + levelIndex + "_BestStars";
     }
+
+    // ===== TUTORIAL =====
+
+    // salva que o tutorial foi concluído
+    public void SetTutorialCompleted(int levelID)
+    {
+        PlayerPrefs.SetInt(
+            GetTutorialKey(levelID),
+            1
+        );
+
+        PlayerPrefs.Save();
+    }
+
+    // verifica se tutorial já foi concluído
+    public bool IsTutorialCompleted(int levelID)
+    {
+        return PlayerPrefs.GetInt(
+            GetTutorialKey(levelID),
+            0
+        ) == 1;
+    }
+
+    // gera chave do tutorial
+    string GetTutorialKey(int levelID)
+    {
+        return "Level_" + levelID + "_TutorialCompleted";
+    }
 }

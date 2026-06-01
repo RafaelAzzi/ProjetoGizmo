@@ -6,6 +6,9 @@ public class LevelLoader : MonoBehaviour
     // ===== CARREGAR PRÓXIMA FASE =====
     public void LoadNextLevel()
     {
+        // garante que a próxima cena não fique congelada
+        Time.timeScale = 1f;
+
         // pega o índice da cena atual
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
@@ -30,18 +33,29 @@ public class LevelLoader : MonoBehaviour
     // ===== REINICIAR FASE =====
     public void RestartLevel()
     {
+        // garante tempo normal
+        Time.timeScale = 1f;
+
         // recarrega a cena atual
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(
+            SceneManager.GetActiveScene().buildIndex
+        );
     }
 
     // ===== IR PARA MENU =====
     public void LoadMainMenu()
     {
+        // garante tempo normal
+        Time.timeScale = 1f;
+
         SceneManager.LoadScene(0);
     }
 
    public void LoadLevel(int levelIndex)
     {
+        // garante tempo normal
+        Time.timeScale = 1f;
+        
         // destrói música do menu
         // antes de entrar na gameplay
         if (MenuMusicManager.Instance != null)

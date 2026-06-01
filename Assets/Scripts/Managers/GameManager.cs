@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
 
     // ===== ESTADO =====
     private float currentTime;
+
+    // tempo inicial configurado da fase
+    private bool initializedTime = false;
+
     private GameState currentState = GameState.WaitingToStart;
 
     public int oneStarScore = 250;
@@ -65,7 +69,23 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        StartGame();
+        currentTime = matchTime;
+
+        initializedTime = true;
+
+        Debug.Log("GameManager Start executou");
+
+        // se não existir TutorialManager na cena,
+        // inicia a partida normalmente
+        if (FindObjectOfType<TutorialManager>() == null)
+        {
+            StartGame();
+
+            if (PhaseMusicManager.Instance != null)
+            {
+                PhaseMusicManager.Instance.PlayPhaseMusic();
+            }
+        }
     }
 
     void Update()
@@ -86,10 +106,12 @@ public class GameManager : MonoBehaviour
     // ===== INICIAR JOGO =====
     public void StartGame()
     {
+        Debug.Log("StartGame executou");
         currentState = GameState.Playing;
         currentTime = matchTime;
 
         Debug.Log("Jogo começou!");
+        
     }
 
     // ===== FINALIZAR JOGO =====

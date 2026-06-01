@@ -9,6 +9,9 @@ public class PauseManager : MonoBehaviour
     [Header("UI")]
     public GameObject pausePanel;
 
+    // botão de como jogar
+    public GameObject howToPlayButton;
+
     // janela principal do pause
     public GameObject pauseWindow;
 
@@ -20,6 +23,9 @@ public class PauseManager : MonoBehaviour
 
     [Header("Gameplay UI")]
     public GameObject scoreUI;
+
+    [Header("Tutorial")]
+    public TutorialManager tutorialManager;
 
     // controla estado do pause
     private bool isPaused = false;
@@ -49,6 +55,18 @@ public class PauseManager : MonoBehaviour
 
         // garante tempo normal
         Time.timeScale = 1f;
+
+        // mostra tutorial apenas na fase 1
+        if (GameManager.Instance != null)
+        {
+            bool isLevelOne =
+                GameManager.Instance.levelID == 1;
+
+            if (howToPlayButton != null)
+            {
+                howToPlayButton.SetActive(isLevelOne);
+            }
+        }
     }
 
     void Update()
@@ -131,6 +149,23 @@ public class PauseManager : MonoBehaviour
     {
         pauseWindow.SetActive(false);
         howToPlayPanel.SetActive(true);
+    }
+
+    // ===== ABRIR TUTORIAL =====
+    public void OpenTutorial()
+    {
+        // esconde janela do pause
+        pauseWindow.SetActive(false);
+
+        // esconde outros painéis
+        howToPlayPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+
+        // abre tutorial
+        if (tutorialManager != null)
+        {
+            tutorialManager.StartTutorialFromPause();
+        }
     }
 
     // ===== ABRIR OPÇÕES =====

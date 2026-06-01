@@ -9,7 +9,8 @@ public class TimerUI : MonoBehaviour
     void Update()
     {
         // só atualiza se o jogo estiver rolando
-        if (!GameManager.Instance.IsGamePlaying()) return;
+        if (GameManager.Instance == null)
+            return;
 
         // pega o tempo restante da fase
         float timeRemaining = GameManager.Instance.GetTimeRemaining();
