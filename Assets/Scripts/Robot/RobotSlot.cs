@@ -5,6 +5,9 @@ public class RobotSlot : MonoBehaviour
 {
     public bool isOccupied = false;
 
+    // ponto para onde o robô deve olhar
+    public Transform lookPoint;
+
     // retorna posição do slot
     public Transform GetPoint()
     {

@@ -9,6 +9,12 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     // ponto onde ele vai parar (slot)
     private Transform targetPoint;
 
+    // ponto intermediário antes do slot
+    private Transform entryPoint;
+
+    // ponto para onde o robô olha ao chegar
+    private Transform lookPoint;
+
     // ponto de saída
     private Transform exitPoint;
 
@@ -24,6 +30,9 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     // estado do robô
     private bool isWaiting = false;
     private bool isLeaving = false;
+
+    // já chegou no ponto intermediário?
+    private bool reachedEntryPoint = false;
 
     // controle de pedido
     private bool hasOrder = false;
@@ -74,10 +83,21 @@ public class RobotCustomer : MonoBehaviour, IInteractable
     public float stopDistance = 0.1f;
 
     // ===== CONFIGURAÇÃO INICIAL =====
-    public void Setup(Transform target, Transform exit, OrderManager manager)
+    public void Setup(
+    Transform entry,
+    Transform target,
+    Transform look,
+    Transform exit,
+    OrderManager manager)
     {
+        entryPoint = entry;
+
         targetPoint = target;
+
+        lookPoint = look;
+
         exitPoint = exit;
+
         orderManager = manager;
     }
 
@@ -97,16 +117,47 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         // ===== IR ATÉ O SLOT =====
         if (!isWaiting && !isLeaving)
         {
+            // ainda não chegou no ponto intermediário
+            if (!reachedEntryPoint)
+            {
+                MoveToTarget(entryPoint.position);
+
+                if (Vector3.Distance(
+                    transform.position,
+                    entryPoint.position) < stopDistance)
+                {
+                    reachedEntryPoint = true;
+                }
+
+                return;
+            }
+
+            // já passou pelo ponto intermediário
             MoveToTarget(targetPoint.position);
 
-            if (Vector3.Distance(transform.position, targetPoint.position) < stopDistance)
+            if (Vector3.Distance(
+                transform.position,
+                targetPoint.position) < stopDistance)
             {
                 isWaiting = true;
 
-                // toca fala inicial do robô
+                // faz o robô olhar para a oficina
+                if (lookPoint != null)
+                {
+                    Vector3 lookDirection =
+                        lookPoint.position - transform.position;
+
+                    lookDirection.y = 0f;
+
+                    if (lookDirection != Vector3.zero)
+                    {
+                        transform.forward =
+                            lookDirection.normalized;
+                    }
+                }
+
                 PlayCriticalCall();
 
-                // ===== NOVO: GERA PEDIDO AUTOMATICAMENTE =====
                 if (!hasOrder)
                 {
                     myOrder = orderManager.GenerateNewOrder();
@@ -114,8 +165,6 @@ public class RobotCustomer : MonoBehaviour, IInteractable
                     if (myOrder != null)
                     {
                         hasOrder = true;
-
-                        // cria bubble visual
                         SpawnBubble();
                     }
                 }
@@ -143,7 +192,7 @@ public class RobotCustomer : MonoBehaviour, IInteractable
         }
 
         // controla áudio crítico
-        HandleCriticalAudio();
+        // HandleCriticalAudio();
 
         // ===== SAIR DO MAPA =====
         if (isLeaving)

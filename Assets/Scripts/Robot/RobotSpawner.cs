@@ -16,12 +16,19 @@ public class SpawnStage
 
 public class RobotSpawner : MonoBehaviour
 {
-    public GameObject robotPrefab;
+    [Header("Robot Prefabs")]
+    public List<GameObject> robotPrefabs = new List<GameObject>();
+
+    // controla qual robô será spawnado em seguida
+    private int nextRobotIndex = 0;
 
     public RobotSlot[] slots;
 
     public Transform spawnPoint;
     public Transform exitPoint;
+
+    // ponto intermediário antes do slot
+    public Transform entryPoint;
 
     public OrderManager orderManager;
 
@@ -102,12 +109,30 @@ public class RobotSpawner : MonoBehaviour
 
     void SpawnRobot(RobotSlot slot)
     {
-        GameObject robotGO = Instantiate(robotPrefab, spawnPoint.position, Quaternion.identity);
+        GameObject robotPrefab = GetNextRobotPrefab();
+
+        if (robotPrefab == null)
+        {
+            return;
+        }
+
+        GameObject robotGO =
+            Instantiate(
+                robotPrefab,
+                spawnPoint.position,
+                Quaternion.identity
+            );
 
         RobotCustomer robot = robotGO.GetComponent<RobotCustomer>();
 
         // configura o robô
-        robot.Setup(slot.GetPoint(), exitPoint, orderManager);
+        robot.Setup(
+            entryPoint,
+            slot.GetPoint(),
+            slot.lookPoint,
+            exitPoint,
+            orderManager
+        );
 
         // marca slot como ocupado
         slot.isOccupied = true;
@@ -130,5 +155,30 @@ public class RobotSpawner : MonoBehaviour
         }
 
         slot.isOccupied = false;
+    }
+
+    // retorna o próximo prefab da lista em ordem
+    GameObject GetNextRobotPrefab()
+    {
+        // segurança
+        if (robotPrefabs == null || robotPrefabs.Count == 0)
+        {
+            Debug.LogError("Nenhum Robot Prefab configurado no RobotSpawner!");
+            return null;
+        }
+
+        // pega prefab atual
+        GameObject prefab = robotPrefabs[nextRobotIndex];
+
+        // avança para o próximo índice
+        nextRobotIndex++;
+
+        // voltou para o início da lista
+        if (nextRobotIndex >= robotPrefabs.Count)
+        {
+            nextRobotIndex = 0;
+        }
+
+        return prefab;
     }
 }

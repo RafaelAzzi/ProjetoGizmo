@@ -47,6 +47,25 @@ public class ResultUI : MonoBehaviour
     public Sprite fullStar;
     public Sprite emptyStar;
 
+    [Header("Star Animation")]
+
+    // tempo entre uma estrela e outra
+    public float starDelay = 0.18f;
+
+    // duração do efeito pop
+    public float starPopDuration = 0.15f;
+
+    // escala máxima durante o pop
+    public float starPopScale = 1.25f;
+
+    [Header("Star Audio")]
+
+    // som da última estrela
+    public AudioClip finalStarSFX;
+
+    // source para tocar o som
+    public AudioSource starAudioSource;
+
     [Header("Fade")]
     public CanvasGroup canvasGroup;
 
@@ -75,8 +94,6 @@ public class ResultUI : MonoBehaviour
 
         // pega estrelas calculadas pelo MatchResultManager
         int stars = MatchResultManager.Instance.GetStars();
-
-        SetStars(stars);
 
        if (MatchResultManager.Instance.IsVictory())
         {
@@ -116,6 +133,8 @@ public class ResultUI : MonoBehaviour
         gameObject.SetActive(true);
 
         StartCoroutine(FadeIn());
+
+        StartCoroutine(AnimateStars(stars));
     }
 
     void SetStars(int stars)
@@ -134,6 +153,111 @@ public class ResultUI : MonoBehaviour
 
         if (stars >= 3)
             star3.sprite = fullStar;
+    }
+
+    IEnumerator AnimateStars(int stars)
+    {
+        // começa com todas vazias
+        star1.sprite = emptyStar;
+        star2.sprite = emptyStar;
+        star3.sprite = emptyStar;
+
+        // garante escala normal
+        star1.rectTransform.localScale = Vector3.one;
+        star2.rectTransform.localScale = Vector3.one;
+        star3.rectTransform.localScale = Vector3.one;
+
+        // primeira estrela
+        if (stars >= 1)
+        {
+            star1.sprite = fullStar;
+
+            PlayFinalStarSound();
+
+            yield return StartCoroutine(
+                PopStar(star1)
+            );
+
+            yield return new WaitForSecondsRealtime(
+                starDelay
+            );
+        }
+
+        // segunda estrela
+        if (stars >= 2)
+        {
+            star2.sprite = fullStar;
+
+            PlayFinalStarSound();
+
+            yield return StartCoroutine(
+                PopStar(star2)
+            );
+
+            yield return new WaitForSecondsRealtime(
+                starDelay
+            );
+        }
+
+        // terceira estrela
+        if (stars >= 3)
+        {
+            star3.sprite = fullStar;
+
+            PlayFinalStarSound();
+
+            yield return StartCoroutine(
+                PopStar(star3)
+            );
+
+        }
+    }
+
+    IEnumerator PopStar(Image star)
+    {
+        float timer = 0f;
+
+        Vector3 startScale = Vector3.one;
+
+        Vector3 targetScale =
+            Vector3.one * starPopScale;
+
+        while (timer < starPopDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t = timer / starPopDuration;
+
+            star.rectTransform.localScale =
+                Vector3.Lerp(
+                    startScale,
+                    targetScale,
+                    t
+                );
+
+            yield return null;
+        }
+
+        timer = 0f;
+
+        while (timer < starPopDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t = timer / starPopDuration;
+
+            star.rectTransform.localScale =
+                Vector3.Lerp(
+                    targetScale,
+                    startScale,
+                    t
+                );
+
+            yield return null;
+        }
+
+        star.rectTransform.localScale =
+            Vector3.one;
     }
 
     // ===== BOTÃO: PRÓXIMA FASE =====
@@ -184,5 +308,19 @@ public class ResultUI : MonoBehaviour
         }
 
         canvasGroup.alpha = 1f;
+    }
+
+    // toca som da última estrela conquistada
+    void PlayFinalStarSound()
+    {
+        if (starAudioSource == null)
+            return;
+
+        if (finalStarSFX == null)
+            return;
+
+        starAudioSource.PlayOneShot(
+            finalStarSFX
+        );
     }
 }

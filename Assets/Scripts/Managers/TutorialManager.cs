@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,7 +17,10 @@ public class TutorialManager : MonoBehaviour
 
     public TextMeshProUGUI dialogueText;
 
-    public RectTransform highlightPanel;
+    public RectTransform highlightBorder;
+
+    // seta do tutorial
+    public RectTransform tutorialArrow;
 
     // câmera principal da fase
     private Camera mainCamera;
@@ -30,10 +34,39 @@ public class TutorialManager : MonoBehaviour
     // controla qual som será tocado
     private int currentSoundIndex = 0;
 
+    // velocidade da animação
+    [SerializeField]
+    private float arrowBounceSpeed = 8f;
+
+    // distância do movimento
+    [SerializeField]
+    private float arrowBounceHeight = 30f;
+
+    // posição base da seta na UI
+    private Vector2 arrowBaseAnchoredPosition;
+
+    // direção da animação da seta
+    private Vector2 arrowBounceDirection;
+
+    [Header("Typing Effect")]
+
+    // Tempo entre cada caractere
+    [SerializeField] private float typingSpeed = 0.03f;
+
+    // Indica se o texto está sendo digitado
+    private bool isTyping = false;
+
+    // Coroutine da digitação atual
+    private Coroutine typingCoroutine;
+
+    // Guarda a mensagem completa atual
+    private string currentFullMessage;
+
     private bool skipTutorial = false;
 
     // indica se tutorial foi aberto pelo pause
     private bool openedFromPause = false;
+    
 
     [Header("Tutorial Audio")]
 
@@ -82,11 +115,20 @@ public class TutorialManager : MonoBehaviour
         if (!tutorialActive)
             return;
 
-        // SPACE avança
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            // Se ainda está digitando,
+            // completa o texto imediatamente
+            if (isTyping)
+            {
+                CompleteCurrentText();
+                return;
+            }
+
             NextStep();
         }
+
+        AnimateArrow();
     }
 
     // ===== INICIAR TUTORIAL =====
@@ -108,17 +150,57 @@ public class TutorialManager : MonoBehaviour
         // toca som da primeira fala
         PlayDialogueSound();
     }
-
+    
     // ===== MOSTRAR PASSO =====
     void ShowStep(int index)
     {
         TutorialStep step = steps[index];
 
-        // atualiza texto
-        dialogueText.text = step.message;
+        // Guarda a mensagem completa atual
+        currentFullMessage = step.message;
 
-        // atualiza highlight
+        // Segurança: para coroutine anterior
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        // Inicia digitação
+        typingCoroutine = StartCoroutine(TypeText(step.message));
+
+        // Atualiza highlight
         UpdateHighlight(step);
+
+        // Atualiza seta
+        UpdateArrow(step);
+    }
+
+    IEnumerator TypeText(string message)
+    {
+        isTyping = true;
+
+        dialogueText.text = "";
+
+        foreach (char letter in message)
+        {
+            dialogueText.text += letter;
+
+            yield return new WaitForSecondsRealtime(typingSpeed);
+        }
+
+        isTyping = false;
+    }
+
+    void CompleteCurrentText()
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        dialogueText.text = currentFullMessage;
+
+        isTyping = false;
     }
 
     // ===== AVANÇAR =====
@@ -146,19 +228,18 @@ public class TutorialManager : MonoBehaviour
         if (step.worldTarget == null &&
             step.uiTarget == null)
         {
-            highlightPanel.gameObject.SetActive(false);
+            highlightBorder.gameObject.SetActive(false);
             return;
         }
 
-        highlightPanel.gameObject.SetActive(true);
+        highlightBorder.gameObject.SetActive(true);
 
         // alvo UI
         if (step.uiTarget != null)
         {
-            highlightPanel.position =
+            highlightBorder.position =
                 step.uiTarget.position;
         }
-
         // alvo mundo 3D
         else if (step.worldTarget != null)
         {
@@ -167,13 +248,14 @@ public class TutorialManager : MonoBehaviour
                     step.worldTarget.position
                 );
 
-            highlightPanel.position = screenPosition;
+            highlightBorder.position = screenPosition;
         }
 
-        highlightPanel.sizeDelta =
+        highlightBorder.sizeDelta =
             step.highlightSize;
     }
 
+    
     // ===== SOM DA FALA =====
     void PlayDialogueSound()
     {
@@ -208,6 +290,87 @@ public class TutorialManager : MonoBehaviour
         openedFromPause = true;
 
         StartTutorial();
+    }
+
+    void UpdateArrow(TutorialStep step)
+    {
+        // este passo não usa seta
+        if (!step.showArrow)
+        {
+            tutorialArrow.gameObject.SetActive(false);
+            return;
+        }
+
+        tutorialArrow.gameObject.SetActive(true);
+
+        Vector2 borderPosition =
+            highlightBorder.position;
+
+        Vector2 borderSize =
+            highlightBorder.sizeDelta;
+
+        Vector2 arrowPosition = borderPosition;
+
+        float margin = 80f;
+
+        switch (step.arrowPosition)
+        {
+            case ArrowPosition.Top:
+
+                arrowPosition +=
+                    new Vector2(
+                        0,
+                        borderSize.y * 0.5f + margin
+                    );
+
+                tutorialArrow.rotation =
+                    Quaternion.Euler(0, 0, 0);
+
+                arrowBounceDirection =
+                    Vector2.up;
+
+                break;
+
+            case ArrowPosition.Left:
+
+                arrowPosition +=
+                    new Vector2(
+                        -(borderSize.x * 0.5f + margin),
+                        0
+                    );
+
+                tutorialArrow.rotation =
+                    Quaternion.Euler(0, 0, 90);
+
+                arrowBounceDirection =
+                    Vector2.right;
+
+                break;
+
+            case ArrowPosition.Right:
+
+                arrowPosition +=
+                    new Vector2(
+                        borderSize.x * 0.5f + margin,
+                        0
+                    );
+
+                tutorialArrow.rotation =
+                    Quaternion.Euler(0, 0, -90);
+
+                arrowBounceDirection =
+                    Vector2.left;
+
+                break;
+        }
+
+        arrowPosition += step.arrowOffset;
+
+        tutorialArrow.position = arrowPosition;
+
+        // guarda posição base da animação
+        arrowBaseAnchoredPosition =
+            tutorialArrow.anchoredPosition;
     }
 
     // ===== FINALIZA ====
@@ -253,5 +416,20 @@ public class TutorialManager : MonoBehaviour
 
         // inicia a partida
         GameManager.Instance.StartGame();
+    }
+
+    // animação da seta
+    void AnimateArrow()
+    {
+        if (!tutorialArrow.gameObject.activeSelf)
+            return;
+
+        float offset =
+            Mathf.Sin(Time.unscaledTime * arrowBounceSpeed)
+            * arrowBounceHeight;
+
+        tutorialArrow.anchoredPosition =
+            arrowBaseAnchoredPosition +
+            arrowBounceDirection * offset;
     }
 }

@@ -21,9 +21,6 @@ public class PauseManager : MonoBehaviour
     // painel de opções
     public GameObject optionsPanel;
 
-    [Header("Gameplay UI")]
-    public GameObject scoreUI;
-
     [Header("Tutorial")]
     public TutorialManager tutorialManager;
 
@@ -98,12 +95,6 @@ public class PauseManager : MonoBehaviour
         // ativa UI
         pausePanel.SetActive(true);
 
-        // esconde HUD do score
-        if (scoreUI != null)
-        {
-            scoreUI.SetActive(false);
-        }
-
         // sempre volta para menu principal do pause
         pauseWindow.SetActive(true);
         howToPlayPanel.SetActive(false);
@@ -127,12 +118,6 @@ public class PauseManager : MonoBehaviour
 
         // esconde UI
         pausePanel.SetActive(false);
-
-        // mostra HUD do score novamente
-        if (scoreUI != null)
-        {
-            scoreUI.SetActive(true);
-        }
 
         // volta tempo normal
         Time.timeScale = 1f;

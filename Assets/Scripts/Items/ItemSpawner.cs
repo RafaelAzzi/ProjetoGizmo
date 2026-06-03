@@ -61,6 +61,18 @@ public class ItemSpawner : MonoBehaviour, IInteractable
         // pega o script Item
         Item item = currentItem.GetComponent<Item>();
 
+        // Mostra dica da DrinkBench para os óleos da Fase 1
+        if (
+            item.itemType == ItemType.OleoComum ||
+            item.itemType == ItemType.OleoAntiferrugem
+        )
+        {
+            if (DrinkBenchHint.Instance != null)
+            {
+                DrinkBenchHint.Instance.ShowHint();
+            }
+        }
+
         // player pega o item
         player.PickupItem(item);
 
