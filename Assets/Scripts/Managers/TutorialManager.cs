@@ -85,11 +85,17 @@ public class TutorialManager : MonoBehaviour
             return;
         }
 
-        if (ProgressManager.Instance.IsTutorialCompleted(tutorialLevelID))
+        bool tutorialCompleted =
+            ProgressManager.Instance.IsTutorialCompleted(
+                tutorialLevelID
+            );
+
+        if (tutorialCompleted)
         {
             skipTutorial = true;
             return;
         }
+
         StartTutorial();
     }
 
@@ -134,6 +140,7 @@ public class TutorialManager : MonoBehaviour
     // ===== INICIAR TUTORIAL =====
     public void StartTutorial()
     {
+        Debug.Log("StartTutorial EXECUTOU");
         if (steps.Count == 0)
             return;
 
@@ -311,7 +318,7 @@ public class TutorialManager : MonoBehaviour
 
         Vector2 arrowPosition = borderPosition;
 
-        float margin = 80f;
+        float margin = 90f;
 
         switch (step.arrowPosition)
         {

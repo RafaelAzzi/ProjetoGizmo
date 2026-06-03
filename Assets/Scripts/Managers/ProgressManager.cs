@@ -4,6 +4,11 @@ public class ProgressManager : MonoBehaviour
 {
     public static ProgressManager Instance;
 
+    // Versão atual do save
+    // Aumente este número quando quiser forçar
+    // todos os jogadores a começarem um save novo
+    private const int SAVE_VERSION = 1;
+
     void Awake()
     {
         // ===== SINGLETON =====
@@ -27,10 +32,33 @@ public class ProgressManager : MonoBehaviour
     {
         Debug.Log("InitializeProgress chamado");
 
+        // pega a versão salva atualmente
+        int savedVersion =
+            PlayerPrefs.GetInt("SaveVersion", 0);
+
+        // se a versão for diferente,
+        // recria todo o save
+        if (savedVersion != SAVE_VERSION)
+        {
+            Debug.Log(
+                "Nova versão detectada. Limpando save..."
+            );
+
+            PlayerPrefs.DeleteAll();
+
+            PlayerPrefs.SetInt(
+                "SaveVersion",
+                SAVE_VERSION
+            );
+
+            PlayerPrefs.Save();
+        }
+
         Debug.Log(
             "Tem ProgressInitialized? " +
             PlayerPrefs.HasKey("ProgressInitialized")
         );
+
         // verifica se já inicializou anteriormente
         if (!PlayerPrefs.HasKey("ProgressInitialized"))
         {
@@ -38,7 +66,10 @@ public class ProgressManager : MonoBehaviour
             UnlockLevel(1);
 
             // marca inicialização
-            PlayerPrefs.SetInt("ProgressInitialized", 1);
+            PlayerPrefs.SetInt(
+                "ProgressInitialized",
+                1
+            );
 
             // salva
             PlayerPrefs.Save();
