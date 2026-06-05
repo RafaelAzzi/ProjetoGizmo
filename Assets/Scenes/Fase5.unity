@@ -3572,7 +3572,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: -1.7, y: 21.32, z: -8.07}
+  m_LocalPosition: {x: -1.7, y: 21.46, z: -7.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5766,7 +5766,7 @@ MonoBehaviour:
   - {fileID: 5169812472139967065, guid: 3320926b5cab70240ac565bf7b3bd082, type: 3}
   - {fileID: 1110602946007641326, guid: 66a9dfcc16141584b9e70435f952bbb7, type: 3}
   activeOrders: []
-  possibleItems: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
+  possibleItems: 18000000
   maxOrders: 3
 --- !u!4 &1764482880
 Transform:

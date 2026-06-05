@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 5084964220170153173}
   - component: {fileID: 4489312638942823099}
   m_Layer: 0
-  m_Name: Fiacao
+  m_Name: Fiacao 1
   m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
