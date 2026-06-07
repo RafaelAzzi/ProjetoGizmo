@@ -2029,8 +2029,8 @@ MonoBehaviour:
   levelID: 4
   matchTime: 180
   oneStarScore: 500
-  twoStarScore: 650
-  threeStarScore: 750
+  twoStarScore: 700
+  threeStarScore: 800
   countdownAudioSource: {fileID: 859455635}
   countdownTickSFX: {fileID: 8300000, guid: 9dd8475551cca3049832fd1505d78138, type: 3}
   phaseEndUI: {fileID: 336262492}
@@ -2747,7 +2747,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1169, y: -11}
+  m_AnchoredPosition: {x: 1205, y: -11}
   m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1106544542
@@ -2811,8 +2811,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 34
+  m_fontSizeBase: 34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3911,10 +3911,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minItemsPerOrder: 1
   maxItemsPerOrder: 1
-  commonOrderTime: 35
-  rareOrderTime: 55
+  commonOrderTime: 30
+  rareOrderTime: 52
   legendaryOrderTime: 75
-  oilOrderTime: 55
+  oilOrderTime: 52
   allItems:
   - {fileID: 2118862421441323440, guid: 626f951e3097c284e8d863ae0b2d677e, type: 3}
   - {fileID: 5084964220170153173, guid: 9b14dfffb5843a243aa3d4303c5d638b, type: 3}

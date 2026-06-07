@@ -5423,8 +5423,8 @@ MonoBehaviour:
   levelID: 3
   matchTime: 180
   oneStarScore: 450
-  twoStarScore: 600
-  threeStarScore: 700
+  twoStarScore: 650
+  threeStarScore: 750
   countdownAudioSource: {fileID: 859455635}
   countdownTickSFX: {fileID: 8300000, guid: 9dd8475551cca3049832fd1505d78138, type: 3}
   phaseEndUI: {fileID: 307735861}
@@ -7648,7 +7648,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1158, y: -11}
+  m_AnchoredPosition: {x: 1205, y: -11}
   m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1106544542
@@ -7712,8 +7712,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 34
+  m_fontSizeBase: 34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8052,7 +8052,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4982111832310678772, guid: 032b0d732fb701e448100fba322e78b6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.4
+      value: -8.84
       objectReference: {fileID: 0}
     - target: {fileID: 4982111832310678772, guid: 032b0d732fb701e448100fba322e78b6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8089,6 +8089,10 @@ PrefabInstance:
     - target: {fileID: 4982111832310678772, guid: 032b0d732fb701e448100fba322e78b6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316086280698440478, guid: 032b0d732fb701e448100fba322e78b6, type: 3}
+      propertyPath: slots.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6438177611015490162, guid: 032b0d732fb701e448100fba322e78b6, type: 3}
       propertyPath: m_Size.x
