@@ -1960,7 +1960,7 @@ PrefabInstance:
       objectReference: {fileID: 682542088}
     - target: {fileID: 810392378977710131, guid: bc54440c2818ae344b6243d1fe630d33, type: 3}
       propertyPath: spawnStages.Array.data[0].maxSpawnDelay
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 810392378977710131, guid: bc54440c2818ae344b6243d1fe630d33, type: 3}
       propertyPath: spawnStages.Array.data[0].minSpawnDelay
@@ -1968,19 +1968,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 810392378977710131, guid: bc54440c2818ae344b6243d1fe630d33, type: 3}
       propertyPath: spawnStages.Array.data[1].maxSpawnDelay
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 810392378977710131, guid: bc54440c2818ae344b6243d1fe630d33, type: 3}
       propertyPath: spawnStages.Array.data[1].minSpawnDelay
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 810392378977710131, guid: bc54440c2818ae344b6243d1fe630d33, type: 3}
       propertyPath: spawnStages.Array.data[2].maxSpawnDelay
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 810392378977710131, guid: bc54440c2818ae344b6243d1fe630d33, type: 3}
       propertyPath: spawnStages.Array.data[2].minSpawnDelay
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6335806415758510252, guid: bc54440c2818ae344b6243d1fe630d33, type: 3}
       propertyPath: m_LocalPosition.x

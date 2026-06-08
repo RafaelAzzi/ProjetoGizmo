@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class PauseManager : MonoBehaviour
 {
@@ -75,6 +76,13 @@ public class PauseManager : MonoBehaviour
         // tecla ESC pausa/despausa
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            // não permite fechar o pause durante o tutorial
+            if (tutorialManager != null &&
+                tutorialManager.IsTutorialActive())
+            {
+                return;
+            }
+
             // se pausado -> volta
             if (isPaused)
             {
@@ -169,6 +177,9 @@ public class PauseManager : MonoBehaviour
         optionsPanel.SetActive(false);
 
         pauseWindow.SetActive(true);
+
+        // remove qualquer botão selecionado
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     // ===== IR PARA MENU =====

@@ -45,50 +45,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15d3f6c94aef87149b1ddbf968392f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialLevelID: 1
+  tutorialLevelID: 5
   steps:
   - message: "Ol\xE1 eu sou sua assistente.\nVou te mostrar como se trabalha em um
       oficina de verdade."
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 0, y: 0}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   - message: "Observe essa bancada.\n\xC9 aqui que voc\xEA pega os itens mais simples
       de nossa oficina, como \xF3leo e sucata."
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 105, y: 205}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   - message: "Essa bancada serve exclusivamente prepara \xF3leos.\nCuidado para n\xE3o
       estraga-los, nossos clientes s\xE3o a prioridade."
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 150, y: 55}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   - message: "Essa belezinha aqui cria nossos melhores itens. \nJunte pe\xE7as e
       experimente."
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 100, y: 60}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   - message: "Essa aqui \xE9 apenas para deixar pe\xE7as armanezadas.\nNunca se sabe
       quando ir\xE1 precisar de lugares para colocar suas pe\xE7as"
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 280, y: 75}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   - message: "Aqui \xE9 onde se encontra os caixotes.\nTodos as pe\xE7as precisam
       ser entregues neles.\nNada de pe\xE7a perdida por ai viu!"
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 160, y: 70}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   - message: "Nossa \xFAltima bancada \xE9 essa.\nAqui \xE9 onde descartamos pe\xE7as
       erradas ou estragadas."
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 90, y: 50}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   - message: "Aqui voc\xEA pode ver sua pontua\xE7\xE3o atual durante a fase."
     worldTarget: {fileID: 0}
     uiTarget: {fileID: 0}
     highlightSize: {x: 80, y: 75}
+    arrowPosition: 0
+    arrowOffset: {x: 0, y: 0}
+    showArrow: 1
   tutorialCanvas: {fileID: 0}
   dialogueText: {fileID: 0}
-  highlightPanel: {fileID: 0}
+  highlightBorder: {fileID: 0}
+  tutorialArrow: {fileID: 0}
+  arrowBounceSpeed: 8
+  arrowBounceHeight: 30
+  typingSpeed: 0.03
   tutorialAudioSource: {fileID: 4738182705468581894}
   dialogueSounds:
   - {fileID: 8300000, guid: 6d369a0544681194bae6dc58ecd06ea1, type: 3}

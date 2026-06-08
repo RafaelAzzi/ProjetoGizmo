@@ -64,7 +64,7 @@ public class ScoreManager : MonoBehaviour
             // item comum
             if (item.rarity == Rarity.Comum)
             {
-                total += 20;
+                total += 10;
             }
 
             // item raro
@@ -76,7 +76,7 @@ public class ScoreManager : MonoBehaviour
             // item lendário
             else if (item.rarity == Rarity.Lendario)
             {
-                total += 60;
+                total += 90;
             }
         }
 

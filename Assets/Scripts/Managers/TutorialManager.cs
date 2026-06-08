@@ -383,12 +383,22 @@ public class TutorialManager : MonoBehaviour
     // ===== FINALIZA ====
     void EndTutorial()
     {
-        // tutorial aberto pelo pause
         if (openedFromPause)
         {
             openedFromPause = false;
 
             tutorialActive = false;
+
+            // interrompe digitação caso exista
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+            }
+
+            isTyping = false;
+
+            currentStepIndex = 0;
 
             tutorialCanvas.SetActive(false);
 
@@ -411,6 +421,17 @@ public class TutorialManager : MonoBehaviour
 
         tutorialActive = false;
 
+        // interrompe digitação caso exista
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+        }
+
+        isTyping = false;
+
+        currentStepIndex = 0;
+
         tutorialCanvas.SetActive(false);
 
         // inicia música da fase
@@ -423,6 +444,12 @@ public class TutorialManager : MonoBehaviour
 
         // inicia a partida
         GameManager.Instance.StartGame();
+    }
+
+    // retorna se o tutorial está ativo
+    public bool IsTutorialActive()
+    {
+        return tutorialActive;
     }
 
     // animação da seta
