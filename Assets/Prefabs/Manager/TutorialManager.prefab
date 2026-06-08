@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15d3f6c94aef87149b1ddbf968392f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialLevelID: 5
+  tutorialLevelID: 6
   steps:
   - message: "Ol\xE1 eu sou sua assistente.\nVou te mostrar como se trabalha em um
       oficina de verdade."
